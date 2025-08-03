@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\muham\\source\\repos\\MimiPosStore\\MimiPosStore.csproj",
+      "projectUniqueName": "C:\\MiniPosStoreDirectoty\\MimiPosStore\\MimiPosStore.csproj",
       "projectName": "MimiPosStore",
-      "projectPath": "C:\\Users\\muham\\source\\repos\\MimiPosStore\\MimiPosStore.csproj",
+      "projectPath": "C:\\MiniPosStoreDirectoty\\MimiPosStore\\MimiPosStore.csproj",
       "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\muham\\source\\repos\\MimiPosStore\\obj\\",
+      "outputPath": "C:\\MiniPosStoreDirectoty\\MimiPosStore\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\muham\\AppData\\Roaming\\NuGet\\NuGet.Config",

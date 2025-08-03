@@ -1,7 +1,35 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\muham\\source\\repos\\MimiPosStore\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\MiniPosStoreDirectoty\\MimiPosStore\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1ABA73-6E15-4773-AE1F-91963A4E734B}|..\\DAL\\DAL.csproj|c:\\miniposstoredirectoty\\dal\\ef models\\clscustomer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1ABA73-6E15-4773-AE1F-91963A4E734B}|..\\DAL\\DAL.csproj|c:\\miniposstoredirectoty\\dal\\ef models\\clsperson.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1ABA73-6E15-4773-AE1F-91963A4E734B}|..\\DAL\\DAL.csproj|c:\\miniposstoredirectoty\\dal\\ef models\\clssupplier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1ABA73-6E15-4773-AE1F-91963A4E734B}|..\\DAL\\DAL.csproj|c:\\miniposstoredirectoty\\dal\\ef models\\unitofmeasure .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1ABA73-6E15-4773-AE1F-91963A4E734B}|..\\DAL\\DAL.csproj|c:\\miniposstoredirectoty\\dal\\ef models\\clsorder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1ABA73-6E15-4773-AE1F-91963A4E734B}|..\\DAL\\DAL.csproj|c:\\miniposstoredirectoty\\dal\\ef models\\clsproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1ABA73-6E15-4773-AE1F-91963A4E734B}|..\\DAL\\DAL.csproj|c:\\miniposstoredirectoty\\dal\\ef models\\clsorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA1ABA73-6E15-4773-AE1F-91963A4E734B}|..\\DAL\\DAL.csproj|c:\\miniposstoredirectoty\\dal\\ef models\\clsimportedproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2B82182B-35EB-4F35-8B7C-2500437D91D8}|..\\BAL\\BAL.csproj|c:\\miniposstoredirectoty\\bal\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
@@ -9,11 +37,128 @@
       "DocumentGroups": [
         {
           "DockedHeight": 314,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 7,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "clsImportedProducts.cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsImportedProducts.cs",
+              "RelativeDocumentMoniker": "..\\DAL\\EF Models\\clsImportedProducts.cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsImportedProducts.cs",
+              "RelativeToolTip": "..\\DAL\\EF Models\\clsImportedProducts.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T19:41:06.449Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "clsOrderItem.cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsOrderItem.cs",
+              "RelativeDocumentMoniker": "..\\DAL\\EF Models\\clsOrderItem.cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsOrderItem.cs",
+              "RelativeToolTip": "..\\DAL\\EF Models\\clsOrderItem.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAwAsAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T19:21:47.14Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "clsProduct.cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsProduct.cs",
+              "RelativeDocumentMoniker": "..\\DAL\\EF Models\\clsProduct.cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsProduct.cs",
+              "RelativeToolTip": "..\\DAL\\EF Models\\clsProduct.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAcwAoAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T18:10:04.645Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "clsOrder.cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsOrder.cs",
+              "RelativeDocumentMoniker": "..\\DAL\\EF Models\\clsOrder.cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsOrder.cs",
+              "RelativeToolTip": "..\\DAL\\EF Models\\clsOrder.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T18:03:00.07Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UnitOfMeasure .cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\UnitOfMeasure .cs",
+              "RelativeDocumentMoniker": "..\\DAL\\EF Models\\UnitOfMeasure .cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\UnitOfMeasure .cs",
+              "RelativeToolTip": "..\\DAL\\EF Models\\UnitOfMeasure .cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAAAkAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T17:50:01.99Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "clsSupplier.cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsSupplier.cs",
+              "RelativeDocumentMoniker": "..\\DAL\\EF Models\\clsSupplier.cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsSupplier.cs",
+              "RelativeToolTip": "..\\DAL\\EF Models\\clsSupplier.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAwAkAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T17:38:41.459Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "clsCustomer.cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsCustomer.cs",
+              "RelativeDocumentMoniker": "..\\DAL\\EF Models\\clsCustomer.cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsCustomer.cs",
+              "RelativeToolTip": "..\\DAL\\EF Models\\clsCustomer.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T17:33:28.612Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "clsPerson.cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsPerson.cs",
+              "RelativeDocumentMoniker": "..\\DAL\\EF Models\\clsPerson.cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\DAL\\EF Models\\clsPerson.cs",
+              "RelativeToolTip": "..\\DAL\\EF Models\\clsPerson.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwAUAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T17:15:17.74Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\MiniPosStoreDirectoty\\BAL\\Class1.cs",
+              "RelativeDocumentMoniker": "..\\BAL\\Class1.cs",
+              "ToolTip": "C:\\MiniPosStoreDirectoty\\BAL\\Class1.cs",
+              "RelativeToolTip": "..\\BAL\\Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-03T17:14:59.114Z",
+              "EditorCaption": ""
             }
           ]
         }
