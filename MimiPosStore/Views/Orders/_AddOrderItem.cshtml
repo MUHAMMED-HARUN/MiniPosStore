@@ -1,0 +1,227 @@
+@model BAL.BALDTO.OrderItemsBALDTO
+@using BAL.BALDTO;
+
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addItemModalLabel">
+                    <i class="fas fa-plus"></i> إضافة عنصر جديد
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="AddItem" method="post" id="addItemForm">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <input type="hidden" asp-for="OrderID" id="orderIdInput" />
+                    <input type="hidden" asp-for="ID" value="0" />
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="ProductID" class="control-label">المنتج</label>
+                                <select asp-for="ProductID" class="form-control" asp-items="ViewBag.ProductList" id="productSelect">
+                                    <option value="">-- اختر المنتج --</option>
+                                </select>
+                                <span asp-validation-for="ProductID" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Quantity" class="control-label">الكمية</label>
+                                <input asp-for="Quantity" class="form-control" type="number" min="1" step="1" id="quantityInput" />
+                                <span asp-validation-for="Quantity" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="control-label">الكمية في المخزن</label>
+                                <input type="text" class="form-control" asp-for="AvailableQuantity" id="availableQuantityDisplay" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="SellingPrice" class="control-label">سعر البيع</label>
+                                <input asp-for="SellingPrice" class="form-control" type="number" min="0" step="0.01" id="sellingPriceInput" />
+                                <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="control-label">المبلغ الإجمالي للعنصر</label>
+                                <input type="text" class="form-control" id="itemTotalAmount" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>معلومات المنتج:</strong>
+                                <div id="productInfo">
+                                    <p class="mb-1">السعر الأساسي: <span id="basePrice">-</span></p>
+                                    <p class="mb-1">الكمية المتوفرة: <span id="availableQuantity">-</span></p>
+                                    <p class="mb-0">الوحدة: <span id="unitOfMeasure">-</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> إضافة العنصر
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+    // تعيين OrderID عند فتح Modal
+    $('#addItemModal').on('show.bs.modal', function () {
+        var orderId = @Model.OrderID;
+        $('#orderIdInput').val(orderId);
+    });
+    
+    // تحديث معلومات المنتج عند تغيير المنتج
+    $('#productSelect').change(function () {
+        var productId = $(this).val();
+        if (productId) {
+            loadProductInfo(productId);
+        } else {
+            clearProductInfo();
+        }
+    });
+    
+    // حساب المبلغ الإجمالي للعنصر
+    $('#quantityInput, #sellingPriceInput').on('input', function () {
+        calculateItemTotal();
+    });
+    
+    // تحميل معلومات المنتج
+    function loadProductInfo(productId) {
+        $.get('/Orders/GetProductInfo', { productId: productId })
+            .done(function (data) {
+                if (data.success) {
+                    $('#basePrice').text(data.retailPrice + ' ' + data.currencyType);
+                    $('#availableQuantity').text(data.availableQuantity);
+                    $('#unitOfMeasure').text(data.uomName);
+                    
+                    // تعيين الكمية المتوفرة في حقل العرض
+                    $('#availableQuantityDisplay').val(data.availableQuantity);
+                    
+                    // تعيين السعر الأساسي كسعر البيع تلقائياً
+                    $('#sellingPriceInput').val(data.retailPrice);
+                    calculateItemTotal();
+                } else {
+                    clearProductInfo();
+                    alert('خطأ في تحميل معلومات المنتج: ' + data.message);
+                }
+            })
+            .fail(function () {
+                clearProductInfo();
+                alert('حدث خطأ في الاتصال بالخادم');
+            });
+    }
+    
+    function clearProductInfo() {
+        $('#basePrice').text('-');
+        $('#availableQuantity').text('-');
+        $('#unitOfMeasure').text('-');
+        $('#availableQuantityDisplay').val('');
+        $('#sellingPriceInput').val('');
+        $('#itemTotalAmount').val('');
+    }
+    
+    function calculateItemTotal() {
+        var quantity = parseFloat($('#quantityInput').val()) || 0;
+        var price = parseFloat($('#sellingPriceInput').val()) || 0;
+        var total = quantity * price;
+        $('#itemTotalAmount').val(total.toFixed(2));
+    }
+    
+    // إعادة تحميل عناصر الطلب بعد إضافة عنصر جديد
+    $('#addItemForm').on('submit', function () {
+        var form = $(this);
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#addItemModal').modal('hide');
+                    // إعادة تحميل عناصر الطلب
+                    if (typeof loadOrderItems === 'function') {
+                        loadOrderItems();
+                    }
+                    // إعادة تعيين النموذج
+                    form[0].reset();
+                    clearProductInfo();
+                    // عرض رسالة نجاح
+                    if (typeof showSuccessMessage === 'function') {
+                        showSuccessMessage(response.message);
+                    }
+                } else {
+                    alert(response.message || 'حدث خطأ أثناء إضافة العنصر');
+                }
+            },
+            error: function (xhr) {
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    // عرض أخطاء التحقق
+                    var errorHtml = '<div class="alert alert-danger"><ul>';
+                    $.each(xhr.responseJSON.errors, function (key, value) {
+                        errorHtml += '<li>' + value.join(', ') + '</li>';
+                    });
+                    errorHtml += '</ul></div>';
+                    $('.modal-body .alert-danger').remove();
+                    $('.modal-body').prepend(errorHtml);
+                } else {
+                    alert('حدث خطأ أثناء إضافة العنصر');
+                }
+            }
+        });
+        return false; // منع الإرسال العادي للنموذج
+    });
+
+     document.addEventListener("DOMContentLoaded", function () {
+            const quantityInput = document.getElementById("quantityInput");
+            const availableInput = document.getElementById("availableQuantityDisplay");
+            const quantityValidation = document.querySelector("[data-valmsg-for='Quantity']");
+
+            quantityInput.addEventListener("input", function () {
+                let requested = parseFloat(quantityInput.value);
+                let available = parseFloat(availableInput.value);
+
+                // reset message
+                quantityValidation.innerText = "";
+
+                if (isNaN(requested) || requested <= 0) {
+                    quantityValidation.innerText = "❌ الكمية يجب أن تكون أكبر من صفر";
+                }
+                else if (requested > available) {
+                    quantityValidation.innerText = "❌ الكمية المطلوبة غير متوفرة في المخزن";
+                }
+            });
+        });
+
+});
+    
+   
+</script>
+}

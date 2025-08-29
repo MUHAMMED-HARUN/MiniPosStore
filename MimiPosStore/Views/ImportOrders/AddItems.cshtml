@@ -1,0 +1,185 @@
+@model IEnumerable<BAL.BALDTO.ImportOrderBALDTO>
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = "إضافة عناصر لأوامر الاستيراد";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/orders.css" />
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-plus-circle text-warning"></i> اختر أمر الاستيراد لإضافة عناصر إليه
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>رقم أمر الاستيراد</th>
+                                    <th>المورد</th>
+                                    <th>تاريخ الاستيراد</th>
+                                    <th>المبلغ الإجمالي</th>
+                                    <th>عدد العناصر الحالية</th>
+                                    <th>حالة الدفع</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@item.ImportOrderID</strong>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <strong>@item.SupplierName</strong>
+                                                <br />
+                                                <small class="text-muted">@item.SupplierPhone</small>
+                                            </div>
+                                        </td>
+                                        <td>@item.FormattedImportDate</td>
+                                        <td>
+                                            <span class="text-primary fw-bold">@item.FormattedTotalAmount</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">@item.ItemsCount عنصر</span>
+                                        </td>
+                                        <td>
+                                            @if (item.IsFullyPaid)
+                                            {
+                                                <span class="badge bg-success">@item.PaymentStatusText</span>
+                                            }
+                                            else if (item.IsPartiallyPaid)
+                                            {
+                                                <span class="badge bg-warning">@item.PaymentStatusText</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">@item.PaymentStatusText</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a asp-action="Edit" asp-route-id="@item.ImportOrderID" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-plus-circle"></i> إضافة عناصر
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.ImportOrderID" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-eye"></i> عرض
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>لا توجد أوامر استيراد متاحة</strong>
+                        <br />
+                        <small>يجب إنشاء أمر استيراد أولاً قبل إضافة العناصر</small>
+                        <br />
+                        <a asp-action="Create" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus"></i> إنشاء أمر استيراد جديد
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-lightbulb text-info"></i> نصائح سريعة
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-search fa-2x text-primary mb-2"></i>
+                            <h6>اختر أمر الاستيراد</h6>
+                            <p class="text-muted small">ابحث عن أمر الاستيراد المناسب من القائمة</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-plus-circle fa-2x text-warning mb-2"></i>
+                            <h6>أضف العناصر</h6>
+                            <p class="text-muted small">اضغط على زر "إضافة عناصر" لإضافة المنتجات</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-save fa-2x text-success mb-2"></i>
+                            <h6>احفظ التغييرات</h6>
+                            <p class="text-muted small">احفظ العناصر المضافة لتحديث أمر الاستيراد</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> العودة لقائمة أوامر الاستيراد
+    </a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+        <i class="fas fa-home"></i> العودة للصفحة الرئيسية
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // إضافة تأثيرات بصرية للصفوف
+            $('tbody tr').hover(
+                function () {
+                    $(this).addClass('table-hover');
+                },
+                function () {
+                    $(this).removeClass('table-hover');
+                }
+            );
+
+            // تفعيل tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+}

@@ -1,0 +1,233 @@
+@model BAL.BALDTO.ImportOrderBALDTO
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = "تفاصيل أمر الاستيراد";
+}
+
+<h1>تفاصيل أمر الاستيراد</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> معلومات أمر الاستيراد
+                </h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">رقم أمر الاستيراد:</dt>
+                    <dd class="col-sm-8">@Model.ImportOrderID</dd>
+
+                    <dt class="col-sm-4">المورد:</dt>
+                    <dd class="col-sm-8">@Model.SupplierName</dd>
+
+                    <dt class="col-sm-4">هاتف المورد:</dt>
+                    <dd class="col-sm-8">@Model.SupplierPhone</dd>
+
+                    <dt class="col-sm-4">عنوان المورد:</dt>
+                    <dd class="col-sm-8">@Model.SupplierAddress</dd>
+
+                    <dt class="col-sm-4">تاريخ الاستيراد:</dt>
+                    <dd class="col-sm-8">@Model.FormattedImportDate</dd>
+
+                    <dt class="col-sm-4">المبلغ الإجمالي:</dt>
+                    <dd class="col-sm-8">@Model.FormattedTotalAmount</dd>
+
+                    <dt class="col-sm-4">المبلغ المدفوع:</dt>
+                    <dd class="col-sm-8">@Model.FormattedPaidAmount</dd>
+
+                    <dt class="col-sm-4">المبلغ المتبقي:</dt>
+                    <dd class="col-sm-8">
+                        <span class="@(Model.IsNotPaid ? "text-danger" : Model.IsPartiallyPaid ? "text-warning" : "text-success")">
+                            @Model.FormattedRemainingAmount
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-4">حالة الدفع:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsFullyPaid)
+                        {
+                            <span class="badge bg-success">@Model.PaymentStatusText</span>
+                        }
+                        else if (Model.IsPartiallyPaid)
+                        {
+                            <span class="badge bg-warning">@Model.PaymentStatusText</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@Model.PaymentStatusText</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">عدد العناصر:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-info">@Model.ItemsCount</span>
+                    </dd>
+
+                    <dt class="col-sm-4">المستخدم المسؤول:</dt>
+                    <dd class="col-sm-8">@Model.UserName</dd>
+
+       @*              <dt class="col-sm-4">تاريخ الإجراء:</dt>
+                    <dd class="col-sm-8">@Model.FormattedActionDate</dd> *@
+                </dl>
+            </div>
+        </div>
+
+        <!-- قائمة عناصر أمر الاستيراد -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-list"></i> عناصر أمر الاستيراد
+                </h5>
+            </div>
+            <div class="card-body">
+                @if (Model.ImportOrderItems != null && Model.ImportOrderItems.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>المنتج</th>
+                                    <th>الكمية</th>
+                                    <th>سعر البيع</th>
+                                    <th>المبلغ الإجمالي</th>
+                                    <th>العملة</th>
+                                    <th>وحدة القياس</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ImportOrderItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+@*                                                 @if (item.HasProductImage)
+                                                {
+                                                    <img src="@item.ProductImageUrl" alt="@item.ProductName" 
+                                                         class="me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                                } *@
+                                                <div>
+                                                    <strong>@item.ProductName</strong>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.SellingPrice</td>
+                                        <td>@item.TotalItemAmount</td>
+                                        <td>@item.CurrencyName</td>
+                                        <td>@item.UOMName</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle"></i>
+                        لا توجد عناصر في هذا أمر الاستيراد.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- ملخص المبالغ -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-calculator"></i> ملخص المبالغ
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-primary">@Model.FormattedTotalAmount</h4>
+                            <small class="text-muted">المبلغ الإجمالي</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-success">@Model.FormattedPaidAmount</h4>
+                            <small class="text-muted">المبلغ المدفوع</small>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <h4 class="@(Model.IsNotPaid ? "text-danger" : Model.IsPartiallyPaid ? "text-warning" : "text-success")">
+                        @Model.FormattedRemainingAmount
+                    </h4>
+                    <small class="text-muted">المبلغ المتبقي</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- حالة الدفع -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-credit-card"></i> حالة الدفع
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                @if (Model.IsFullyPaid)
+                {
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                        <h5>مدفوع بالكامل</h5>
+                        <p class="mb-0">تم سداد جميع المبالغ</p>
+                    </div>
+                }
+                else if (Model.IsPartiallyPaid)
+                {
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        <h5>مدفوع جزئياً</h5>
+                        <p class="mb-0">المتبقي: @Model.FormattedRemainingAmount</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle fa-2x"></i>
+                        <h5>غير مدفوع</h5>
+                        <p class="mb-0">المطلوب: @Model.FormattedTotalAmount</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- الإجراءات -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-cogs"></i> الإجراءات
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> تعديل
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-warning">
+                        <i class="fas fa-plus-circle"></i> إضافة عناصر
+                    </a>
+                    @if (!Model.IsFullyPaid)
+                    {
+                        <a asp-action="AddPayment" asp-route-id="@Model.ImportOrderID" class="btn btn-success">
+                            <i class="fas fa-money-bill"></i> إضافة دفعة
+                        </a>
+                    }
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> العودة للقائمة
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

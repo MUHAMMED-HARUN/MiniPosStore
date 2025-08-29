@@ -1,0 +1,39 @@
+@model BAL.BALDTO.CustomerBALDTO
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = "تفاصيل العميل";
+}
+
+<h1>تفاصيل العميل</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-4">معرف العميل:</dt>
+        <dd class="col-sm-8">@Model.CustomerID</dd>
+
+        <dt class="col-sm-4">معرف الشخص:</dt>
+        <dd class="col-sm-8">@Model.PersonID</dd>
+
+        <dt class="col-sm-4">الاسم الأول:</dt>
+        <dd class="col-sm-8">@Model.FirstName</dd>
+
+        <dt class="col-sm-4">الاسم الأخير:</dt>
+        <dd class="col-sm-8">@Model.LastName</dd>
+
+        <dt class="col-sm-4">الاسم الكامل:</dt>
+        <dd class="col-sm-8">@(Model.FirstName + " " + Model.LastName)</dd>
+
+        <dt class="col-sm-4">رقم الهاتف:</dt>
+        <dd class="col-sm-8">@Model.PhoneNumber</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CustomerID" class="btn btn-warning">
+        <i class="fas fa-edit"></i> تعديل
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> العودة للقائمة
+    </a>
+</div>

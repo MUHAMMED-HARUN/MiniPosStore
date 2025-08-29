@@ -1,0 +1,48 @@
+@model BAL.BALDTO.SupplierBALDTO
+@using BAL.BALDTO;
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">
+            <i class="fas fa-truck me-2"></i>
+            تفاصيل المورد
+        </h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">معرف المورد:</dt>
+            <dd class="col-sm-8">@Model.SupplierID</dd>
+
+            <dt class="col-sm-4">معرف الشخص:</dt>
+            <dd class="col-sm-8">@Model.PersonID</dd>
+
+            <dt class="col-sm-4">الاسم الأول:</dt>
+            <dd class="col-sm-8">@Model.FirstName</dd>
+
+            <dt class="col-sm-4">الاسم الأخير:</dt>
+            <dd class="col-sm-8">@Model.LastName</dd>
+
+            <dt class="col-sm-4">الاسم الكامل:</dt>
+            <dd class="col-sm-8">@(Model.FirstName + " " + Model.LastName)</dd>
+
+            <dt class="col-sm-4">رقم الهاتف:</dt>
+            <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+            <dt class="col-sm-4">اسم المتجر:</dt>
+            <dd class="col-sm-8">@Model.ShopName</dd>
+
+            <dt class="col-sm-4">عنوان المتجر:</dt>
+            <dd class="col-sm-8">@Model.Address</dd>
+        </dl>
+
+        <div class="text-center mt-3">
+            <a asp-action="Details" asp-route-id="@Model.SupplierID" class="btn btn-info">
+                <i class="fas fa-eye me-1"></i>
+                عرض التفاصيل
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.SupplierID" class="btn btn-warning">
+                <i class="fas fa-edit me-1"></i>
+                تعديل
+            </a>
+        </div>
+    </div>
+</div>

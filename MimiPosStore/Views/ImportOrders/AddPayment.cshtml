@@ -1,0 +1,197 @@
+@model BAL.BALDTO.ImportOrderBALDTO
+@{
+    ViewData["Title"] = "إضافة دفعة";
+}
+
+<h1>إضافة دفعة</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-money-bill"></i> إضافة دفعة جديدة
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="AddPayment" method="post">
+                    <input type="hidden" name="id" value="@Model.ImportOrderID" />
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">رقم أمر الاستيراد</label>
+                                <input type="text" class="form-control" value="@Model.ImportOrderID" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">المورد</label>
+                                <input type="text" class="form-control" value="@Model.SupplierName" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">المبلغ الإجمالي</label>
+                                <input type="text" class="form-control" value="@Model.FormattedTotalAmount" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">المبلغ المدفوع حالياً</label>
+                                <input type="text" class="form-control" value="@Model.FormattedPaidAmount" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label">المبلغ المتبقي</label>
+                                <input type="text" class="form-control text-danger" value="@Model.FormattedRemainingAmount" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="paymentAmount" class="form-label">مبلغ الدفعة الجديدة</label>
+                                <input type="number" id="paymentAmount" name="paymentAmount" class="form-control" 
+                                       step="0.01" min="0.01" max="@(Model.TotalAmount - Model.PaidAmount)" required />
+                                <div class="form-text">أقصى مبلغ يمكن دفعه: @Model.FormattedRemainingAmount</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> إضافة الدفعة
+                        </button>
+                        <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-warning">
+                            <i class="fas fa-plus-circle"></i> إضافة عناصر
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> العودة للقائمة
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- ملخص المبالغ -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-calculator"></i> ملخص المبالغ
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-primary">@Model.FormattedTotalAmount</h4>
+                            <small class="text-muted">المبلغ الإجمالي</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <h4 class="text-success">@Model.FormattedPaidAmount</h4>
+                            <small class="text-muted">المدفوع</small>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <h4 class="text-danger">@Model.FormattedRemainingAmount</h4>
+                    <small class="text-muted">المتبقي</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- حالة الدفع -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-credit-card"></i> حالة الدفع
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                @if (Model.IsFullyPaid)
+                {
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                        <h5>مدفوع بالكامل</h5>
+                    </div>
+                }
+                else if (Model.IsPartiallyPaid)
+                {
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        <h5>مدفوع جزئياً</h5>
+                        <p class="mb-0">المتبقي: @Model.FormattedRemainingAmount</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle fa-2x"></i>
+                        <h5>غير مدفوع</h5>
+                        <p class="mb-0">المطلوب: @Model.FormattedTotalAmount</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- معلومات إضافية -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> معلومات إضافية
+                </h5>
+            </div>
+            <div class="card-body">
+                <p><strong>تاريخ الاستيراد:</strong><br>@Model.FormattedImportDate</p>
+                <p><strong>عدد العناصر:</strong><br>@Model.ItemsCount</p>
+                <p><strong>المستخدم المسؤول:</strong><br>@Model.UserName</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // التحقق من مبلغ الدفعة
+            $('#paymentAmount').on('input', function () {
+                var paymentAmount = parseFloat($(this).val()) || 0;
+                var remainingAmount = @(Model.TotalAmount - Model.PaidAmount);
+                
+                if (paymentAmount > remainingAmount) {
+                    $(this).addClass('is-invalid');
+                    $(this).next('.form-text').addClass('text-danger').text('المبلغ أكبر من المتبقي');
+                } else if (paymentAmount <= 0) {
+                    $(this).addClass('is-invalid');
+                    $(this).next('.form-text').addClass('text-danger').text('يجب أن يكون المبلغ أكبر من صفر');
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).next('.form-text').removeClass('text-danger').text('أقصى مبلغ يمكن دفعه: @Model.FormattedRemainingAmount');
+                }
+            });
+
+            // منع إرسال النموذج إذا كان المبلغ غير صحيح
+            $('form').on('submit', function (e) {
+                var paymentAmount = parseFloat($('#paymentAmount').val()) || 0;
+                var remainingAmount = @(Model.TotalAmount - Model.PaidAmount);
+                
+                if (paymentAmount > remainingAmount || paymentAmount <= 0) {
+                    e.preventDefault();
+                    alert('يرجى إدخال مبلغ صحيح');
+                    return false;
+                }
+            });
+        });
+    </script>
+}

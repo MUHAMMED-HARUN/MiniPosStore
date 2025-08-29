@@ -1,0 +1,61 @@
+@{
+    ViewData["Title"] = "البحث عن مورد";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-search me-2"></i>
+                        البحث عن مورد
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Search" method="post">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="control-label">نوع البحث</label>
+                                    <select name="searchType" class="form-control" required>
+                                        <option value="">اختر نوع البحث</option>
+                                        <option value="SupplierID">معرف المورد</option>
+                                        <option value="PersonID">معرف الشخص</option>
+                                        <option value="PhoneNumber">رقم الهاتف</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="control-label">قيمة البحث</label>
+                                    <input name="searchValue" class="form-control" placeholder="أدخل قيمة البحث" required />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-3">
+                                    <label class="control-label">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-1"></i>
+                                        بحث
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    @if (ViewBag.SearchResult != null)
+                    {
+                        <hr />
+                        <h4 class="text-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            تم العثور على النتيجة
+                        </h4>
+                        
+                        <partial name="_SupplierDetails" model="ViewBag.SearchResult" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,138 @@
+@model BAL.BALDTO.ImportOrderBALDTO
+@{
+    ViewData["Title"] = "حذف أمر الاستيراد";
+}
+
+<h1>حذف أمر الاستيراد</h1>
+
+<div class="alert alert-danger">
+    <h4 class="alert-heading">
+        <i class="fas fa-exclamation-triangle"></i> تحذير!
+    </h4>
+    <p>هل أنت متأكد من حذف أمر الاستيراد التالي؟ هذا الإجراء لا يمكن التراجع عنه.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">
+            <i class="fas fa-info-circle"></i> تفاصيل أمر الاستيراد
+        </h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">رقم أمر الاستيراد:</dt>
+            <dd class="col-sm-8">@Model.ImportOrderID</dd>
+
+            <dt class="col-sm-4">المورد:</dt>
+            <dd class="col-sm-8">@Model.SupplierName</dd>
+
+            <dt class="col-sm-4">هاتف المورد:</dt>
+            <dd class="col-sm-8">@Model.SupplierPhone</dd>
+
+            <dt class="col-sm-4">تاريخ الاستيراد:</dt>
+            <dd class="col-sm-8">@Model.FormattedImportDate</dd>
+
+            <dt class="col-sm-4">المبلغ الإجمالي:</dt>
+            <dd class="col-sm-8">@Model.FormattedTotalAmount</dd>
+
+            <dt class="col-sm-4">المبلغ المدفوع:</dt>
+            <dd class="col-sm-8">@Model.FormattedPaidAmount</dd>
+
+            <dt class="col-sm-4">المبلغ المتبقي:</dt>
+            <dd class="col-sm-8">
+                <span class="@(Model.IsNotPaid ? "text-danger" : Model.IsPartiallyPaid ? "text-warning" : "text-success")">
+                    @Model.FormattedRemainingAmount
+                </span>
+            </dd>
+
+            <dt class="col-sm-4">حالة الدفع:</dt>
+            <dd class="col-sm-8">
+                @if (Model.IsFullyPaid)
+                {
+                    <span class="badge bg-success">@Model.PaymentStatusText</span>
+                }
+                else if (Model.IsPartiallyPaid)
+                {
+                    <span class="badge bg-warning">@Model.PaymentStatusText</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">@Model.PaymentStatusText</span>
+                }
+            </dd>
+
+            <dt class="col-sm-4">عدد العناصر:</dt>
+            <dd class="col-sm-8">
+                <span class="badge bg-info">@Model.ItemsCount</span>
+            </dd>
+        </dl>
+    </div>
+</div>
+
+@if (Model.ImportOrderItems != null && Model.ImportOrderItems.Any())
+{
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-list"></i> عناصر أمر الاستيراد (سيتم حذفها أيضاً)
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>المنتج</th>
+                            <th>الكمية</th>
+                            <th>سعر البيع</th>
+                            <th>المبلغ الإجمالي</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ImportOrderItems.Take(5)) // عرض أول 5 عناصر فقط
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.SellingPrice</td>
+                                <td>@item.TotalItemAmount</td>
+                            </tr>
+                        }
+                        @if (Model.ImportOrderItems.Count > 5)
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">
+                                    ... و @(Model.ImportOrderItems.Count - 5) عنصر آخر
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!Model.IsFullyPaid)
+{
+    <div class="alert alert-warning">
+        <h5><i class="fas fa-exclamation-triangle"></i> تنبيه</h5>
+        <p>هذا أمر الاستيراد لم يتم سداده بالكامل. المبلغ المتبقي: <strong>@Model.FormattedRemainingAmount</strong></p>
+    </div>
+}
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ImportOrderID" />
+    
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash"></i> تأكيد الحذف
+        </button>
+        <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-warning">
+            <i class="fas fa-plus-circle"></i> إضافة عناصر
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> العودة للقائمة
+        </a>
+    </div>
+</form>

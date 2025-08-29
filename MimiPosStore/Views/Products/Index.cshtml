@@ -1,0 +1,103 @@
+@model IEnumerable<BAL.BALDTO.ProductBALDTO>
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = "قائمة المنتجات";
+}
+
+<h1>قائمة المنتجات</h1>
+
+<p>
+    <a asp-action="Save" asp-route-id="0" class="btn btn-primary">إضافة منتج جديد</a>
+</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+{
+    <div class="alert alert-info">
+        نتائج البحث عن: <strong>@ViewBag.SearchTerm</strong>
+        <a asp-action="Index" class="btn btn-sm btn-outline-info ms-2">عرض جميع المنتجات</a>
+    </div>
+}
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                @if (!string.IsNullOrEmpty(item.ImagePath))
+                {
+                    <img src="~/product/imgs/@item.ImagePath" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                }
+                else
+                {
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                }
+                
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">@item.Description</p>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted">سعر البيع:</small>
+                            <div class="fw-bold text-primary">@item.RetailPrice.ToString("C")</div>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">سعر الجملة:</small>
+                            <div class="fw-bold text-success">@item.WholesalePrice.ToString("C")</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <small class="text-muted">الكمية المتوفرة:</small>
+                            <div class="fw-bold @(item.AvailableQuantity > 0 ? "text-success" : "text-danger")">
+                                @item.AvailableQuantity
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">وحدة القياس:</small>
+                            <div class="fw-bold">@item.UOMName</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="btn-group w-100" role="group">
+                        <a asp-action="Save" asp-route-id="@item.ID" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> تعديل
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> حذف
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle"></i>
+        لا توجد منتجات مسجلة حالياً.
+    </div>
+}

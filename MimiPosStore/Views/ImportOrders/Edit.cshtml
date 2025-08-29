@@ -1,0 +1,235 @@
+@model BAL.BALDTO.ImportOrderBALDTO
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = "تعديل أمر الاستيراد";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/orders.css" />
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" method="post" id="editImportOrderForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <input type="hidden" asp-for="ImportOrderID" />
+            <input type="hidden" asp-for="ItemsCount" id="ItemsCount" />
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="SupplierID" class="control-label">المورد</label>
+                        <select asp-for="SupplierID" class="form-control" asp-items="ViewBag.SupplierList">
+                            <option value="">-- اختر المورد --</option>
+                        </select>
+                        <span asp-validation-for="SupplierID" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="ImportDate" class="control-label">تاريخ الاستيراد</label>
+                        <input asp-for="ImportDate" class="form-control" type="date" />
+                        <span asp-validation-for="ImportDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="TotalAmount" class="control-label">المبلغ الإجمالي</label>
+                        <input asp-for="TotalAmount" class="form-control" readonly />
+                        <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="PaidAmount" class="control-label">المبلغ المدفوع</label>
+                        <input asp-for="PaidAmount" class="form-control" />
+                        <span asp-validation-for="PaidAmount" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="PaymentStatus" class="control-label">حالة الدفع</label>
+                        <select asp-for="PaymentStatus" class="form-control" asp-items="ViewBag.PaymentStatusList">
+                        </select>
+                        <span asp-validation-for="PaymentStatus" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> حفظ
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> العودة للقائمة
+                </a>
+            </div>
+        </form>
+
+        <!-- إضافة عناصر أمر الاستيراد -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-list"></i> عناصر أمر الاستيراد
+                </h5>
+            </div>
+            <div class="card-body">
+                <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    <i class="fas fa-plus"></i> إضافة عنصر جديد
+                </button>
+                
+                <div id="importOrderItemsList">
+                    @await Html.PartialAsync("_ImportOrderItemsList", Model.ImportOrderItems )
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> معلومات المورد
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="supplierInfo">
+                    @if (Model.ImportOrderID > 0 && !string.IsNullOrEmpty(Model.SupplierName))
+                    {
+                        <p><strong>اسم المتجر:</strong> @Model.SupplierName</p>
+                        <p><strong>الهاتف:</strong> @Model.SupplierPhone</p>
+                        <p><strong>العنوان:</strong> @Model.SupplierAddress</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">اختر مورداً لعرض المعلومات</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-calculator"></i> ملخص المبالغ
+                </h5>
+            </div>
+            <div class="card-body">
+                <p><strong>المبلغ الإجمالي:</strong> @Model.FormattedTotalAmount</p>
+                <p><strong>المبلغ المدفوع:</strong> @Model.FormattedPaidAmount</p>
+                <p><strong>المبلغ المتبقي:</strong> 
+                    <span class="@(Model.IsNotPaid ? "text-danger" : Model.IsPartiallyPaid ? "text-warning" : "text-success")">
+                        @Model.FormattedRemainingAmount
+                    </span>
+                </p>
+                <p><strong>عدد العناصر:</strong> @Model.ItemsCount</p>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<!-- Modal إضافة عنصر جديد -->
+<div class="modal fade" id="addItemModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">إضافة عنصر جديد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="AddItem" method="post">
+                <div class="modal-body">
+                    @await Html.PartialAsync("_AddImportOrderItem", new ImportOrderItemBALDTO { ImportOrderID = Model.ImportOrderID })
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إضافة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal تعديل عنصر -->
+<div class="modal fade" id="editItemModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">تعديل العنصر</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="UpdateItem" method="post">
+                <div class="modal-body">
+                    <div id="editItemContent">
+                        <!-- سيتم تحميل المحتوى هنا -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">تحديث</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/js/ImportOder.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            // تحديث معلومات المورد عند تغيير الاختيار
+            $('#SupplierID').change(function () {
+                var supplierId = $(this).val();
+                if (supplierId) {
+                    // يمكن إضافة AJAX call هنا لجلب معلومات المورد
+                }
+            });
+
+            // تفعيل تعديل العناصر
+            $(document).on('click', '.edit-item-btn', function () {
+                var itemId = $(this).data('item-id');
+                $.get('/ImportOrders/GetImportOrderItemForEdit', { itemId: itemId }, function (data) {
+                    if (data.success) {
+                        $('#editItemContent').html(data.html);
+                        $('#editItemModal').modal('show');
+                    } else {
+                        alert('خطأ في تحميل بيانات العنصر');
+                    }
+                });
+            });
+
+            // تفعيل حذف العناصر
+            $(document).on('click', '.delete-item-btn', function () {
+                if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
+                    var itemId = $(this).data('item-id');
+                    var importOrderId = @Model.ImportOrderID;
+                    
+                    $.post('/ImportOrders/DeleteItem', { itemId: itemId, importOrderId: importOrderId }, function (data) {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert('خطأ في حذف العنصر');
+                        }
+                    });
+                }
+            });
+
+            // تحديث قائمة العناصر
+            function refreshItemsList() {
+                $.get('/ImportOrders/GetImportOrderItems', { importOrderId: @Model.ImportOrderID }, function (data) {
+                    $('#importOrderItemsList').html(data);
+                });
+            }
+        });
+    </script>
+}

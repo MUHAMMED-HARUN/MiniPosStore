@@ -1,0 +1,96 @@
+C:\MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.deps.json
+C:\MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.dll
+C:\MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.pdb
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.AssemblyReference.cache
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.AssemblyInfoInputs.cache
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.AssemblyInfo.cs
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.CoreCompileInputs.cache
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.sourcelink.json
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.dll
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\refint\BAL.dll
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.pdb
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\ref\BAL.dll
+C:\MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\DAL.dll
+C:\MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\DAL.pdb
+C:\MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.Up2Date
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\bin\Debug\net8.0\BAL.deps.json
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\bin\Debug\net8.0\BAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\bin\Debug\net8.0\BAL.pdb
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\bin\Debug\net8.0\DAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\bin\Debug\net8.0\DAL.pdb
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.csproj.AssemblyReference.cache
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.AssemblyInfoInputs.cache
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.AssemblyInfo.cs
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.csproj.CoreCompileInputs.cache
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.sourcelink.json
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.csproj.Up2Date
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\refint\BAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\BAL.pdb
+C:\‏‏‏‏MiniPosStoreDirectoty - نسخة - نسخة\BAL\obj\Debug\net8.0\ref\BAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.AssemblyReference.cache
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.AssemblyInfoInputs.cache
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.AssemblyInfo.cs
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.CoreCompileInputs.cache
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.sourcelink.json
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.deps.json
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.pdb
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\DAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\DAL.pdb
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.Up2Date
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\refint\BAL.dll
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.pdb
+C:\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\ref\BAL.dll
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.deps.json
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.dll
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\BAL.pdb
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\DAL.dll
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\bin\Debug\net8.0\DAL.pdb
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.AssemblyReference.cache
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.AssemblyInfoInputs.cache
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.AssemblyInfo.cs
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.CoreCompileInputs.cache
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.sourcelink.json
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.csproj.Up2Date
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.dll
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\refint\BAL.dll
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\BAL.pdb
+D:\Project\‏‏‏‏MiniPosStoreDirectoty\BAL\obj\Debug\net8.0\ref\BAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\bin\Debug\net8.0\BAL.deps.json
+D:\Project\MiniPosStoreDirectory\BAL\bin\Debug\net8.0\BAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\bin\Debug\net8.0\BAL.pdb
+D:\Project\MiniPosStoreDirectory\BAL\bin\Debug\net8.0\DAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\bin\Debug\net8.0\DAL.pdb
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.csproj.AssemblyReference.cache
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.AssemblyInfoInputs.cache
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.AssemblyInfo.cs
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.csproj.CoreCompileInputs.cache
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.sourcelink.json
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.csproj.Up2Date
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\refint\BAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.pdb
+D:\Project\MiniPosStoreDirectory\BAL\obj\Debug\net8.0\ref\BAL.dll
+D:\Project\‏‏MiniPosStoreDirectory\BAL\bin\Debug\net8.0\BAL.deps.json
+D:\Project\‏‏MiniPosStoreDirectory\BAL\bin\Debug\net8.0\BAL.dll
+D:\Project\‏‏MiniPosStoreDirectory\BAL\bin\Debug\net8.0\BAL.pdb
+D:\Project\‏‏MiniPosStoreDirectory\BAL\bin\Debug\net8.0\DAL.dll
+D:\Project\‏‏MiniPosStoreDirectory\BAL\bin\Debug\net8.0\DAL.pdb
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.csproj.AssemblyReference.cache
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.AssemblyInfoInputs.cache
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.AssemblyInfo.cs
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.csproj.CoreCompileInputs.cache
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.sourcelink.json
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.csproj.Up2Date
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.dll
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\refint\BAL.dll
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\BAL.pdb
+D:\Project\‏‏MiniPosStoreDirectory\BAL\obj\Debug\net8.0\ref\BAL.dll

@@ -1,0 +1,153 @@
+name: dockercompose16906648380309611979
+services:
+  mimiposstore:
+    build:
+      context: D:\Project\MiniPosStoreDirectory
+      dockerfile: MimiPosStore/Dockerfile
+      args:
+        BUILD_CONFIGURATION: Debug
+        LAUNCHING_FROM_VS: "true"
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: MimiPosStore
+      target: base
+    command:
+      - sh
+      - -c
+      - |-
+        dotnet ef database update --project MimiPosStore/MimiPosStore.csproj &&
+               dotnet MimiPosStore.dll
+    container_name: mimiposstore
+    depends_on:
+      miniPosStoreDB:
+        condition: service_started
+        required: true
+    entrypoint:
+      - dotnet
+      - --roll-forward
+      - Major
+      - /VSTools/DistrolessHelper/DistrolessHelper.dll
+      - --wait
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DB_HOST: miniPosStoreDB
+      DB_Name: MiniPosStore
+      DB_SA_PASSWORD: sa123456
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: /.nuget/fallbackpackages
+    image: mimiposstore:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /.nuget/packages --additionalProbingPath /.nuget/fallbackpackages  "/app/bin/Debug/net8.0/MimiPosStore.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: dotnet --roll-forward Major /VSTools/DistrolessHelper/DistrolessHelper.dll --stop dotnet
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      mimiposstoreApp: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "8001"
+        protocol: tcp
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    tty: true
+    volumes:
+      - type: bind
+        source: D:\Project\MiniPosStoreDirectory\MimiPosStore\wwwroot
+        target: /app/wwwroot
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\AppData\Roaming\Microsoft\UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\AppData\Roaming\Microsoft\UserSecrets
+        target: /root/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\AppData\Roaming\ASP.NET\Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\AppData\Roaming\ASP.NET\Https
+        target: /root/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: D:\Project\MiniPosStoreDirectory\MimiPosStore
+        target: /app
+        bind:
+          create_host_path: true
+      - type: bind
+        source: D:\Project\MiniPosStoreDirectory
+        target: /src
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\vsdbg\vs2017u5
+        target: /remote_debugger
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\.nuget\packages
+        target: /.nuget/packages
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: D:\Visual Studio\Shared\NuGetPackages
+        target: /.nuget/fallbackpackages
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: D:\Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\linux-x64\net8.0
+        target: /VSTools
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: D:\Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload
+        target: /HotReloadAgent
+        read_only: true
+        bind:
+          create_host_path: true
+  miniPosStoreDB:
+    container_name: MiniPosStoreDB
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: sa123456
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    networks:
+      mimiposstoreApp: null
+    ports:
+      - mode: ingress
+        target: 1433
+        published: "8002"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: sql_data
+        target: /var/opt/mssql
+        volume: {}
+networks:
+  mimiposstoreApp:
+    name: dockercompose16906648380309611979_mimiposstoreApp
+volumes:
+  sql_data:
+    name: dockercompose16906648380309611979_sql_data

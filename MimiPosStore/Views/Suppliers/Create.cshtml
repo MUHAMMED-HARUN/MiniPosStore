@@ -1,0 +1,67 @@
+@model DAL.EF.Models.clsSupplier
+
+@{
+    ViewData["Title"] = "إضافة مورد جديد";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-truck me-2"></i>
+                        إضافة مورد جديد
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="PersonID" class="control-label">معرف الشخص</label>
+                                    <input asp-for="PersonID" class="form-control" type="number" />
+                                    <span asp-validation-for="PersonID" class="text-danger"></span>
+                                    <small class="form-text text-muted">معرف الشخص المرتبط بهذا المورد</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="StoreName" class="control-label">اسم المتجر</label>
+                                    <input asp-for="StoreName" class="form-control" />
+                                    <span asp-validation-for="StoreName" class="text-danger"></span>
+                                    <small class="form-text text-muted">اسم متجر أو شركة المورد</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="StoreAddress" class="control-label">عنوان المتجر</label>
+                                    <input asp-for="StoreAddress" class="form-control" />
+                                    <span asp-validation-for="StoreAddress" class="text-danger"></span>
+                                    <small class="form-text text-muted">عنوان متجر أو شركة المورد</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>
+                                إضافة المورد
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>
+                                العودة للقائمة
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

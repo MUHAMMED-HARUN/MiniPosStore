@@ -1,0 +1,84 @@
+@model DAL.EF.Models.clsProduct
+@using DAL.EF.Models;
+@using BAL;
+@{
+    ViewData["Title"] = "حذف المنتج";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">
+                        <i class="fas fa-exclamation-triangle"></i> تأكيد حذف المنتج
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">تحذير!</h4>
+                        <p>هل أنت متأكد من حذف هذا المنتج؟ هذا الإجراء لا يمكن التراجع عنه.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Name)</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+
+                                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Description)</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+
+                                <dt class="col-sm-4">سعر البيع</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.RetailPrice) @ParseCurrencyType(Model.CurrencyType)</dd>
+
+                                <dt class="col-sm-4">سعر الجملة</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.WholesalePrice) @ParseCurrencyType(Model.CurrencyType)</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">الكمية المتاحة</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.AvailableQuantity)</dd>
+
+                                <dt class="col-sm-4">وحدة القياس</dt>
+                                <dd class="col-sm-8">@(Model.UnitOfMeasure?.Name ?? "")</dd>
+
+                                <dt class="col-sm-4">تاريخ العملية</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.ActionDate)</dd>
+
+                                <dt class="col-sm-4">المستخدم المسؤول</dt>
+                                <dd class="col-sm-8">@Html.DisplayFor(model => model.ActionByUser)</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="ID" />
+                        <div class="form-group">
+                            <div class="btn-group" role="group">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> تأكيد الحذف
+                                </button>
+                                <a asp-action="Index" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> رجوع
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    private string ParseCurrencyType(string currencyType)
+    {
+        if (Enum.TryParse<clsGlobal.enCurrencyType>(currencyType, out var result))
+        {
+            return result.ToString();
+        }
+        return "TRY";
+    }
+}

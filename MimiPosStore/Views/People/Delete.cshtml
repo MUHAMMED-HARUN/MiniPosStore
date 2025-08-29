@@ -1,0 +1,65 @@
+@model DAL.EF.Models.clsPerson
+
+@{
+    ViewData["Title"] = "حذف الشخص";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-times me-2"></i>
+                        حذف الشخص
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h4 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            تحذير!
+                        </h4>
+                        <p>هل أنت متأكد من حذف هذا الشخص؟ هذا الإجراء لا يمكن التراجع عنه.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">المعرف:</dt>
+                                <dd class="col-sm-8">@Model.ID</dd>
+
+                                <dt class="col-sm-4">الاسم الأول:</dt>
+                                <dd class="col-sm-8">@Model.FirstName</dd>
+
+                                <dt class="col-sm-4">الاسم الأخير:</dt>
+                                <dd class="col-sm-8">@Model.LastName</dd>
+
+                                <dt class="col-sm-4">الاسم الكامل:</dt>
+                                <dd class="col-sm-8">@($"{Model.FirstName} {Model.LastName}")</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">رقم الهاتف:</dt>
+                                <dd class="col-sm-8">@Model.PhoneNumber</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" method="post" class="text-center mt-4">
+                        <input type="hidden" asp-for="ID" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>
+                            تأكيد الحذف
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            العودة للقائمة
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

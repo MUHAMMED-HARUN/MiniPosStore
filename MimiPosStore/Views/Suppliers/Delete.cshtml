@@ -1,0 +1,59 @@
+@model DAL.EF.Models.clsSupplier
+
+@{
+    ViewData["Title"] = "حذف المورد";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-truck me-2"></i>
+                        حذف المورد
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h4 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            تحذير!
+                        </h4>
+                        <p>هل أنت متأكد من حذف هذا المورد؟ هذا الإجراء لا يمكن التراجع عنه.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">معرف المورد:</dt>
+                                <dd class="col-sm-8">@Model.ID</dd>
+
+                                <dt class="col-sm-4">معرف الشخص:</dt>
+                                <dd class="col-sm-8">@Model.PersonID</dd>
+
+                                <dt class="col-sm-4">اسم المتجر:</dt>
+                                <dd class="col-sm-8">@Model.StoreName</dd>
+
+                                <dt class="col-sm-4">عنوان المتجر:</dt>
+                                <dd class="col-sm-8">@Model.StoreAddress</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" method="post" class="text-center mt-4">
+                        <input type="hidden" asp-for="ID" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i>
+                            تأكيد الحذف
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            العودة للقائمة
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

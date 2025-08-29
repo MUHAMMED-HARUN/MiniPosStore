@@ -1,0 +1,45 @@
+@model BAL.BALDTO.SupplierBALDTO
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = "تفاصيل المورد";
+}
+
+<h1>تفاصيل المورد</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-4">معرف المورد:</dt>
+        <dd class="col-sm-8">@Model.SupplierID</dd>
+
+        <dt class="col-sm-4">معرف الشخص:</dt>
+        <dd class="col-sm-8">@Model.PersonID</dd>
+
+        <dt class="col-sm-4">الاسم الأول:</dt>
+        <dd class="col-sm-8">@Model.FirstName</dd>
+
+        <dt class="col-sm-4">الاسم الأخير:</dt>
+        <dd class="col-sm-8">@Model.LastName</dd>
+
+        <dt class="col-sm-4">الاسم الكامل:</dt>
+        <dd class="col-sm-8">@(Model.FirstName + " " + Model.LastName)</dd>
+
+        <dt class="col-sm-4">رقم الهاتف:</dt>
+        <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+        <dt class="col-sm-4">اسم المتجر:</dt>
+        <dd class="col-sm-8">@Model.ShopName</dd>
+
+        <dt class="col-sm-4">عنوان المتجر:</dt>
+        <dd class="col-sm-8">@Model.Address</dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SupplierID" class="btn btn-warning">
+        <i class="fas fa-edit"></i> تعديل
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> العودة للقائمة
+    </a>
+</div>

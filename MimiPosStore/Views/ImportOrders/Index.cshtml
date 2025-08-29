@@ -1,0 +1,156 @@
+@model IEnumerable<BAL.BALDTO.ImportOrderBALDTO>
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = "قائمة أوامر الاستيراد";
+}
+
+<h1>قائمة أوامر الاستيراد</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">إنشاء أمر استيراد جديد</a>
+    <a asp-action="AddItems" class="btn btn-warning">
+        <i class="fas fa-plus-circle"></i> إضافة عناصر للطلبات
+    </a>
+    <a asp-action="Search" class="btn btn-info">البحث</a>
+</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+{
+    <div class="alert alert-info">
+        نتائج البحث عن: <strong>@ViewBag.SearchTerm</strong>
+        <a asp-action="Index" class="btn btn-sm btn-outline-info ms-2">عرض جميع أوامر الاستيراد</a>
+    </div>
+}
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>رقم أمر الاستيراد</th>
+            <th>المورد</th>
+            <th>هاتف المورد</th>
+            <th>تاريخ الاستيراد</th>
+            <th>المبلغ الإجمالي</th>
+            <th>المبلغ المدفوع</th>
+            <th>المبلغ المتبقي</th>
+            <th>حالة الدفع</th>
+            <th>عدد العناصر</th>
+            <th>الإجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ImportOrderID</td>
+                <td>@item.SupplierName</td>
+                <td>@item.SupplierPhone</td>
+                <td>@item.FormattedImportDate</td>
+                <td>@item.FormattedTotalAmount</td>
+                <td>@item.FormattedPaidAmount</td>
+                <td class="@(item.IsNotPaid ? "text-danger" : item.IsPartiallyPaid ? "text-warning" : "text-success")">
+                    @item.FormattedRemainingAmount
+                </td>
+                <td>
+                    @if (item.IsFullyPaid)
+                    {
+                        <span class="badge bg-success">@item.PaymentStatusText</span>
+                    }
+                    else if (item.IsPartiallyPaid)
+                    {
+                        <span class="badge bg-warning">@item.PaymentStatusText</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">@item.PaymentStatusText</span>
+                    }
+                </td>
+                <td>
+                    <span class="badge bg-info">@item.ItemsCount</span>
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@item.ImportOrderID" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> تفاصيل
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.ImportOrderID" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> تعديل
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.ImportOrderID" class="btn btn-warning btn-sm">
+                            <i class="fas fa-plus-circle"></i> إضافة عناصر
+                        </a>
+                        @if (!item.IsFullyPaid)
+                        {
+                            <a asp-action="AddPayment" asp-route-id="@item.ImportOrderID" class="btn btn-success btn-sm">
+                                <i class="fas fa-money-bill"></i> دفع
+                            </a>
+                        }
+                        <a asp-action="Delete" asp-route-id="@item.ImportOrderID" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> حذف
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle"></i>
+        لا توجد أوامر استيراد مسجلة حالياً.
+    </div>
+}
+
+<!-- Search Modal -->
+<div class="modal fade" id="searchModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">البحث في أوامر الاستيراد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="Search" method="get">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="searchTerm" class="form-label">كلمة البحث</label>
+                        <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
+                               placeholder="ابحث برقم أمر الاستيراد أو اسم المورد">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">بحث</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // تفعيل البحث
+            $('a[asp-action="Search"]').click(function (e) {
+                e.preventDefault();
+                $('#searchModal').modal('show');
+            });
+        });
+    </script>
+}

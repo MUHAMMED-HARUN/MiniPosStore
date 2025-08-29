@@ -1,0 +1,155 @@
+@model DAL.EF.Models.clsOrder
+@using BAL;
+
+@{
+    ViewData["Title"] = "حذف الطلب";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">
+                        <i class="fas fa-exclamation-triangle"></i> @ViewData["Title"]
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle"></i> تحذير!</h5>
+                        <p class="mb-0">هل أنت متأكد من حذف هذا الطلب؟ هذا الإجراء لا يمكن التراجع عنه.</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>تفاصيل الطلب:</h5>
+                            <dl class="row">
+                                <dt class="col-sm-4">رقم الطلب:</dt>
+                                <dd class="col-sm-8">@Model.ID</dd>
+
+                                <dt class="col-sm-4">العميل:</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.Customer?.Person != null)
+                                    {
+                                        @($"{Model.Customer.Person.FirstName} {Model.Customer.Person.LastName}")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">غير محدد</span>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-4">تاريخ الطلب:</dt>
+                                <dd class="col-sm-8">@Model.OrderDate.ToString("dd/MM/yyyy")</dd>
+
+                                <dt class="col-sm-4">المبلغ الإجمالي:</dt>
+                                <dd class="col-sm-8">@Model.TotalAmount.ToString("C")</dd>
+
+                                <dt class="col-sm-4">المبلغ المدفوع:</dt>
+                                <dd class="col-sm-8">@Model.PaidAmount.ToString("C")</dd>
+
+                                <dt class="col-sm-4">المبلغ المتبقي:</dt>
+                                <dd class="col-sm-8">@((Model.TotalAmount - Model.PaidAmount).ToString("C"))</dd>
+
+                                <dt class="col-sm-4">حالة الدفع:</dt>
+                                <dd class="col-sm-8">
+                                    @{
+                                        var paymentStatusText = Model.PaymentStatus switch
+                                        {
+                                            0 => "غير مدفوع",
+                                            1 => "مدفوع جزئياً",
+                                            2 => "مدفوع بالكامل",
+                                            _ => "غير محدد"
+                                        };
+                                        var paymentStatusClass = Model.PaymentStatus switch
+                                        {
+                                            0 => "badge bg-danger",
+                                            1 => "badge bg-warning",
+                                            2 => "badge bg-success",
+                                            _ => "badge bg-secondary"
+                                        };
+                                    }
+                                    <span class="@paymentStatusClass">@paymentStatusText</span>
+                                </dd>
+
+                                <dt class="col-sm-4">عدد العناصر:</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-info">@(Model.OrderItems?.Count ?? 0)</span>
+                                </dd>
+                            </dl>
+
+                            @if (Model.OrderItems != null && Model.OrderItems.Any())
+                            {
+                                <h5 class="mt-4">عناصر الطلب:</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-sm">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>المنتج</th>
+                                                <th>الكمية</th>
+                                                <th>سعر البيع</th>
+                                                <th>المجموع الفرعي</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.OrderItems)
+                                            {
+                                                <tr>
+                                                    <td>@(item.Product?.Name ?? "غير محدد")</td>
+                                                    <td>@item.Quantity</td>
+                                                    <td>@item.SellingPrice.ToString("C")</td>
+                                                    <td>@((item.Quantity * item.SellingPrice).ToString("C"))</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card border-danger">
+                                <div class="card-header bg-danger text-white">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-trash"></i> تأكيد الحذف
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        <i class="fas fa-info-circle"></i>
+                                        سيتم حذف الطلب وجميع عناصره نهائياً من قاعدة البيانات.
+                                    </p>
+                                    
+                                    <form asp-action="Delete" method="post">
+                                        <input type="hidden" asp-for="ID" />
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fas fa-trash"></i> تأكيد الحذف
+                                            </button>
+                                            <a asp-action="Index" class="btn btn-secondary">
+                                                <i class="fas fa-arrow-left"></i> رجوع
+                                            </a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // تحذير إضافي عند محاولة الحذف
+            $('form').on('submit', function (e) {
+                if (!confirm('هل أنت متأكد تماماً من حذف هذا الطلب؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+}

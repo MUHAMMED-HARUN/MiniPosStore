@@ -1,0 +1,16 @@
+D:\Project\MiniPosStoreDirectory\BAL\bin\Release\net8.0\BAL.deps.json
+D:\Project\MiniPosStoreDirectory\BAL\bin\Release\net8.0\BAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\bin\Release\net8.0\BAL.pdb
+D:\Project\MiniPosStoreDirectory\BAL\bin\Release\net8.0\DAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\bin\Release\net8.0\DAL.pdb
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.csproj.AssemblyReference.cache
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.AssemblyInfoInputs.cache
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.AssemblyInfo.cs
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.csproj.CoreCompileInputs.cache
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.sourcelink.json
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.csproj.Up2Date
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\refint\BAL.dll
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\BAL.pdb
+D:\Project\MiniPosStoreDirectory\BAL\obj\Release\net8.0\ref\BAL.dll

@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "إضافة عميل جديد";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-plus me-2"></i>
+                        إضافة عميل جديد
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>
+                            ملاحظة مهمة
+                        </h5>
+                        <p>يجب أولاً البحث عن الشخص وإضافته قبل إضافته كعميل.</p>
+                    </div>
+
+                    <form asp-action="AddCustomer" method="post">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label class="control-label">نوع البحث</label>
+                                    <select name="searchType" class="form-control" required>
+                                        <option value="">اختر نوع البحث</option>
+                                        <option value="ID">المعرف (ID)</option>
+                                        <option value="PhoneNumber">رقم الهاتف</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="control-label">قيمة البحث</label>
+                                    <input name="searchValue" class="form-control" placeholder="أدخل قيمة البحث" required />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group mb-3">
+                                    <label class="control-label">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-1"></i>
+                                        بحث
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    @if (ViewBag.SearchResult != null)
+                    {
+                        <hr />
+                        <h4 class="text-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            تم العثور على النتيجة
+                        </h4>
+
+                        <partial name="~/Views/People/_PersonDetails.cshtml" src="" model="ViewBag.SearchResult" />
+
+                        <div class="text-center mt-3">
+                            <form asp-action="AddCustomerConfirm" method="post">
+                                <input type="hidden" name="personId" value="@ViewBag.SearchResult.ID" />
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-user-plus me-1"></i>
+                                    إضافة كعميل
+                                </button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

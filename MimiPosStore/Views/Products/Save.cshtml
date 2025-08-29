@@ -1,0 +1,161 @@
+@model BAL.BALDTO.ProductBALDTO
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = Model.ID == 0 ? "إضافة منتج جديد" : "تعديل المنتج";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Save" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="ImagePath" />
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label">اسم المنتج</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="UOMID" class="control-label">وحدة القياس</label>
+                        <select asp-for="UOMID" class="form-control" asp-items="ViewBag.UOMList">
+                            <option value="">-- اختر وحدة القياس --</option>
+                        </select>
+                        <span asp-validation-for="UOMID" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label">الوصف</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="RetailPrice" class="control-label">سعر البيع</label>
+                        <input asp-for="RetailPrice" class="form-control" type="number" step="0.01" min="0" />
+                        <span asp-validation-for="RetailPrice" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="WholesalePrice" class="control-label">سعر الجملة</label>
+                        <input asp-for="WholesalePrice" class="form-control" type="number" step="0.01" min="0" />
+                        <span asp-validation-for="WholesalePrice" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label asp-for="AvailableQuantity" class="control-label">الكمية المتوفرة</label>
+                        <input asp-for="AvailableQuantity" class="form-control" type="number" step="0.01" min="0" />
+                        <span asp-validation-for="AvailableQuantity" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="CurrencyType" class="control-label">نوع العملة</label>
+                        <select asp-for="CurrencyType" class="form-control" asp-items="ViewBag.CurrencyList">
+                            <option value="">-- اختر العملة --</option>
+                        </select>
+                        <span asp-validation-for="CurrencyType" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="ProductImage" class="control-label">صورة المنتج</label>
+                        <input type="file" id="ProductImage" name="ProductImage" class="form-control" accept="image/*" />
+                        <small class="form-text text-muted">اختر صورة للمنتج (اختياري)</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> حفظ
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> العودة للقائمة
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-image"></i> معاينة الصورة
+                </h5>
+            </div>
+            <div class="card-body text-center">
+                <div id="imagePreview">
+                    @if (!string.IsNullOrEmpty(Model.ImagePath))
+                    {
+                        <img src="~/product/imgs/@Model.ImagePath" class="img-fluid rounded" alt="صورة المنتج" style="max-height: 200px;">
+                    }
+                    else
+                    {
+                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // معاينة الصورة عند اختيارها
+            $('#ProductImage').change(function () {
+                var file = this.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imagePreview').html('<img src="' + e.target.result + '" class="img-fluid rounded" style="max-height: 200px;">');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // التحقق من صحة النموذج
+            $('form').submit(function (e) {
+                var isValid = true;
+                
+                // التحقق من الحقول المطلوبة
+                $('[required]').each(function () {
+                    if (!$(this).val()) {
+                        $(this).addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('يرجى ملء جميع الحقول المطلوبة');
+                }
+            });
+        });
+    </script>
+}

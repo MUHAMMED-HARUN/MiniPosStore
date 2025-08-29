@@ -1,0 +1,52 @@
+@model DAL.EF.Models.clsCustomer
+
+@{
+    ViewData["Title"] = "تعديل بيانات العميل";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-edit me-2"></i>
+                        تعديل بيانات العميل
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="ID" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="PersonID" class="control-label">معرف الشخص</label>
+                                    <input asp-for="PersonID" class="form-control" type="number" />
+                                    <span asp-validation-for="PersonID" class="text-danger"></span>
+                                    <small class="form-text text-muted">معرف الشخص المرتبط بهذا العميل</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save me-1"></i>
+                                حفظ التعديلات
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>
+                                العودة للقائمة
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
