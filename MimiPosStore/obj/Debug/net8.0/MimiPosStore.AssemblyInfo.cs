@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MimiPosStore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dddaad31a6b37590d7d8f8c049728b65bfa00e31")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6df2ef73e5b7e32ed9e2918b92b10b6da94b0676")]
 [assembly: System.Reflection.AssemblyProductAttribute("MimiPosStore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MimiPosStore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

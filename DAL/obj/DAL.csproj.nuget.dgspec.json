@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Project\\MiniPosStoreDirectory\\DAL\\DAL.csproj": {}
+    "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj": {}
   },
   "projects": {
-    "D:\\Project\\MiniPosStoreDirectory\\DAL\\DAL.csproj": {
+    "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Project\\MiniPosStoreDirectory\\DAL\\DAL.csproj",
+        "projectUniqueName": "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "D:\\Project\\MiniPosStoreDirectory\\DAL\\DAL.csproj",
+        "projectPath": "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj",
         "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
-        "outputPath": "D:\\Project\\MiniPosStoreDirectory\\DAL\\obj\\",
+        "outputPath": "D:\\Project\\ddd\\MiniPosStore\\DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Visual Studio\\Shared\\NuGetPackages"

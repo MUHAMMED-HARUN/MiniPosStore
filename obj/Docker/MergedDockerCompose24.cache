@@ -1,0 +1,113 @@
+name: dockercompose7660390491658846
+services:
+  mimiposstore:
+    build:
+      context: D:\Project\ddd\MiniPosStore
+      dockerfile: MimiPosStore/Dockerfile
+    container_name: mimiposstore
+    depends_on:
+      miniPosStoreDB:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_HTTPS_PORTS: "8081"
+      ASPNETCORE_URLS: http://+:80
+      DB_HOST: miniPosStoreDB
+      DB_Name: MiniPosStore
+      DB_SA_PASSWORD: Sa123456!
+    image: mimiposstore
+    networks:
+      mimiposstoreApp: null
+    ports:
+      - mode: ingress
+        target: 80
+        published: "80"
+        protocol: tcp
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+      - mode: ingress
+        target: 8081
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: D:\Project\ddd\MiniPosStore\MimiPosStore\wwwroot
+        target: /app/wwwroot
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\AppData\Roaming/Microsoft/UserSecrets
+        target: /home/app/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\AppData\Roaming/Microsoft/UserSecrets
+        target: /root/.microsoft/usersecrets
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\AppData\Roaming/ASP.NET/Https
+        target: /home/app/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: C:\Users\muham\AppData\Roaming/ASP.NET/Https
+        target: /root/.aspnet/https
+        read_only: true
+        bind:
+          create_host_path: true
+  miniPosStoreDB:
+    container_name: MiniPosStoreDB
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Sa123456!
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    networks:
+      mimiposstoreApp: null
+    ports:
+      - mode: ingress
+        target: 1433
+        published: "8002"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: sql_data
+        target: /var/opt/mssql
+        volume: {}
+  portainer:
+    command:
+      - -H
+      - unix:///var/run/docker.sock
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    networks:
+      mimiposstoreApp: null
+    ports:
+      - mode: ingress
+        target: 9443
+        published: "9000"
+        protocol: tcp
+    restart: always
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        bind:
+          create_host_path: true
+      - type: volume
+        source: portainer_data
+        target: /data
+        volume: {}
+networks:
+  mimiposstoreApp:
+    name: dockercompose7660390491658846_mimiposstoreApp
+volumes:
+  portainer_data:
+    name: dockercompose7660390491658846_portainer_data
+  sql_data:
+    name: dockercompose7660390491658846_sql_data

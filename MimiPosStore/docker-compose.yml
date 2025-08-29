@@ -1,9 +1,7 @@
+version: '3.8'
+
 networks:
   mimiposstoreApp:
-
-volumes:
-  sql_data:
-  app_wwwroot:
 
 services:
   miniPosStoreDB:
@@ -24,16 +22,35 @@ services:
     build:
       context: .
       dockerfile: MimiPosStore/Dockerfile
-    image: ${DOCKER_REGISTRY-}mimiposstore
+    image: mimiposstore
     ports:
-      - "8001:80"
+      - "80:80"
     depends_on:
       - miniPosStoreDB
     environment:
       - DB_HOST=miniPosStoreDB
       - DB_Name=MiniPosStore
       - DB_SA_PASSWORD=Sa123456!
+      - ASPNETCORE_URLS=http://+:80   # Â–« Ì”„Õ »«· ‘€Ì· ⁄·Ï HTTP
     volumes:
       - ./MimiPosStore/wwwroot:/app/wwwroot
     networks:
       - mimiposstoreApp
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - "9000:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    networks:
+      - mimiposstoreApp
+
+volumes:
+  sql_data:
+  app_wwwroot:
+  portainer_data:

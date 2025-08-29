@@ -1,22 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Project\\MiniPosStoreDirectory\\",
+  "WorkspaceRootPath": "D:\\Project\\ddd\\MiniPosStore\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{81DDED9D-158B-E303-5F62-77A2896D2A5A}|docker-compose.dcproj|d:\\project\\miniposstoredirectory\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "AbsoluteMoniker": "D:0:0:{81DDED9D-158B-E303-5F62-77A2896D2A5A}|docker-compose.dcproj|d:\\project\\ddd\\miniposstore\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{81DDED9D-158B-E303-5F62-77A2896D2A5A}|docker-compose.dcproj|solutionrelative:docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{12357D34-2A02-1ECD-BC6C-D84ADDC1A72E}|DAL\\DAL.csproj|d:\\project\\miniposstoredirectory\\dal\\ef\\appdbcontext\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{12357D34-2A02-1ECD-BC6C-D84ADDC1A72E}|DAL\\DAL.csproj|solutionrelative:dal\\ef\\appdbcontext\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{AF55B45C-3402-0EED-C2B6-A60EEEA0D906}|MimiPosStore\\MimiPosStore.csproj|d:\\project\\ddd\\miniposstore\\mimiposstore\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{AF55B45C-3402-0EED-C2B6-A60EEEA0D906}|MimiPosStore\\MimiPosStore.csproj|solutionrelative:mimiposstore\\docker-compose.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AF55B45C-3402-0EED-C2B6-A60EEEA0D906}|MimiPosStore\\MimiPosStore.csproj|d:\\project\\miniposstoredirectory\\mimiposstore\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AF55B45C-3402-0EED-C2B6-A60EEEA0D906}|MimiPosStore\\MimiPosStore.csproj|solutionrelative:mimiposstore\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AF55B45C-3402-0EED-C2B6-A60EEEA0D906}|MimiPosStore\\MimiPosStore.csproj|d:\\project\\miniposstoredirectory\\mimiposstore\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{AF55B45C-3402-0EED-C2B6-A60EEEA0D906}|MimiPosStore\\MimiPosStore.csproj|solutionrelative:mimiposstore\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,57 +21,44 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AppDBContext.cs",
-              "DocumentMoniker": "D:\\Project\\MiniPosStoreDirectory\\DAL\\EF\\AppDBContext\\AppDBContext.cs",
-              "RelativeDocumentMoniker": "DAL\\EF\\AppDBContext\\AppDBContext.cs",
-              "ToolTip": "D:\\Project\\MiniPosStoreDirectory\\DAL\\EF\\AppDBContext\\AppDBContext.cs",
-              "RelativeToolTip": "DAL\\EF\\AppDBContext\\AppDBContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-28T19:02:48.44Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Dockerfile",
-              "DocumentMoniker": "D:\\Project\\MiniPosStoreDirectory\\MimiPosStore\\Dockerfile",
-              "RelativeDocumentMoniker": "MimiPosStore\\Dockerfile",
-              "ToolTip": "D:\\Project\\MiniPosStoreDirectory\\MimiPosStore\\Dockerfile",
-              "RelativeToolTip": "MimiPosStore\\Dockerfile",
-              "ViewState": "AgIAABQAAAAAAAAAAAAUwBwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-08-28T18:39:35.851Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Project\\MiniPosStoreDirectory\\MimiPosStore\\Program.cs",
-              "RelativeDocumentMoniker": "MimiPosStore\\Program.cs",
-              "ToolTip": "D:\\Project\\MiniPosStoreDirectory\\MimiPosStore\\Program.cs",
-              "RelativeToolTip": "MimiPosStore\\Program.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAgwDQAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-28T18:42:53.107Z"
+              "Title": "docker-compose.yml",
+              "DocumentMoniker": "D:\\Project\\ddd\\MiniPosStore\\MimiPosStore\\docker-compose.yml",
+              "RelativeDocumentMoniker": "MimiPosStore\\docker-compose.yml",
+              "ToolTip": "D:\\Project\\ddd\\MiniPosStore\\MimiPosStore\\docker-compose.yml",
+              "RelativeToolTip": "MimiPosStore\\docker-compose.yml",
+              "ViewState": "AgIAACsAAAAAAAAAAAAiwDgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2025-08-29T20:57:11.148Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "docker-compose.yml",
-              "DocumentMoniker": "D:\\Project\\MiniPosStoreDirectory\\docker-compose.yml",
+              "DocumentMoniker": "D:\\Project\\ddd\\MiniPosStore\\docker-compose.yml",
               "RelativeDocumentMoniker": "docker-compose.yml",
-              "ToolTip": "D:\\Project\\MiniPosStoreDirectory\\docker-compose.yml",
+              "ToolTip": "D:\\Project\\ddd\\MiniPosStore\\docker-compose.yml",
               "RelativeToolTip": "docker-compose.yml",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAYwDAAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
-              "WhenOpened": "2025-08-28T17:38:53.249Z",
+              "WhenOpened": "2025-08-29T20:56:47.987Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Microsoft.VisualStudio.Docker.Compose.targets",
+              "DocumentMoniker": "D:\\Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
+              "ToolTip": "D:\\Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
+              "RelativeToolTip": "..\\..\\..\\Visual Studio\\2022\\Community\\MSBuild\\Sdks\\Microsoft.Docker.Sdk\\build\\Microsoft.VisualStudio.Docker.Compose.targets",
+              "ViewState": "AgIAAMQAAAAAAAAAAAAqwNYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-08-29T20:55:42.05Z"
             }
           ]
         }

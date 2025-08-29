@@ -14,8 +14,8 @@ services:
       - ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS=true
       - NUGET_FALLBACK_PACKAGES=/.nuget/fallbackpackages
     volumes:
-      - D:\Project\MiniPosStoreDirectory\MimiPosStore:/app:rw
-      - D:\Project\MiniPosStoreDirectory:/src:rw
+      - D:\Project\ddd\MiniPosStore\MimiPosStore:/app:rw
+      - D:\Project\ddd\MiniPosStore:/src:rw
       - C:\Users\muham\vsdbg\vs2017u5:/remote_debugger:rw
       - C:\Users\muham\.nuget\packages:/.nuget/packages:ro
       - D:\Visual Studio\Shared\NuGetPackages:/.nuget/fallbackpackages:ro
