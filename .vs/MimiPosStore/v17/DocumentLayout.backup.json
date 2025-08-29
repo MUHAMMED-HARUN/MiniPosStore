@@ -36,7 +36,7 @@
               "RelativeDocumentMoniker": "DAL\\EF\\AppDBContext\\AppDBContext.cs",
               "ToolTip": "D:\\Project\\MiniPosStoreDirectory\\DAL\\EF\\AppDBContext\\AppDBContext.cs",
               "RelativeToolTip": "DAL\\EF\\AppDBContext\\AppDBContext.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAjwB0AAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAIwB0AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-28T19:02:48.44Z",
               "EditorCaption": ""
@@ -63,8 +63,7 @@
               "RelativeToolTip": "MimiPosStore\\Program.cs",
               "ViewState": "AgIAACsAAAAAAAAAAAAgwDQAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-28T18:42:53.107Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-28T18:42:53.107Z"
             },
             {
               "$type": "Document",
@@ -76,8 +75,7 @@
               "RelativeToolTip": "docker-compose.yml",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
-              "WhenOpened": "2025-08-28T17:38:53.249Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-28T17:38:53.249Z"
             }
           ]
         }

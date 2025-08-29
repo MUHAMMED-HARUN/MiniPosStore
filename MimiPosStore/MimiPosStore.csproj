@@ -35,4 +35,10 @@
     <Folder Include="Areas\Identity\Data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="docker-compose.override.yml">
+      <DependentUpon>docker-compose.yml</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>

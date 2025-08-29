@@ -1,0 +1,39 @@
+networks:
+  mimiposstoreApp:
+
+volumes:
+  sql_data:
+  app_wwwroot:
+
+services:
+  miniPosStoreDB:
+    container_name: MiniPosStoreDB
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "8002:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Sa123456!
+    volumes:
+      - sql_data:/var/opt/mssql
+    networks:
+      - mimiposstoreApp
+
+  mimiposstore:
+    container_name: mimiposstore
+    build:
+      context: .
+      dockerfile: MimiPosStore/Dockerfile
+    image: ${DOCKER_REGISTRY-}mimiposstore
+    ports:
+      - "8001:80"
+    depends_on:
+      - miniPosStoreDB
+    environment:
+      - DB_HOST=miniPosStoreDB
+      - DB_Name=MiniPosStore
+      - DB_SA_PASSWORD=Sa123456!
+    volumes:
+      - ./MimiPosStore/wwwroot:/app/wwwroot
+    networks:
+      - mimiposstoreApp
