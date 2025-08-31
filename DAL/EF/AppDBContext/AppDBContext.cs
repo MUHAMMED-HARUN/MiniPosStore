@@ -22,18 +22,18 @@ namespace DAL.EF.AppDBContext
         public AppDBContext(DbContextOptions<AppDBContext> options) 
             : base(options)
         {
-            var databaseCreator = Database.GetService<IRelationalDatabaseCreator>()as RelationalDatabaseCreator;
-            if(databaseCreator!= null)
-            {
-                if(!databaseCreator.CanConnect())
-                {
-                    Database.Migrate(); 
-                }
-                if(!databaseCreator.HasTables())
-                {
-                    databaseCreator.CreateTables();
-                }
-            }
+            //var databaseCreator = Database.GetService<IRelationalDatabaseCreator>()as RelationalDatabaseCreator;
+            //if(databaseCreator!= null)
+            //{
+            //    if(!databaseCreator.CanConnect())
+            //    {
+            //        Database.Migrate(); 
+            //    }
+            //    if(!databaseCreator.HasTables())
+            //    {
+            //        databaseCreator.CreateTables();
+            //    }
+            //}
         }
 
         public DbSet<clsCustomer> Customers { get; set; }

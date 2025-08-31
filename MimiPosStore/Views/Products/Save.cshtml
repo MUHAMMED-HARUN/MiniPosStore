@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="Save" method="post" enctype="multipart/form-data">
+        <form asp-action="Save" method="post" id="editOrderForm" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <input type="hidden" asp-for="ID" />
@@ -124,6 +124,8 @@
 
 @section Scripts {
     <script>
+        <script src="~/js/Product.js" asp-append-version="true"></script>
+
         $(document).ready(function () {
             // معاينة الصورة عند اختيارها
             $('#ProductImage').change(function () {

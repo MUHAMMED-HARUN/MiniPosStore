@@ -57,6 +57,7 @@ namespace MimiPosStore.Controllers
             ModelState.Remove("UOMName");
             ModelState.Remove("UOMSymbol");
             ModelState.Remove("ActionByUser");
+            ModelState.Remove("CurrencyName");
          
             if (ModelState.IsValid)
             {

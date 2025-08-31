@@ -1,5 +1,19 @@
 ﻿
-    $(document).ready(function () {
+$(document).ready(function () {
+    function getOrderItemsList() {
+        var list = [];
+
+        // اجمع القيم من الخاصية data-item-id لكل صف عناصر موجود في القائمة المعروضة
+        document.querySelectorAll('#orderItems .order-item-row').forEach(function (row) {
+            var idAttr = row.getAttribute('data-item-id');
+            var itemId = parseInt(idAttr);
+            if (!isNaN(itemId)) {
+                list.push(itemId);
+            }
+        });
+
+        return list;
+    }
         // تحديث معلومات المنتج عند تغيير المنتج
         $('#productSelect').change(function () {
             var productId = $(this).val();
@@ -100,4 +114,43 @@
         });
         return false; // منع الإرسال العادي للنموذج
     });
+
+    $('#orderForm').on('submit', function (e) {
+        e.preventDefault(); // منع الإرسال الافتراضي
+
+        // احسب الإجمالي وعدد العناصر
+        calculateItemTotal();
+        var itemsCount = $('#OrderItemsList .order-item-row').length || 0;
+        $('#ItemsCount').val(itemsCount);
+
+        // اجمع قائمة item IDs
+        var itemIds = getOrderItemsList();
+
+        // احصل على بيانات الفورم
+        var formData = new FormData(this);
+
+        // أضف قائمة item IDs كبيانات إضافية
+        formData.append('ItemIds', JSON.stringify(itemIds));
+
+        // أرسل البيانات عبر AJAX
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    alert('تم حفظ أمر الاستيراد بنجاح');
+                    window.location.href = '/Orders/Index';
+                } else {
+                    alert('حدث خطأ أثناء الحفظ: ' + (response.message || 'خطأ غير معروف'));
+                }
+            },
+            error: function () {
+                alert('حدث خطأ في الاتصال بالخادم');
+            }
+        });
+    });
+
 });

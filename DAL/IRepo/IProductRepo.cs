@@ -16,6 +16,8 @@ namespace DAL.IRepo
         Task<bool> DeleteProductAsync(int id);
         Task<List<clsProduct>> SearchProductsAsync(string searchTerm);
           Task<bool> IncreaseProductQuantityAsync( int[] ImportOrderItmesID, string ActionByUser);
+          Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser);
+
         Task<List<clsUnitOfMeasure>> GetAllUOMAsync();
         Task<clsUnitOfMeasure> GetUOMByIdAsync(int id);
     }

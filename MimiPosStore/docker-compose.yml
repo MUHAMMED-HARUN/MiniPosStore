@@ -31,7 +31,7 @@ services:
       - DB_HOST=miniPosStoreDB
       - DB_Name=MiniPosStore
       - DB_SA_PASSWORD=Sa123456!
-      - ASPNETCORE_URLS=http://+:80   # Â–« Ì”„Õ »«· ‘€Ì· ⁄·Ï HTTP
+      - ASPNETCORE_URLS=http://+:80
     volumes:
       - ./MimiPosStore/wwwroot:/app/wwwroot
     networks:

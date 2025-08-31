@@ -70,6 +70,11 @@ namespace BAL.Services
         {
             return await _productRepo.IncreaseProductQuantityAsync( ImportOrderItmesID, ActionByUser);
         }
+        public async Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser)
+        {
+            return await _productRepo.DecreaseProductQuantityAsync(OrderItemsID, actionByUser);
+        }
+
 
         public async Task<List<clsUnitOfMeasure>> GetAllUOMAsync()
         {

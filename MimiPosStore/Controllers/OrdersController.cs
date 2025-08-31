@@ -6,10 +6,13 @@ using DAL.EF.DTO;
 using DAL.EF.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MimiPosStore.Controllers
@@ -76,13 +79,14 @@ namespace MimiPosStore.Controllers
         // POST: Orders/Save
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(OrderBALDTO orderBALDTO)
+        public async Task<IActionResult> Save(OrderBALDTO orderBALDTO, string ItemIds=null)
         {
      
             ModelState.Remove("PhoneNumber");
             ModelState.Remove("LastName");
             ModelState.Remove("FirstName");
             ModelState.Remove("ActionByUser");
+
             if (ModelState.IsValid)
             {
                 try
@@ -100,8 +104,26 @@ namespace MimiPosStore.Controllers
                     else
                     {
                         // تحديث طلب موجود
-                        await _orderService.UpdateBALDTOAsync(orderBALDTO);
+                       bool  result =  await _orderService.UpdateBALDTOAsync(orderBALDTO);
+
+                        if (result)
+                        {
+                            if (!string.IsNullOrEmpty(ItemIds))
+                            {
+                                try
+                                {
+                                    var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
+                                    if (ArrayItemsID.Length > 0 && ArrayItemsID != null) 
+                                    _productService.DecreaseProductQuantityAsync(ArrayItemsID, currentUserId);
+                                }
+                                catch(SqlException e )
+                                {
+                                    string s = e.Source;
+                                }
+                            }
                         TempData["SuccessMessage"] = "تم تحديث الطلب بنجاح";
+                        }
+
                     }
 
                     return RedirectToAction(nameof(Index));

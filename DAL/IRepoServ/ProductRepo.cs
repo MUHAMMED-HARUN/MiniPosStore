@@ -1,7 +1,10 @@
 using DAL.EF.AppDBContext;
 using DAL.EF.Models;
 using DAL.IRepo;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,7 +134,56 @@ namespace DAL.IRepoServ
             // 6?? ÍÝÙ ÇáÊÛííÑÇÊ Ýí ÞÇÚÏÉ ÇáÈíÇäÇÊ
             return await _context.SaveChangesAsync() > 0;
         }
+        public async Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser)
+        {
+            if (OrderItemsID == null || OrderItemsID.Length == 0)
+                return false;
 
+            // 1?? ÌáÈ ÚäÇÕÑ ÇáÇÓÊíÑÇÏ ÇáãÑÊÈØÉ
+            var OrderItems =  _context.OrderItems
+                .Where(oi => OrderItemsID.Contains(oi.ID))
+                .ToList();
+
+            if (!OrderItems.Any())
+                return false;
+
+            // 2?? ÇÓÊÎÑÇÌ ãÚÑÝÇÊ ÇáãäÊÌÇÊ ÇáãÑÊÈØÉ
+            var productIds = OrderItems.Select(ioi => ioi.ProductID).Distinct().ToList();
+            var products = new List<clsProduct>();
+            try
+            {
+                products =  _context.Products
+                    .Where(p => productIds.Contains(p.ID))
+                    .ToList();
+            }
+            catch (SqlException e)
+            {
+                return false; // Ãæ ÇáÊÚÇãá ãÚ ÇáÎØÃ ÍÓÈ ÇáÍÇÌÉ
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+
+            // 4?? ÊÍæíá ÇáãäÊÌÇÊ Åáì Dictionary ááÈÍË ÇáÓÑíÚ
+            var productDict = products.ToDictionary(p => p.ID);
+
+            // 5?? ÊÍÏíË ÇáßãíÇÊ áßá ãäÊÌ
+            foreach (var item in OrderItems)
+            {
+                if (productDict.TryGetValue(item.ProductID, out var product))
+                {
+                    product.AvailableQuantity -= item.Quantity;
+                    product.ActionDate = DateTime.Now;
+                    product.ActionByUser = actionByUser;
+                    product.ActionType = 3; // Quantity Change
+                }
+            }
+
+            // 6?? ÍÝÙ ÇáÊÛííÑÇÊ Ýí ÞÇÚÏÉ ÇáÈíÇäÇÊ
+            return await _context.SaveChangesAsync() > 0;
+        }
         public async Task<List<clsUnitOfMeasure>> GetAllUOMAsync()
         {
             return await _context.UnitOfMeasures.ToListAsync();

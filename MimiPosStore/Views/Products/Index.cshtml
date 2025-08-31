@@ -41,7 +41,7 @@
             <div class="card h-100">
                 @if (!string.IsNullOrEmpty(item.ImagePath))
                 {
-                    <img src="~/product/imgs/@item.ImagePath" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                    <img src="@item.ImagePath" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
                 }
                 else
                 {

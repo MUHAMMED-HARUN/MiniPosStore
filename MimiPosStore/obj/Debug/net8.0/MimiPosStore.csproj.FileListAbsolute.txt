@@ -2063,7 +2063,10 @@ D:\Project\ddd\MiniPosStore\MimiPosStore\obj\Debug\net8.0\staticwebassets.build.
 D:\Project\ddd\MiniPosStore\MimiPosStore\obj\Debug\net8.0\staticwebassets.build.json.cache
 D:\Project\ddd\MiniPosStore\MimiPosStore\obj\Debug\net8.0\staticwebassets.development.json
 D:\Project\ddd\MiniPosStore\MimiPosStore\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+<<<<<<< HEAD
 D:\Project\ddd\MiniPosStore\MimiPosStore\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+=======
+>>>>>>> 5776ae9 (fdf)
 D:\Project\ddd\MiniPosStore\MimiPosStore\obj\Debug\net8.0\MimiPosS.184F6D8F.Up2Date
 D:\Project\ddd\MiniPosStore\MimiPosStore\obj\Debug\net8.0\MimiPosStore.dll
 D:\Project\ddd\MiniPosStore\MimiPosStore\obj\Debug\net8.0\refint\MimiPosStore.dll
