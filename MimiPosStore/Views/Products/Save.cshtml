@@ -108,7 +108,7 @@
                 <div id="imagePreview">
                     @if (!string.IsNullOrEmpty(Model.ImagePath))
                     {
-                        <img src="~/product/imgs/@Model.ImagePath" class="img-fluid rounded" alt="صورة المنتج" style="max-height: 200px;">
+                        <img src="~/@Model.ImagePath.Replace("\\", "/")"   class="img-fluid rounded"   alt="صورة المنتج"  style="max-height: 200px;">
                     }
                     else
                     {

@@ -1224,6 +1224,14 @@
                 },
                 "Patterns": null
               },
+              "b4024391-a768-43bd-be34-62f283fc6abe.jpg": {
+                "Children": null,
+                "Asset": {
+                  "ContentRootIndex": 0,
+                  "SubPath": "product/imgs/b4024391-a768-43bd-be34-62f283fc6abe.jpg"
+                },
+                "Patterns": null
+              },
               "c6ede0ce-cf1c-41b4-a422-35f6f492c657.png": {
                 "Children": null,
                 "Asset": {
@@ -1245,6 +1253,14 @@
                 "Asset": {
                   "ContentRootIndex": 0,
                   "SubPath": "product/imgs/e589deea-a8ce-4863-a0e1-4818d917d7e0.png"
+                },
+                "Patterns": null
+              },
+              "f16162be-d5a5-49f9-b6ae-b765cc9dcf68.png": {
+                "Children": null,
+                "Asset": {
+                  "ContentRootIndex": 0,
+                  "SubPath": "product/imgs/f16162be-d5a5-49f9-b6ae-b765cc9dcf68.png"
                 },
                 "Patterns": null
               },
