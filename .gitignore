@@ -6,3 +6,6 @@
 bin/
 obj/
 .vs/
+**/bin/
+**/obj/
+*.pdb
