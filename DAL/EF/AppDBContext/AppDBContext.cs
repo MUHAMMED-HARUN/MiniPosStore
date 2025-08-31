@@ -22,18 +22,18 @@ namespace DAL.EF.AppDBContext
         public AppDBContext(DbContextOptions<AppDBContext> options) 
             : base(options)
         {
-            //var databaseCreator = Database.GetService<IRelationalDatabaseCreator>()as RelationalDatabaseCreator;
-            //if(databaseCreator!= null)
-            //{
-            //    if(!databaseCreator.CanConnect())
-            //    {
-            //        Database.Migrate(); 
-            //    }
-            //    if(!databaseCreator.HasTables())
-            //    {
-            //        databaseCreator.CreateTables();
-            //    }
-            //}
+            var databaseCreator = Database.GetService<IRelationalDatabaseCreator>() as RelationalDatabaseCreator;
+            if (databaseCreator != null)
+            {
+                if (!databaseCreator.CanConnect())
+                {
+                    Database.Migrate();
+                }
+                if (!databaseCreator.HasTables())
+                {
+                    databaseCreator.CreateTables();
+                }
+            }
         }
 
         public DbSet<clsCustomer> Customers { get; set; }
@@ -261,9 +261,9 @@ namespace DAL.EF.AppDBContext
                 log.ActionType = e.State.ToString();
                 log.Version = 1;
                 log.NewData = e.State != EntityState.Deleted?
-                   JsonSerializer.Serialize(e.CurrentValues.ToObject()) : null;
+                   JsonSerializer.Serialize(e.CurrentValues.ToObject()) : "null";
                 log.OldData = e.State != EntityState.Added ?
-                     JsonSerializer.Serialize(e.OriginalValues.ToObject()) : null;
+                     JsonSerializer.Serialize(e.OriginalValues.ToObject()) : "null";
 
                 LogRegisters.Add(log);
             }

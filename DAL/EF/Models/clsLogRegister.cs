@@ -12,7 +12,7 @@ namespace DAL.EF.Models
         public int ID { get; set; }
         public string TableName { get; set; }
         public string NewData { get; set; }
-        public string OldData { get; set; }
+        public string? OldData { get; set; }
        public DateTime ActionDate { get; set; }
         [ForeignKey("User")]
         public string ActoinByUser { get; set; }
