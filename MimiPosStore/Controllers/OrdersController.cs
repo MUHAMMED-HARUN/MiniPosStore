@@ -42,7 +42,7 @@ namespace MimiPosStore.Controllers
                 var orders = await _orderService.GetAllBALDTOAsync();
                 return View(orders);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل قائمة الطلبات: " + ex.Message;
                 return View(new List<OrderBALDTO>());
@@ -79,70 +79,131 @@ namespace MimiPosStore.Controllers
             return View(order);
         }
 
-        // POST: Orders/Save
+        //// POST: Orders/Save
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Save(OrderBALDTO orderBALDTO, string ItemIds=null)
+        //{
+
+        //    ModelState.Remove("PhoneNumber");
+        //    ModelState.Remove("LastName");
+        //    ModelState.Remove("FirstName");
+        //    ModelState.Remove("ActionByUser");
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            // TODO: Get current user ID from authentication
+        //            string currentUserId = "95a74952-19d3-4339-8e71-2f1835eea812"; // Placeholder
+        //            orderBALDTO.ActionByUser = currentUserId;
+        //            // معالجة الطلب
+        //            if (orderBALDTO.ID == 0)
+        //            {
+        //                // إضافة طلب جديد
+        //                await _orderService.CreateBALDTOAsync(orderBALDTO);
+        //                TempData["SuccessMessage"] = "تم إضافة الطلب بنجاح";
+        //            }
+        //            else
+        //            {
+        //                // تحديث طلب موجود
+        //               bool  result =  await _orderService.UpdateBALDTOAsync(orderBALDTO);
+
+        //                if (result)
+        //                {
+        //                    if (!string.IsNullOrEmpty(ItemIds))
+        //                    {
+        //                        try
+        //                        {
+        //                            var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
+        //                            if (ArrayItemsID.Length > 0 && ArrayItemsID != null) 
+        //                         await   _productService.DecreaseProductQuantityAsync(ArrayItemsID, currentUserId);
+        //                        }
+        //                        catch(ArgumentException e)
+        //                        {
+        //                            throw new ArgumentException(e.Message);
+        //                        }
+        //                    }
+        //                    TempData["SuccessMessage"] = "تم تحديث الطلب بنجاح";
+        //                }
+        //                else
+        //                {
+        //                    TempData["ErrorMessage"] = "فشل في تحديث الطلب";
+        //                }
+
+        //            }
+
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ModelState.AddModelError("", "حدث خطأ أثناء حفظ الطلب: " + ex.Message);
+        //            TempData["ErrorMessage"] = "فشل في تحديث الطلب" + " " + ex.Message;
+        //            ;
+
+        //        }
+        //    }
+
+        //    await PopulateDropDowns();
+        //    return View(orderBALDTO);
+        //}
+
+        // GET: Orders/Delete/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(OrderBALDTO orderBALDTO, string ItemIds=null)
+        public async Task<IActionResult> Save(OrderBALDTO orderBALDTO, string ItemIds = null)
         {
-     
             ModelState.Remove("PhoneNumber");
             ModelState.Remove("LastName");
             ModelState.Remove("FirstName");
             ModelState.Remove("ActionByUser");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
+                return Json(new { success = false, message = "بيانات الطلب غير صحيحة" });
+            }
+
+            try
+            {
+                string currentUserId = "95a74952-19d3-4339-8e71-2f1835eea812"; // Placeholder
+                orderBALDTO.ActionByUser = currentUserId;
+
+                if (orderBALDTO.ID == 0)
                 {
-                    // TODO: Get current user ID from authentication
-                    string currentUserId = "95a74952-19d3-4339-8e71-2f1835eea812"; // Placeholder
-                    orderBALDTO.ActionByUser = currentUserId;
-                    // معالجة الطلب
-                    if (orderBALDTO.ID == 0)
+                    await _orderService.CreateBALDTOAsync(orderBALDTO);
+                    return Json(new { success = true, message = "تم إضافة الطلب بنجاح" });
+                }
+                else
+                {
+                    bool result = await _orderService.UpdateBALDTOAsync(orderBALDTO);
+                    if (!string.IsNullOrEmpty(ItemIds))
                     {
-                        // إضافة طلب جديد
-                        await _orderService.CreateBALDTOAsync(orderBALDTO);
-                        TempData["SuccessMessage"] = "تم إضافة الطلب بنجاح";
+                        var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
+                        if (ArrayItemsID?.Length > 0)
+                            await _productService.DecreaseProductQuantityAsync(ArrayItemsID, currentUserId);
+                    }
+
+                    if (result)
+                    {
+                        return Json(new { success = true, message = "تم تحديث الطلب بنجاح" });
                     }
                     else
                     {
-                        // تحديث طلب موجود
-                       bool  result =  await _orderService.UpdateBALDTOAsync(orderBALDTO);
-
-                        if (result)
-                        {
-                            if (!string.IsNullOrEmpty(ItemIds))
-                            {
-                                try
-                                {
-                                    var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
-                                    if (ArrayItemsID.Length > 0 && ArrayItemsID != null) 
-                                 await   _productService.DecreaseProductQuantityAsync(ArrayItemsID, currentUserId);
-                                }
-                                catch
-                                {
-
-                                }
-                            }
-                        //    ModelState.Clear();
-                        //TempData["SuccessMessage"] = "تم تحديث الطلب بنجاح";
-                        }
-
+                        return Json(new { success = false, message = "فشل في تحديث الطلب" });
                     }
-
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "حدث خطأ أثناء حفظ الطلب: " + ex.Message);
                 }
             }
-            
-            await PopulateDropDowns();
-            return View(orderBALDTO);
+            catch (ArgumentException argEx)
+            {
+                return Json(new { success = false, message = argEx.Message });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "حدث خطأ أثناء حفظ الطلب: " + ex.Message });
+            }
         }
 
-        // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             var order = await _orderService.GetByIdBALDTOAsync(id);

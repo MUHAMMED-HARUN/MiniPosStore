@@ -20,10 +20,11 @@ namespace MimiPosStore.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ICurrentUserService _CurentUserService;
 
-        public ProductsController(IProductService productService, IWebHostEnvironment webHostEnvironment)
+        public ProductsController(IProductService productService, IWebHostEnvironment webHostEnvironment,ICurrentUserService currentUser)
         {
             _productService = productService;
             _webHostEnvironment = webHostEnvironment;
+            _CurentUserService = currentUser;
         }
 
         // GET: Products

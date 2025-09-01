@@ -100,7 +100,7 @@ namespace DAL.IRepoServ
             if (importOrderItemsID == null || importOrderItemsID.Length == 0)
                 return false;
 
-            // 1?? ÌáÈ ÚäÇÕÑ ÇáÇÓÊíÑÇÏ ÇáãÑÊÈØÉ
+            // 1?? ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var importOrderItems = await _context.ImportOrderItems
                 .Where(ioi => importOrderItemsID.Contains(ioi.ID))
                 .ToListAsync();
@@ -108,18 +108,18 @@ namespace DAL.IRepoServ
             if (!importOrderItems.Any())
                 return false;
 
-            // 2?? ÇÓÊÎÑÇÌ ãÚÑÝÇÊ ÇáãäÊÌÇÊ ÇáãÑÊÈØÉ
+            // 2?? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var productIds = importOrderItems.Select(ioi => ioi.ProductID).Distinct().ToList();
 
-            // 3?? ÌáÈ ÇáãäÊÌÇÊ ãä ÞÇÚÏÉ ÇáÈíÇäÇÊ
+            // 3?? ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var products = await _context.Products
                 .Where(p => productIds.Contains(p.ID))
                 .ToListAsync();
 
-            // 4?? ÊÍæíá ÇáãäÊÌÇÊ Åáì Dictionary ááÈÍË ÇáÓÑíÚ
+            // 4?? ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Dictionary ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var productDict = products.ToDictionary(p => p.ID);
 
-            // 5?? ÊÍÏíË ÇáßãíÇÊ áßá ãäÊÌ
+            // 5?? ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             foreach (var item in importOrderItems)
             {
                 if (productDict.TryGetValue(item.ProductID, out var product))
@@ -131,7 +131,7 @@ namespace DAL.IRepoServ
                 }
             }
 
-            // 6?? ÍÝÙ ÇáÊÛííÑÇÊ Ýí ÞÇÚÏÉ ÇáÈíÇäÇÊ
+            // 6?? ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             return await _context.SaveChangesAsync() > 0;
         }
         public async Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser)
@@ -139,7 +139,7 @@ namespace DAL.IRepoServ
             if (OrderItemsID == null || OrderItemsID.Length == 0)
                 return false;
 
-            // 1?? ÌáÈ ÚäÇÕÑ ÇáÇÓÊíÑÇÏ ÇáãÑÊÈØÉ
+            // 1?? ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var OrderItems =  _context.OrderItems
                 .Where(oi => OrderItemsID.Contains(oi.ID))
                 .ToList();
@@ -147,7 +147,7 @@ namespace DAL.IRepoServ
             if (!OrderItems.Any())
                 return false;
 
-            // 2?? ÇÓÊÎÑÇÌ ãÚÑÝÇÊ ÇáãäÊÌÇÊ ÇáãÑÊÈØÉ
+            // 2?? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var productIds = OrderItems.Select(ioi => ioi.ProductID).Distinct().ToList();
             var products = new List<clsProduct>();
             try
@@ -158,7 +158,7 @@ namespace DAL.IRepoServ
             }
             catch (SqlException e)
             {
-                return false; // Ãæ ÇáÊÚÇãá ãÚ ÇáÎØÃ ÍÓÈ ÇáÍÇÌÉ
+                return false; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             }
             catch (Exception e)
             {
@@ -166,14 +166,19 @@ namespace DAL.IRepoServ
             }
 
 
-            // 4?? ÊÍæíá ÇáãäÊÌÇÊ Åáì Dictionary ááÈÍË ÇáÓÑíÚ
+            // 4?? ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Dictionary ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var productDict = products.ToDictionary(p => p.ID);
 
-            // 5?? ÊÍÏíË ÇáßãíÇÊ áßá ãäÊÌ
+            // 5?? ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             foreach (var item in OrderItems)
             {
                 if (productDict.TryGetValue(item.ProductID, out var product))
                 {
+                    if (product.AvailableQuantity - item.Quantity < 0)
+                    {
+                        throw new ArgumentException("ÙƒÙ…ÙŠØ© Ø§Ù„Ù…Ù†ØªØ¬ ØºÙŠØ± ÙƒØ§ÙÙŠØ©.");
+                    }
+
                     product.AvailableQuantity -= item.Quantity;
                     product.ActionDate = DateTime.Now;
                     product.ActionByUser = actionByUser;
@@ -181,7 +186,7 @@ namespace DAL.IRepoServ
                 }
             }
 
-            // 6?? ÍÝÙ ÇáÊÛííÑÇÊ Ýí ÞÇÚÏÉ ÇáÈíÇäÇÊ
+            // 6?? ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             return await _context.SaveChangesAsync() > 0;
         }
         public async Task<List<clsUnitOfMeasure>> GetAllUOMAsync()

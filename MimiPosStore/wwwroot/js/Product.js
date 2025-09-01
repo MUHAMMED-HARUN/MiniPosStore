@@ -69,6 +69,22 @@ $(document).ready(function () {
         $('#itemTotalAmount').val(total.toFixed(2));
     }
 
+    // دالة لجمع معرفات عناصر الطلب
+    function getOrderItemsList() {
+        var list = [];
+
+        // اجمع القيم من الخاصية data-item-id لكل صف عناصر موجود في القائمة المعروضة
+        document.querySelectorAll('#orderItems .order-item-row').forEach(function (row) {
+            var idAttr = row.getAttribute('data-item-id');
+            var itemId = parseInt(idAttr);
+            if (!isNaN(itemId)) {
+                list.push(itemId);
+            }
+        });
+
+        return list;
+    }
+
     // إعادة تحميل عناصر الطلب بعد إضافة عنصر جديد
     $('#addItemForm').on('submit', function () {
         var form = $(this);
@@ -120,7 +136,7 @@ $(document).ready(function () {
 
         // احسب الإجمالي وعدد العناصر
         calculateItemTotal();
-        var itemsCount = $('#OrderItemsList .order-item-row').length || 0;
+        var itemsCount = $('#orderItems .order-item-row').length || 0;
         $('#ItemsCount').val(itemsCount);
 
         // اجمع قائمة item IDs
