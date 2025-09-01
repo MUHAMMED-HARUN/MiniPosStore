@@ -149,19 +149,94 @@ namespace BAL.Services
 			return await _orderRepo.SearchOrdersAsync(searchTerm);
 		}
 
-		public async Task<bool> Save()
-		{
-			if (SaveMode == clsGlobal.enSaveMode.Add)
-			{
-				var result = await CreateAsync(Order);
-				if (result)
-					SaveMode = clsGlobal.enSaveMode.Update;
-				return result;
-			}
-			else
-			{
-				return await UpdateAsync(Order);
-			}
-		}
-	}
+		        public async Task<bool> Save()
+        {
+            if (SaveMode == clsGlobal.enSaveMode.Add)
+            {
+                var result = await CreateAsync(Order);
+                if (result)
+                    SaveMode = clsGlobal.enSaveMode.Update;
+                return result;
+            }
+            else
+            {
+                return await UpdateAsync(Order);
+            }
+        }
+
+        // Payment Methods
+        public async Task<bool> UpdatePaymentStatusAsync(int orderID, byte paymentStatus)
+        {
+            try
+            {
+                var order = await _orderRepo.GetByIdAsync(orderID);
+                if (order == null) return false;
+
+                order.PaymentStatus = paymentStatus;
+                order.ActionDate = DateTime.Now;
+                order.ActionType = 1; // Update
+
+                return await UpdateAsync(order);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AddPaymentAsync(int orderID, float paymentAmount)
+        {
+            try
+            {
+                var order = await _orderRepo.GetByIdAsync(orderID);
+                if (order == null) return false;
+
+                order.PaidAmount += paymentAmount;
+                order.ActionDate = DateTime.Now;
+                order.ActionType = 1; // Update
+                
+                // Update payment status based on paid amount
+                if (order.PaidAmount >= order.TotalAmount)
+                    order.PaymentStatus = 2; // Fully paid
+                else if (order.PaidAmount > 0)
+                    order.PaymentStatus = 1; // Partially paid
+                else
+                    order.PaymentStatus = 0; // Not paid
+
+                return await UpdateAsync(order);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<float> GetRemainingAmountAsync(int orderID)
+        {
+            try
+            {
+                var order = await _orderRepo.GetByIdAsync(orderID);
+                if (order == null) return 0;
+                return order.TotalAmount - order.PaidAmount;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
+        public async Task<bool> IsFullyPaidAsync(int orderID)
+        {
+            try
+            {
+                var order = await _orderRepo.GetByIdAsync(orderID);
+                if (order == null) return false;
+                return order.PaidAmount >= order.TotalAmount;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+    }
 }

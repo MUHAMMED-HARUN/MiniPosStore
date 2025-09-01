@@ -114,6 +114,12 @@
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
                             <i class="fas fa-plus"></i> إضافة عنصر جديد
                         </button>
+                        @if ((Model.TotalAmount - Model.PaidAmount) > 0)
+                        {
+                            <a asp-action="AddPayment" asp-route-id="@Model.ID" class="btn btn-warning">
+                                <i class="fas fa-money-bill"></i> إضافة دفعة
+                            </a>
+                        }
                     </div>
                     
                     <div id="orderItems">

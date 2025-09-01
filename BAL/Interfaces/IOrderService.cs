@@ -43,6 +43,12 @@ namespace BAL.Interfaces
         // Search Methods
         Task<List<clsOrder>> SearchOrdersAsync(string searchTerm);
         
+        // Payment Methods
+        Task<bool> UpdatePaymentStatusAsync(int orderID, byte paymentStatus);
+        Task<bool> AddPaymentAsync(int orderID, float paymentAmount);
+        Task<float> GetRemainingAmountAsync(int orderID);
+        Task<bool> IsFullyPaidAsync(int orderID);
+        
         Task<bool> Save();
     }
 }

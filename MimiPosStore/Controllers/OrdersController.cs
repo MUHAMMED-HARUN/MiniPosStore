@@ -152,7 +152,7 @@ namespace MimiPosStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(OrderBALDTO orderBALDTO, string ItemIds = null)
+        public async Task<IActionResult> Save(OrderBALDTO orderBALDTO, string? ItemIds = null)
         {
             ModelState.Remove("PhoneNumber");
             ModelState.Remove("LastName");
@@ -466,6 +466,69 @@ namespace MimiPosStore.Controllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
+        }
+
+        // GET: Orders/UpdatePaymentStatus
+        [HttpGet]
+        public async Task<IActionResult> UpdatePaymentStatus(int id, byte paymentStatus)
+        {
+            try
+            {
+                var result = await _orderService.UpdatePaymentStatusAsync(id, paymentStatus);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "تم تحديث حالة الدفع بنجاح";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "فشل في تحديث حالة الدفع";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "حدث خطأ أثناء تحديث حالة الدفع: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Orders/AddPayment
+        [HttpGet]
+        public async Task<IActionResult> AddPayment(int id)
+        {
+            var order = await _orderService.GetByIdBALDTOAsync(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.RemainingAmount = await _orderService.GetRemainingAmountAsync(id);
+            return View(order);
+        }
+
+        // POST: Orders/AddPayment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPayment(int id, float paymentAmount)
+        {
+            try
+            {
+                var result = await _orderService.AddPaymentAsync(id, paymentAmount);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "تم إضافة الدفعة بنجاح";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "فشل في إضافة الدفعة";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "حدث خطأ أثناء إضافة الدفعة: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         private async Task PopulateDropDowns()

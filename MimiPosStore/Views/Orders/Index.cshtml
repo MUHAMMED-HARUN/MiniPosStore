@@ -68,12 +68,20 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Save" asp-route-id="@item.ID" class="btn btn-primary btn-sm">
-                        <i class="fas fa-edit"></i> تعديل
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i> حذف
-                    </a>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Save" asp-route-id="@item.ID" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> تعديل
+                        </a>
+                        @if (remainingAmount > 0)
+                        {
+                            <a asp-action="AddPayment" asp-route-id="@item.ID" class="btn btn-success btn-sm">
+                                <i class="fas fa-money-bill"></i> دفع
+                            </a>
+                        }
+                        <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> حذف
+                        </a>
+                    </div>
                 </td>
             </tr>
         }

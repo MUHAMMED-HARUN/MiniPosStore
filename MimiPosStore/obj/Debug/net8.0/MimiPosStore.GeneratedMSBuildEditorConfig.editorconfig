@@ -268,6 +268,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW1wb3J0T3JkZXJzXF9JbXBvcnRPcmRlckl0ZW1zTGlzdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Project/ddd/MiniPosStore/MimiPosStore/Views/Orders/AddPayment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJzXEFkZFBheW1lbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Project/ddd/MiniPosStore/MimiPosStore/Views/Orders/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJzXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
