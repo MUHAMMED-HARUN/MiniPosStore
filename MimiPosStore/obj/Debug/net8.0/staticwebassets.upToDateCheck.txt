@@ -66,6 +66,7 @@ wwwroot\product\imgs\18687dd7-d44b-4fd3-ac33-206d60df5e28.png
 wwwroot\product\imgs\1fe4e8a7-3388-4dc9-87b5-68a3625d0e14.jpg
 wwwroot\product\imgs\563a269d-3f58-42f3-bd25-ffb1538090b4.png
 wwwroot\product\imgs\82f7ea73-0073-4233-bd65-2dcfcf3c5a18.png
+wwwroot\product\imgs\875c102a-365c-4220-a0d2-c9faeb771c3d.jpg
 wwwroot\product\imgs\880794da-8750-4002-bb93-af3d9ce97785.jpg
 wwwroot\product\imgs\91244bd3-7ecc-4ac6-b66a-5e2256a9e2be.jpg
 wwwroot\product\imgs\9984c143-0352-45f9-9d8c-105f6618fe77.jpg
@@ -76,4 +77,5 @@ wwwroot\product\imgs\e1d59859-a588-4d46-a990-b5f874631a3b.png
 wwwroot\product\imgs\e589deea-a8ce-4863-a0e1-4818d917d7e0.png
 wwwroot\product\imgs\f16162be-d5a5-49f9-b6ae-b765cc9dcf68.png
 wwwroot\product\imgs\f41b1fe6-8167-4a44-a891-5149c6dac4e4.png
+wwwroot\product\imgs\f905c017-09e5-4216-8d08-5c12bc83a083.jpg
 wwwroot\product\imgs\fe4065a5-7877-442b-bca7-6771bf40163f.png

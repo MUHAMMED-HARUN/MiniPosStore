@@ -4,9 +4,11 @@ using BAL.Interfaces;
 using BAL.BALDTO;
 using DAL.EF.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MimiPosStore.Controllers
 {
+    [Authorize]
     public class CustomersController : Controller
     {
         private readonly ICustomerService _customerService;

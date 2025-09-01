@@ -15,8 +15,8 @@ namespace DAL.IRepo
         Task<bool> DeleteAsync(int OrderID, string CurentUserID);
         Task<clsOrder> GetByIdAsync(int OrderID);
         Task<List<clsOrder>> GetAllAsync();
-        Task<bool> ConfirmOrderAsync(int OrderID);
-        Task<bool> CancelOrderAsync(int OrderID);
+        Task<bool> ConfirmOrderAsync(int OrderID, string CurentUserID);
+        Task<bool> CancelOrderAsync(int OrderID,string CurentUserID);
 
 
         Task<bool> AddItem(clsOrderItem orderItem);

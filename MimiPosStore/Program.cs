@@ -44,16 +44,16 @@ namespace MimiPosStore
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
-            string dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "miniPosStoreDB";
-            string dbName = Environment.GetEnvironmentVariable("DB_Name") ?? "MiniPosStore";
-            string dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD") ?? "sa123456";
+            //string dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "miniPosStoreDB";
+            //string dbName = Environment.GetEnvironmentVariable("DB_Name") ?? "MiniPosStore";
+            //string dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD") ?? "sa123456";
 
-            string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=sa;Password={dbPassword};TrustServerCertificate=True;";
-            builder.Services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlServer(connectionString));
+            //string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=sa;Password={dbPassword};TrustServerCertificate=True;";
+            //builder.Services.AddDbContext<AppDBContext>(options =>
+            //    options.UseSqlServer(connectionString));
 
-            //builder.Services.AddDbContext<AppDBContext>(option =>
-            //    option.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
+            builder.Services.AddDbContext<AppDBContext>(option =>
+                option.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
 
             builder.Services.AddIdentity<clsUser, IdentityRole>(options =>
             {

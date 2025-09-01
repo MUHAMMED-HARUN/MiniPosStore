@@ -2,6 +2,7 @@ using BAL;
 using BAL.BALDTO;
 using BAL.Interfaces;
 using DAL.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -11,10 +12,13 @@ using System.Threading.Tasks;
 
 namespace MimiPosStore.Controllers
 {
+    [Authorize]
+
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ICurrentUserService _CurentUserService;
 
         public ProductsController(IProductService productService, IWebHostEnvironment webHostEnvironment)
         {
@@ -64,7 +68,7 @@ namespace MimiPosStore.Controllers
                 try
                 {
                     // TODO: Get current user ID from authentication
-                    string currentUserId = "95a74952-19d3-4339-8e71-2f1835eea812"; // Placeholder
+                    string currentUserId = _CurentUserService.GetCurrentUserId(); // Placeholder
                     string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "product", "imgs");
 
                     // معالجة الصورة

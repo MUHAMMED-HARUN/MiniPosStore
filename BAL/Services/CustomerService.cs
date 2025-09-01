@@ -14,7 +14,7 @@ namespace BAL.Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepo _customerRepo;
-        
+        private readonly ICurrentUserRepo _currentUserRepo;
         public clsGlobal.enSaveMode SaveMode { get; set; }
         public virtual clsCustomer customer { get; set; }
 
@@ -26,6 +26,7 @@ namespace BAL.Services
 
         public async Task<bool> AddAsync(clsCustomer customer)
         {
+            
             return await _customerRepo.AddAsync(customer);
         }
 

@@ -14,10 +14,11 @@ namespace BAL.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepo _productRepo;
-
-        public ProductService(IProductRepo productRepo)
+        private readonly ICurrentUserService _currentUserServ;
+        public ProductService(IProductRepo productRepo,ICurrentUserService currentUser)
         {
             _productRepo = productRepo;
+            _currentUserServ = currentUser;
         }
 
         public async Task<List<clsProduct>> GetAllProductsAsync()
@@ -32,7 +33,7 @@ namespace BAL.Services
 
         public async Task<clsProduct> CreateProductAsync(clsProduct product, string currentUserId, string uploadPath)
         {
-            product.ActionByUser = currentUserId;
+            product.ActionByUser = _currentUserServ.GetCurrentUserId();
             product.ActionDate = DateTime.Now;
             product.ActionType = 1; // Add
             
@@ -42,7 +43,7 @@ namespace BAL.Services
 
         public async Task<clsProduct> UpdateProductAsync(clsProduct product, string currentUserId, string uploadPath)
         {
-            product.ActionByUser = currentUserId;
+            product.ActionByUser = _currentUserServ.GetCurrentUserId(); 
             product.ActionDate = DateTime.Now;
             product.ActionType = 2; // Update
             
@@ -59,7 +60,7 @@ namespace BAL.Services
                 clsUtil.DeleteImage(product.ImagePath, uploadPath);
             }
 
-            return await _productRepo.DeleteProductAsync(id);
+            return await _productRepo.DeleteProductAsync(id,_currentUserServ.GetCurrentUserId());
         }
 
         public async Task<List<clsProduct>> SearchProductsAsync(string searchTerm)
@@ -68,11 +69,12 @@ namespace BAL.Services
         }
         public async Task<bool> IncreaseProductQuantityAsync( int[] ImportOrderItmesID, string ActionByUser)
         {
-            return await _productRepo.IncreaseProductQuantityAsync( ImportOrderItmesID, ActionByUser);
+
+            return await _productRepo.IncreaseProductQuantityAsync(ImportOrderItmesID, _currentUserServ.GetCurrentUserId());
         }
         public async Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser)
         {
-            return await _productRepo.DecreaseProductQuantityAsync(OrderItemsID, actionByUser);
+            return await _productRepo.DecreaseProductQuantityAsync(OrderItemsID, _currentUserServ.GetCurrentUserId());
         }
 
 
@@ -108,7 +110,7 @@ namespace BAL.Services
         public async Task<bool> CreateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath)
         {
             var product = productBALDTO.ToProductModel();
-            product.ActionByUser = currentUserId;
+            product.ActionByUser = _currentUserServ.GetCurrentUserId(); ;
             product.ActionDate = DateTime.Now;
             product.ActionType = 1; // Add
             
@@ -119,7 +121,7 @@ namespace BAL.Services
         public async Task<bool> UpdateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath)
         {
             var product = productBALDTO.ToProductModel();
-            product.ActionByUser = currentUserId;
+            product.ActionByUser = _currentUserServ.GetCurrentUserId(); ;
             product.ActionDate = DateTime.Now;
             product.ActionType = 2; // Update
             

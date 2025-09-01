@@ -1,6 +1,7 @@
 using DAL.EF.AppDBContext;
 using DAL.EF.Models;
 using DAL.IRepo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MimiPosStore.Models;
@@ -10,6 +11,7 @@ using System.Linq.Expressions;
 
 namespace MimiPosStore.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

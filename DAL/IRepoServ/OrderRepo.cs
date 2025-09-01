@@ -116,7 +116,7 @@ namespace DAL.IRepoServ
             }
         }
 
-        public async Task<bool> ConfirmOrderAsync(int OrderID)
+        public async Task<bool> ConfirmOrderAsync(int OrderID,string CurentUserID)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace DAL.IRepoServ
             }
         }
 
-        public async Task<bool> CancelOrderAsync(int OrderID)
+        public async Task<bool> CancelOrderAsync(int OrderID,string CurentUserID)
         {
             try
             {

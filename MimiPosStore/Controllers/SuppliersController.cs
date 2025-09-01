@@ -1,12 +1,15 @@
+using BAL.BALDTO;
+using BAL.Interfaces;
+using DAL.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BAL.Interfaces;
-using BAL.BALDTO;
-using DAL.EF.Models;
 using System.Threading.Tasks;
 
 namespace MimiPosStore.Controllers
 {
+    [Authorize]
+
     public class SuppliersController : Controller
     {
         private readonly ISupplierService _supplierService;

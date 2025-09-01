@@ -4,6 +4,7 @@ using BAL.Interfaces;
 using BAL.Mappers;
 using DAL.EF.DTO;
 using DAL.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,6 +17,8 @@ using System.Threading.Tasks;
 
 namespace MimiPosStore.Controllers
 {
+    [Authorize]
+
     public class ImportOrdersController : Controller
     {
         private readonly IImportOrderService _importOrderService;

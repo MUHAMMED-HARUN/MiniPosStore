@@ -98,70 +98,6 @@
                     "Children": {
                       "css": {
                         "Children": {
-                          "bootstrap.css": {
-                            "Children": null,
-                            "Asset": {
-                              "ContentRootIndex": 2,
-                              "SubPath": "lib/bootstrap/dist/css/bootstrap.css"
-                            },
-                            "Patterns": null
-                          },
-                          "bootstrap.css.map": {
-                            "Children": null,
-                            "Asset": {
-                              "ContentRootIndex": 2,
-                              "SubPath": "lib/bootstrap/dist/css/bootstrap.css.map"
-                            },
-                            "Patterns": null
-                          },
-                          "bootstrap.min.css": {
-                            "Children": null,
-                            "Asset": {
-                              "ContentRootIndex": 2,
-                              "SubPath": "lib/bootstrap/dist/css/bootstrap.min.css"
-                            },
-                            "Patterns": null
-                          },
-                          "bootstrap.min.css.map": {
-                            "Children": null,
-                            "Asset": {
-                              "ContentRootIndex": 2,
-                              "SubPath": "lib/bootstrap/dist/css/bootstrap.min.css.map"
-                            },
-                            "Patterns": null
-                          },
-                          "bootstrap.rtl.css": {
-                            "Children": null,
-                            "Asset": {
-                              "ContentRootIndex": 2,
-                              "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.css"
-                            },
-                            "Patterns": null
-                          },
-                          "bootstrap.rtl.css.map": {
-                            "Children": null,
-                            "Asset": {
-                              "ContentRootIndex": 2,
-                              "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.css.map"
-                            },
-                            "Patterns": null
-                          },
-                          "bootstrap.rtl.min.css": {
-                            "Children": null,
-                            "Asset": {
-                              "ContentRootIndex": 2,
-                              "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css"
-                            },
-                            "Patterns": null
-                          },
-                          "bootstrap.rtl.min.css.map": {
-                            "Children": null,
-                            "Asset": {
-                              "ContentRootIndex": 2,
-                              "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css.map"
-                            },
-                            "Patterns": null
-                          },
                           "bootstrap-grid.css": {
                             "Children": null,
                             "Asset": {
@@ -351,6 +287,70 @@
                             "Asset": {
                               "ContentRootIndex": 2,
                               "SubPath": "lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css.map"
+                            },
+                            "Patterns": null
+                          },
+                          "bootstrap.css": {
+                            "Children": null,
+                            "Asset": {
+                              "ContentRootIndex": 2,
+                              "SubPath": "lib/bootstrap/dist/css/bootstrap.css"
+                            },
+                            "Patterns": null
+                          },
+                          "bootstrap.css.map": {
+                            "Children": null,
+                            "Asset": {
+                              "ContentRootIndex": 2,
+                              "SubPath": "lib/bootstrap/dist/css/bootstrap.css.map"
+                            },
+                            "Patterns": null
+                          },
+                          "bootstrap.min.css": {
+                            "Children": null,
+                            "Asset": {
+                              "ContentRootIndex": 2,
+                              "SubPath": "lib/bootstrap/dist/css/bootstrap.min.css"
+                            },
+                            "Patterns": null
+                          },
+                          "bootstrap.min.css.map": {
+                            "Children": null,
+                            "Asset": {
+                              "ContentRootIndex": 2,
+                              "SubPath": "lib/bootstrap/dist/css/bootstrap.min.css.map"
+                            },
+                            "Patterns": null
+                          },
+                          "bootstrap.rtl.css": {
+                            "Children": null,
+                            "Asset": {
+                              "ContentRootIndex": 2,
+                              "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.css"
+                            },
+                            "Patterns": null
+                          },
+                          "bootstrap.rtl.css.map": {
+                            "Children": null,
+                            "Asset": {
+                              "ContentRootIndex": 2,
+                              "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.css.map"
+                            },
+                            "Patterns": null
+                          },
+                          "bootstrap.rtl.min.css": {
+                            "Children": null,
+                            "Asset": {
+                              "ContentRootIndex": 2,
+                              "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css"
+                            },
+                            "Patterns": null
+                          },
+                          "bootstrap.rtl.min.css.map": {
+                            "Children": null,
+                            "Asset": {
+                              "ContentRootIndex": 2,
+                              "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css.map"
                             },
                             "Patterns": null
                           }
@@ -656,70 +656,6 @@
                 "Children": {
                   "css": {
                     "Children": {
-                      "bootstrap.css": {
-                        "Children": null,
-                        "Asset": {
-                          "ContentRootIndex": 0,
-                          "SubPath": "lib/bootstrap/dist/css/bootstrap.css"
-                        },
-                        "Patterns": null
-                      },
-                      "bootstrap.css.map": {
-                        "Children": null,
-                        "Asset": {
-                          "ContentRootIndex": 0,
-                          "SubPath": "lib/bootstrap/dist/css/bootstrap.css.map"
-                        },
-                        "Patterns": null
-                      },
-                      "bootstrap.min.css": {
-                        "Children": null,
-                        "Asset": {
-                          "ContentRootIndex": 0,
-                          "SubPath": "lib/bootstrap/dist/css/bootstrap.min.css"
-                        },
-                        "Patterns": null
-                      },
-                      "bootstrap.min.css.map": {
-                        "Children": null,
-                        "Asset": {
-                          "ContentRootIndex": 0,
-                          "SubPath": "lib/bootstrap/dist/css/bootstrap.min.css.map"
-                        },
-                        "Patterns": null
-                      },
-                      "bootstrap.rtl.css": {
-                        "Children": null,
-                        "Asset": {
-                          "ContentRootIndex": 0,
-                          "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.css"
-                        },
-                        "Patterns": null
-                      },
-                      "bootstrap.rtl.css.map": {
-                        "Children": null,
-                        "Asset": {
-                          "ContentRootIndex": 0,
-                          "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.css.map"
-                        },
-                        "Patterns": null
-                      },
-                      "bootstrap.rtl.min.css": {
-                        "Children": null,
-                        "Asset": {
-                          "ContentRootIndex": 0,
-                          "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css"
-                        },
-                        "Patterns": null
-                      },
-                      "bootstrap.rtl.min.css.map": {
-                        "Children": null,
-                        "Asset": {
-                          "ContentRootIndex": 0,
-                          "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css.map"
-                        },
-                        "Patterns": null
-                      },
                       "bootstrap-grid.css": {
                         "Children": null,
                         "Asset": {
@@ -909,6 +845,70 @@
                         "Asset": {
                           "ContentRootIndex": 0,
                           "SubPath": "lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css.map"
+                        },
+                        "Patterns": null
+                      },
+                      "bootstrap.css": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/bootstrap/dist/css/bootstrap.css"
+                        },
+                        "Patterns": null
+                      },
+                      "bootstrap.css.map": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/bootstrap/dist/css/bootstrap.css.map"
+                        },
+                        "Patterns": null
+                      },
+                      "bootstrap.min.css": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/bootstrap/dist/css/bootstrap.min.css"
+                        },
+                        "Patterns": null
+                      },
+                      "bootstrap.min.css.map": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/bootstrap/dist/css/bootstrap.min.css.map"
+                        },
+                        "Patterns": null
+                      },
+                      "bootstrap.rtl.css": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.css"
+                        },
+                        "Patterns": null
+                      },
+                      "bootstrap.rtl.css.map": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.css.map"
+                        },
+                        "Patterns": null
+                      },
+                      "bootstrap.rtl.min.css": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css"
+                        },
+                        "Patterns": null
+                      },
+                      "bootstrap.rtl.min.css.map": {
+                        "Children": null,
+                        "Asset": {
+                          "ContentRootIndex": 0,
+                          "SubPath": "lib/bootstrap/dist/css/bootstrap.rtl.min.css.map"
                         },
                         "Patterns": null
                       }
@@ -1189,6 +1189,14 @@
                 "Asset": {
                   "ContentRootIndex": 0,
                   "SubPath": "product/imgs/82f7ea73-0073-4233-bd65-2dcfcf3c5a18.png"
+                },
+                "Patterns": null
+              },
+              "875c102a-365c-4220-a0d2-c9faeb771c3d.jpg": {
+                "Children": null,
+                "Asset": {
+                  "ContentRootIndex": 0,
+                  "SubPath": "product/imgs/875c102a-365c-4220-a0d2-c9faeb771c3d.jpg"
                 },
                 "Patterns": null
               },

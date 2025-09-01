@@ -23,7 +23,7 @@ namespace BAL.Services
 
         public string GetCurrentUserId()
         {
-            return UserId ?? "95a74952-19d3-4339-8e71-2f1835eea812";
+            return UserId ;
         }
     }
 }

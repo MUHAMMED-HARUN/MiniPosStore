@@ -4,6 +4,7 @@ using BAL.Interfaces;
 using BAL.Mappers;
 using DAL.EF.DTO;
 using DAL.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -17,6 +18,8 @@ using System.Threading.Tasks;
 
 namespace MimiPosStore.Controllers
 {
+    [Authorize]
+
     public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
@@ -114,14 +117,15 @@ namespace MimiPosStore.Controllers
                                 {
                                     var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
                                     if (ArrayItemsID.Length > 0 && ArrayItemsID != null) 
-                                    _productService.DecreaseProductQuantityAsync(ArrayItemsID, currentUserId);
+                                 await   _productService.DecreaseProductQuantityAsync(ArrayItemsID, currentUserId);
                                 }
-                                catch(SqlException e )
+                                catch
                                 {
-                                    string s = e.Source;
+
                                 }
                             }
-                        TempData["SuccessMessage"] = "تم تحديث الطلب بنجاح";
+                        //    ModelState.Clear();
+                        //TempData["SuccessMessage"] = "تم تحديث الطلب بنجاح";
                         }
 
                     }

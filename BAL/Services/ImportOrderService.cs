@@ -153,6 +153,7 @@ namespace BAL.Services
             try
             {
                 var importOrder = importOrderBALDTO.ToImportOrderModel();
+                importOrder.ActionByUser = _currentUserService.GetCurrentUserId();
                 return await AddAsync(importOrder);
             }
             catch (Exception)
@@ -166,6 +167,7 @@ namespace BAL.Services
             try
             {
                 var importOrder = importOrderBALDTO.ToImportOrderModel();
+                importOrder.ActionByUser = _currentUserService.GetCurrentUserId();
                 return await UpdateAsync(importOrder);
             }
             catch (Exception)
@@ -275,6 +277,7 @@ namespace BAL.Services
             try
             {
                 var importOrder = await _importOrderRepo.GetByIdAsync(importOrderID);
+                importOrder.ActionByUser = _currentUserService.GetCurrentUserId();
                 if (importOrder == null) return false;
 
                 importOrder.PaymentStatus = paymentStatus;
@@ -291,6 +294,7 @@ namespace BAL.Services
             try
             {
                 var importOrder = await _importOrderRepo.GetByIdAsync(importOrderID);
+                importOrder.ActionByUser = _currentUserService.GetCurrentUserId();
                 if (importOrder == null) return false;
 
                 importOrder.PaidAmount += paymentAmount;

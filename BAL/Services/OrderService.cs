@@ -14,29 +14,33 @@ namespace BAL.Services
 	public class OrderService : IOrderService
 	{
 		private readonly IOrderRepo _orderRepo;
-		
-		public clsGlobal.enSaveMode SaveMode { get; set; }
+		private readonly ICurrentUserService _currentUserServ;
+        public clsGlobal.enSaveMode SaveMode { get; set; }
 		public virtual clsOrder Order { get; set; }
 
-		public OrderService(IOrderRepo orderRepo)
+		public OrderService(IOrderRepo orderRepo,ICurrentUserService currentUser)
 		{
 			_orderRepo = orderRepo;
 			SaveMode = clsGlobal.enSaveMode.Add;
+			_currentUserServ = currentUser;
 		}
 
 		public async Task<bool> CreateAsync(clsOrder order)
 		{
-			return await _orderRepo.CreateAsync(order)>0;
+			order.ActionByUser = _currentUserServ.GetCurrentUserId();
+            return await _orderRepo.CreateAsync(order)>0;
 		}
 
 		public async Task<bool> UpdateAsync(clsOrder order)
 		{
-			return await _orderRepo.UpdateAsync(order);
+            order.ActionByUser = _currentUserServ.GetCurrentUserId();
+            return await _orderRepo.UpdateAsync(order);
 		}
 
 		public async Task<bool> DeleteAsync(int OrderID, string CurentUserID)
 		{
-			return await _orderRepo.DeleteAsync(OrderID, CurentUserID);
+			CurentUserID = _currentUserServ.GetCurrentUserId();
+            return await _orderRepo.DeleteAsync(OrderID, CurentUserID);
 		}
 
 		public async Task<clsOrder> GetByIdAsync(int OrderID)
@@ -51,16 +55,17 @@ namespace BAL.Services
 
 		public async Task<bool> ConfirmOrderAsync(int OrderID)
 		{
-			return await _orderRepo.ConfirmOrderAsync(OrderID);
+			return await _orderRepo.ConfirmOrderAsync(OrderID, _currentUserServ.GetCurrentUserId());
 		}
 
 		public async Task<bool> CancelOrderAsync(int OrderID)
 		{
-			return await _orderRepo.CancelOrderAsync(OrderID);
+			return await _orderRepo.CancelOrderAsync(OrderID,_currentUserServ.GetCurrentUserId());
 		}
 
 		public async Task<bool> AddItem(clsOrderItem orderItem)
 		{
+		
 			return await _orderRepo.AddItem(orderItem);
 		}
 
@@ -99,14 +104,17 @@ namespace BAL.Services
 
 		public async Task<bool> CreateBALDTOAsync(OrderBALDTO orderBALDTO)
 		{
-			var order = orderBALDTO.ToOrderModel();
+			orderBALDTO.ActionByUser=_currentUserServ.GetCurrentUserId();
+            var order = orderBALDTO.ToOrderModel();
+			
 			orderBALDTO.ID=	await _orderRepo.CreateAsync(order);
 			return orderBALDTO.ID > 0;
         }
 
 		public async Task<bool> UpdateBALDTOAsync(OrderBALDTO orderBALDTO)
 		{
-			var order = orderBALDTO.ToOrderModel();
+			orderBALDTO.ActionByUser = _currentUserServ.GetCurrentUserId();
+            var order = orderBALDTO.ToOrderModel();
 			return await _orderRepo.UpdateAsync(order);
 		}
 
