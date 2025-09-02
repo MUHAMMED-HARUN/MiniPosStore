@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -167,6 +168,15 @@ namespace MimiPosStore.Controllers
             ViewBag.SearchTerm = searchTerm;
             return View("Index", products);
         }
+
+        [HttpGet]
+        public async Task<JsonResult> SearchProductByNmae(string term)
+        {
+            ProductBALDTO product= await _productService.SearchProductByNameBALDTOAsync(term);
+
+            return Json(product);
+        }
+
 
         private async Task PopulateUOMDropDown()
         {

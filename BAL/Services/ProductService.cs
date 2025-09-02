@@ -134,7 +134,11 @@ namespace BAL.Services
             var products = await _productRepo.SearchProductsAsync(searchTerm);
             return products.ToProductBALDTOList();
         }
-
+     public async   Task<ProductBALDTO> SearchProductByNameBALDTOAsync(string searchTerm)
+        {
+           var product =await _productRepo.SearchProductByNameBALDTOAsync(searchTerm);
+            return product.ToProductBALDTO();
+        }
         // دالة مساعدة لمعالجة رفع الصور
         public string HandleImageUpload(IFormFile imageFile, string currentImagePath, string uploadPath)
         {

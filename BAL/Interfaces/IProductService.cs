@@ -30,5 +30,6 @@ namespace BAL.Interfaces
         Task<bool> CreateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath);
         Task<bool> UpdateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath);
         Task<List<ProductBALDTO>> SearchProductsBALDTOAsync(string searchTerm);
+        Task<ProductBALDTO> SearchProductByNameBALDTOAsync(string searchTerm);
     }
 }

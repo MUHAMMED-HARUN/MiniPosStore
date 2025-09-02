@@ -14,7 +14,7 @@ namespace DAL.EF.Models
         public int ID { get; set; }
         [Required]
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public float RetailPrice { get; set; }
         public float WholesalePrice { get; set; }
         public float AvailableQuantity { get; set; }

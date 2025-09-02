@@ -49,6 +49,28 @@
 
 // حساب وتجميع المبالغ الإجمالية لكل عناصر أمر الاستيراد وتحديث حقل TotalAmount
 $(document).ready(function () {
+    function loadProductInfo(productId) {
+        $.get('/Orders/GetProductInfo', { productId: productId })
+            .done(function (data) {
+                if (data.success) {
+                    $('#basePrice').text(data.retailPrice + ' ' + data.currencyType);
+                    $('#availableQuantity').text(data.availableQuantity);
+                    $('#unitOfMeasure').text(data.uomName);
+
+                    // تعيين السعر الأساسي كسعر البيع تلقائياً
+                    $('#sellingPriceInput').val(data.retailPrice);
+                    $('#availableQuantityDisplay').val(data.availableQuantity);
+                    calculateItemTotal();
+                } else {
+                    clearProductInfo();
+                    alert('خطأ في تحميل معلومات المنتج: ' + data.message);
+                }
+            })
+            .fail(function () {
+                clearProductInfo();
+                alert('حدث خطأ في الاتصال بالخادم');
+            });
+    }
     function parseFloatSafe(text) {
         return parseFloat(String(text).replace(/[^\d.-]/g, '')) || 0;
     }
@@ -137,4 +159,33 @@ $(document).ready(function () {
             }
         });
     });
+
+
+    $("#btnSearchProduct").click(function () {
+        var searchTerm = $("#editProductSearch").val().trim();
+        if (!searchTerm) return;
+
+        $.ajax({
+            url: '/Products/SearchProductByNmae', // تم تصحيح الاسم
+            type: 'GET',
+            dataType: 'json',
+            data: { term: searchTerm },
+            success: function (data) {
+                var $results = $("#searchResults");
+                $results.empty();
+
+                if (!data || data.length === 0) {
+                    $results.append('<div class="list-group-item">لا توجد نتائج</div>');
+                    return;
+                }
+
+
+                loadProductInfo(data.id);
+            },
+            error: function () {
+                alert("حدث خطأ أثناء البحث.");
+            }
+        });
+    });
 });
+

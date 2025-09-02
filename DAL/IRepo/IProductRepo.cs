@@ -1,4 +1,5 @@
-﻿using DAL.EF.Models;
+﻿using DAL.EF.DTO;
+using DAL.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace DAL.IRepo
         Task<List<clsProduct>> SearchProductsAsync(string searchTerm);
           Task<bool> IncreaseProductQuantityAsync( int[] ImportOrderItmesID, string ActionByUser);
           Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser);
-
+        Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm);
         Task<List<clsUnitOfMeasure>> GetAllUOMAsync();
         Task<clsUnitOfMeasure> GetUOMByIdAsync(int id);
     }

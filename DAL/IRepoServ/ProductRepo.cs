@@ -1,4 +1,5 @@
 using DAL.EF.AppDBContext;
+using DAL.EF.DTO;
 using DAL.EF.Models;
 using DAL.IRepo;
 using Microsoft.Data.SqlClient;
@@ -188,6 +189,10 @@ namespace DAL.IRepoServ
 
             // 6?? ��� ��������� �� ����� ��������
             return await _context.SaveChangesAsync() > 0;
+        }
+       public async Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm)
+        {
+            return await _context.Products.Where(p => p.Name==searchTerm).Include(p => p.UnitOfMeasure).FirstOrDefaultAsync();
         }
         public async Task<List<clsUnitOfMeasure>> GetAllUOMAsync()
         {

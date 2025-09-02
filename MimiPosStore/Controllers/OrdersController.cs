@@ -206,7 +206,7 @@ namespace MimiPosStore.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var order = await _orderService.GetByIdBALDTOAsync(id);
+            var order = await _orderService.GetByIdAsync(id);
             if (order == null)
             {
                 return NotFound();

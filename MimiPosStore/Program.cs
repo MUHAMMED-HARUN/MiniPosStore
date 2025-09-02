@@ -1,17 +1,29 @@
+using BAL.Interfaces;
+using BAL.Services;
 using DAL.EF.AppDBContext;
 using DAL.EF.Models;
+using DAL.IRepo;
+using DAL.IRepoServ;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using DAL.IRepo;
-using DAL.IRepoServ;
-using BAL.Interfaces;
-using BAL.Services;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MimiPosStore
 {
     public class Program
     {
+
+        public static void CreateDataBase( WebApplication app)
+        {
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDBContext>();         
+            }
+
+        }
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +75,7 @@ namespace MimiPosStore
             .AddEntityFrameworkStores<AppDBContext>()
             .AddDefaultTokenProviders();
 
+
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Identity/Account/Login";
@@ -73,6 +86,8 @@ namespace MimiPosStore
 
 
             var app = builder.Build();
+
+     CreateDataBase(app);
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

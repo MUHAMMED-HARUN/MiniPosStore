@@ -27,7 +27,19 @@
                                 <span asp-validation-for="ProductID" class="text-danger"></span>
                             </div>
                         </div>
-                        
+                        <div class="form-group mb-3">
+                            <label asp-for="ProductID" class="control-label">المنتج</label>
+                            <div class="input-group">
+                                <input type="text" id="editProductSearch" class="form-control" placeholder="اكتب اسم المنتج" autocomplete="off" />
+                                <button class="btn btn-primary" type="button" id="btnSearchProduct">
+                                    <i class="fas fa-search"></i> بحث
+                                </button>
+                            </div>
+                            <input type="hidden" asp-for="ProductID" id="editProductID" />
+                            <div id="searchResults" class="list-group mt-1" style="max-height: 200px; overflow-y: auto;"></div>
+                            <span asp-validation-for="ProductID" class="text-danger"></span>
+                        </div>
+
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label asp-for="Quantity" class="control-label">الكمية</label>

@@ -16,8 +16,7 @@ namespace BAL.BALDTO
 
         private string GetCurrencySymbol()
         {
-            // يمكن تحديد العملة من العناصر أو إعدادات النظام
-                return ImportOrderItems?.FirstOrDefault()?.CurrencyType ?? "SAR";
+                return ImportOrderItems?.FirstOrDefault()?.CurrencyType ?? "TRY";
         }
     }
 }

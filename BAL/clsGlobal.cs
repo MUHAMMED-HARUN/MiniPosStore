@@ -41,10 +41,17 @@ namespace BAL
         {
             return new SortedDictionary<int, string>
         {
-            { (int)enCurrencyType.TRY, "ليرة تركية (TRY)" },
+            { (int)enCurrencyType.TRY, "TRY" },
             { (int)enCurrencyType.USD, "دولار أمريكي (USD)" },
             { (int)enCurrencyType.EUR, "يورو (EUR)" }
         };
+        }
+        public static string GetCurrencyTypeString(int CurrecyType)
+        {
+             if( GetCurrencyTypeList().TryGetValue(CurrecyType,out string Value))
+                return Value;
+            else
+                return string.Empty;
         }
     }
 

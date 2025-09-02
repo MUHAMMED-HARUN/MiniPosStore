@@ -168,5 +168,40 @@ $(document).ready(function () {
             }
         });
     });
+    $("#btnSearchProduct").click(function () {
+        var searchTerm = $("#editProductSearch").val().trim();
+        if (!searchTerm) return;
+
+        $.ajax({
+            url: '/Products/SearchProductByNmae', // تم تصحيح الاسم
+            type: 'GET',
+            dataType: 'json',
+            data: { term: searchTerm },
+            success: function (data) {
+                var $results = $("#searchResults");
+                $results.empty();
+
+                if (!data || data.length === 0) {
+                    $results.append('<div class="list-group-item">لا توجد نتائج</div>');
+                    return;
+                }
+
+
+                loadProductInfo(data.id);
+            },
+            error: function () {
+                alert("حدث خطأ أثناء البحث.");
+            }
+        });
+    });
+
+
+    //// تحديث المبلغ الإجمالي عند تغيير الكمية أو السعر
+    //$("#quantityInput, #sellingPriceInput").on("input", function () {
+    //    var quantity = parseFloat($("#quantityInput").val()) || 0;
+    //    var price = parseFloat($("#sellingPriceInput").val()) || 0;
+    //    $("#itemTotalAmount").val((quantity * price).toFixed(2));
+    //});
+
 
 });

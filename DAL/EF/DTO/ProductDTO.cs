@@ -13,7 +13,7 @@ namespace DAL.EF.DTO
         public string Name { get; set; }
         
         [Display(Name = "الوصف")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
         [Required(ErrorMessage = "سعر البيع مطلوب")]
         [Display(Name = "سعر البيع")]
