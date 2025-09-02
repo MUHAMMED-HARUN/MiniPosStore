@@ -25,7 +25,6 @@ namespace DAL.EF.AppDBContext
             var databaseCreator = Database.GetService<IRelationalDatabaseCreator>() as RelationalDatabaseCreator;
             if (databaseCreator != null)
             {
-               databaseCreator.EnsureDeleted();
                 if (!databaseCreator.CanConnect())
                 {
                     Database.Migrate();
