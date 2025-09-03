@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MimiPosStore.Areas.Identity.Pages.Account
 {
+    [Authorize]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<clsUser> _signInManager;
