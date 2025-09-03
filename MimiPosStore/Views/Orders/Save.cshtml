@@ -441,13 +441,13 @@
 
                     <div class="row">
                         <div class="col-md-3">
-                            <strong>المبلغ الإجمالي:</strong> <span id="totalAmount">@Model.TotalAmount.ToString("C")</span>
+                            <strong>المبلغ الإجمالي:</strong> <span id="totalAmount">@Model.TotalAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                         </div>
                         <div class="col-md-3">
-                            <strong>المبلغ المدفوع:</strong> <span id="paidAmount">@Model.PaidAmount.ToString("C")</span>
+                            <strong>المبلغ المدفوع:</strong> <span id="paidAmount">@Model.PaidAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                         </div>
                         <div class="col-md-3">
-                            <strong>المبلغ المتبقي:</strong> <span id="remainingAmount" class="text-danger">@((Model.TotalAmount - Model.PaidAmount).ToString("C"))</span>
+                            <strong>المبلغ المتبقي:</strong> <span id="remainingAmount" class="text-danger">@((Model.TotalAmount - Model.PaidAmount) + BAL.clsGlobal.GetCurrencyTypeString(1))</span>
                         </div>
                         <div class="col-md-3">
                             <strong>عدد العناصر:</strong> <span id="itemsCount">0</span>

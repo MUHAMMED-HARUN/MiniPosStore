@@ -28,10 +28,10 @@
                             <span class="badge bg-primary">@item.Quantity</span>
                         </td>
                         <td>
-                            <span class="text-success">@item.SellingPrice.ToString("C")</span>
+                            <span class="text-success">@item.SellingPrice @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                         </td>
                         <td>
-                            <span class="item-total text-primary fw-bold">@item.ProductSaleAmount.ToString("C")</span>
+                            <span class="item-total text-primary fw-bold">@item.ProductSaleAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                         </td>
                         <td>
                             <div class="btn-group" role="group">

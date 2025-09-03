@@ -55,10 +55,10 @@
                 <td>@item.ID</td>
                 <td>@(item.FirstName + " " + item.LastName)</td>
                 <td>@item.OrderDate.ToString("dd/MM/yyyy")</td>
-                <td>@item.TotalAmount.ToString("C")</td>
-                <td>@item.PaidAmount.ToString("C")</td>
+                <td>@item.TotalAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</td>
+                <td>@item.PaidAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</td>
                 <td class="@(remainingAmount > 0 ? "text-danger" : "text-success")">
-                    @remainingAmount.ToString("C")
+                    @remainingAmount @BAL.clsGlobal.GetCurrencyTypeString(1)
                 </td>
                 <td>
                     @{
