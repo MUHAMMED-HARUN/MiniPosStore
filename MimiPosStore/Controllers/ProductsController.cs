@@ -29,10 +29,17 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(BAL.BALFilters.clsProductFilterBAL filter)
         {
-            var products = await _productService.GetAllProductsBALDTOAsync();
-            return View(products);
+            // Populate dropdowns for filters
+            ViewBag.UOMList = new SelectList(await _productService.GetAllUOMAsync(), "Name", "Name");
+            ViewBag.CurrencyList = new SelectList(BAL.clsGlobal.GetCurrencyTypeList(), "Key", "Value");
+
+            var products = await _productService.GetAllProductsAsync(filter);
+
+            // Wrap results in BAL filter model for the view convenience
+        filter.ProductDTOList = products;
+            return View(filter);
         }
 
         // GET: Products/Save (للإضافة)
@@ -157,16 +164,14 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: Products/Search
-        public async Task<IActionResult> Search(string searchTerm)
+        public IActionResult Search(string searchTerm)
         {
+            // Redirect to Index with filter query (search by Name)
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 return RedirectToAction(nameof(Index));
             }
-
-            var products = await _productService.SearchProductsBALDTOAsync(searchTerm);
-            ViewBag.SearchTerm = searchTerm;
-            return View("Index", products);
+            return RedirectToAction(nameof(Index), new { Name = searchTerm });
         }
 
         [HttpGet]

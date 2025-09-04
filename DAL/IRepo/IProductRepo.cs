@@ -1,4 +1,5 @@
 ﻿using DAL.EF.DTO;
+using DAL.EF.Filters;
 using DAL.EF.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace DAL.IRepo
     public interface IProductRepo
     {
         Task<List<clsProduct>> GetAllProductsAsync();
+        Task<List<ProductDTO>> GetAllProductsAsync(clsProductFilter filter);
         Task<clsProduct> GetProductByIdAsync(int id);
         Task<clsProduct> CreateProductAsync(clsProduct product);
         Task<clsProduct> UpdateProductAsync(clsProduct product);

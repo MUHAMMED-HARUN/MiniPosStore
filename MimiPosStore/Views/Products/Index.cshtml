@@ -1,4 +1,4 @@
-@model IEnumerable<BAL.BALDTO.ProductBALDTO>
+@model BAL.BALFilters.clsProductFilterBAL
 @using BAL.BALDTO;
 @{
     ViewData["Title"] = "قائمة المنتجات";
@@ -6,9 +6,71 @@
 
 <h1>قائمة المنتجات</h1>
 
-<p>
+<div class="mb-3">
     <a asp-action="Save" asp-route-id="0" class="btn btn-primary">إضافة منتج جديد</a>
-</p>
+</div>
+
+<form asp-action="Index" method="get" class="card card-body mb-3">
+    <div class="row g-2">
+        <div class="col-md-3">
+            <label class="form-label">الاسم</label>
+            <input name="Name" value="@Model?.Name" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">الوصف</label>
+            <input name="Description" value="@Model?.Description" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">سعر البيع من</label>
+            <input name="MinRetailPrice" value="@Model?.MinRetailPrice" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">سعر البيع إلى</label>
+            <input name="MaxRetailPrice" value="@Model?.MaxRetailPrice" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">سعر الجملة من</label>
+            <input name="MinWholesalePrice" value="@Model?.MinWholesalePrice" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">سعر الجملة إلى</label>
+            <input name="MaxWholesalePrice" value="@Model?.MaxWholesalePrice" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">الكمية من</label>
+            <input name="MinAvailableQuantity" value="@Model?.MinAvailableQuantity" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">الكمية إلى</label>
+            <input name="MaxAvailableQuantity" value="@Model?.MaxAvailableQuantity" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">العملة</label>
+            <select name="CurrencyType" class="form-select" asp-items="ViewBag.CurrencyList">
+                <option value="">الكل</option>
+                @if (!string.IsNullOrEmpty(Model?.CurrencyType))
+                {
+                    <option selected value="@Model.CurrencyType">@Model.CurrencyType</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">وحدة القياس</label>
+            <select name="UnitOfMeasureName" class="form-select" asp-items="ViewBag.UOMList">
+                <option value="">الكل</option>
+                @if (!string.IsNullOrEmpty(Model?.UnitOfMeasureName))
+                {
+                    <option selected value="@Model.UnitOfMeasureName">@Model.UnitOfMeasureName</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-success me-2">تطبيق الفلترة</button>
+            <a asp-action="Index" class="btn btn-secondary">تفريغ</a>
+        </div>
+    </div>
+    
+</form>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -48,7 +110,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.ProductDTOList)
         {
             <tr>
                 <!-- الصورة -->
@@ -90,7 +152,7 @@
 </table>
 
 
-@if (!Model.Any())
+@if (!Model.ProductDTOList.Any())
 {
     <div class="alert alert-info text-center">
         <i class="fas fa-info-circle"></i>

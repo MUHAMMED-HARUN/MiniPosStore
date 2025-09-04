@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DAL.EF.Filters;
 
 namespace BAL.Interfaces
 {
     public interface IProductService
     {
         Task<List<clsProduct>> GetAllProductsAsync();
+        Task<List<ProductBALDTO>> GetAllProductsAsync(clsProductFilter Filter);
         Task<clsProduct> GetProductByIdAsync(int id);
         Task<clsProduct> CreateProductAsync(clsProduct product, string currentUserId, string uploadPath);
         Task<clsProduct> UpdateProductAsync(clsProduct product, string currentUserId, string uploadPath);

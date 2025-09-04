@@ -1,13 +1,15 @@
-using BAL.Interfaces;
 using BAL.BALDTO;
+using BAL.Interfaces;
 using BAL.Mappers;
+using DAL.EF.DTO;
+using DAL.EF.Filters;
 using DAL.EF.Models;
 using DAL.IRepo;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace BAL.Services
 {
@@ -25,7 +27,24 @@ namespace BAL.Services
         {
             return await _productRepo.GetAllProductsAsync();
         }
+        public async Task<List<ProductBALDTO>> GetAllProductsAsync(clsProductFilter Filter)
+        {
+            List<ProductDTO> productsDAL = await _productRepo.GetAllProductsAsync(Filter);
+            List<ProductBALDTO> products = productsDAL.Select(p => new ProductBALDTO
+            {
+                ID = p.ID,
+                Name = p.Name,
+                Description = p.Description,
+                RetailPrice = p.RetailPrice,
+                WholesalePrice = p.WholesalePrice,
+                AvailableQuantity = p.AvailableQuantity,
+                CurrencyType = p.CurrencyType,
+                CurrencyName = p.CurrencyName,
+                UOMName = p.UOMName,
 
+            }).ToList();
+          return products;
+        }
         public async Task<clsProduct> GetProductByIdAsync(int id)
         {
             return await _productRepo.GetProductByIdAsync(id);

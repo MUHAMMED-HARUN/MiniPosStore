@@ -43,7 +43,7 @@ namespace DAL.EF.DTO
         [Display(Name = "وحدة القياس")]
         public int UOMID { get; set; }
         
-        [Display(Name = "اسم وحدة القياس")]
+        [Display(Name = "اسم وحدة القياس")] 
         public string UOMName { get; set; }
         
         [Display(Name = "رمز وحدة القياس")]

@@ -1,5 +1,6 @@
 using DAL.EF.AppDBContext;
 using DAL.EF.DTO;
+using DAL.EF.Filters;
 using DAL.EF.Models;
 using DAL.IRepo;
 using Microsoft.Data.SqlClient;
@@ -30,6 +31,36 @@ namespace DAL.IRepoServ
                 .Include(p => p.User)
                 .ToListAsync();
         }
+
+        public async Task<List<ProductDTO>> GetAllProductsAsync(clsProductFilter filter)
+        {
+            string Query = @$"select * from GetProductsFiltered ( {clsDALUtil.GetSqlPrameterString<clsProductFilter>()})";
+
+            using (var connection = _context.Database.GetDbConnection().CreateCommand())
+            {
+                connection.CommandText = Query;
+                connection.CommandType = System.Data.CommandType.Text;
+
+                if (connection.Connection.State != System.Data.ConnectionState.Open)
+                    connection.Connection.Open();
+
+                var arr = clsDALUtil.GetSqlPrameters<clsProductFilter>(filter).ToArray();
+                connection.Parameters.AddRange(arr);
+
+                List<ProductDTO> products = new List<ProductDTO>();
+                using (var reader = connection.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var product = new ProductDTO();
+                        clsDALUtil.MapToClass<ProductDTO>(reader, ref product);
+                        products.Add(product);
+                    }
+                }
+                return products;
+            }
+        }
+
 
         public async Task<clsProduct> GetProductByIdAsync(int id)
         {
