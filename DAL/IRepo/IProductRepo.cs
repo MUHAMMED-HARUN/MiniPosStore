@@ -16,7 +16,7 @@ namespace DAL.IRepo
         Task<clsProduct> GetProductByIdAsync(int id);
         Task<clsProduct> CreateProductAsync(clsProduct product);
         Task<clsProduct> UpdateProductAsync(clsProduct product);
-        Task<bool> DeleteProductAsync(int id,string CurentUserID);
+        Task<bool> DeleteProductAsync(clsProduct Product,string CurentUserID);
         Task<List<clsProduct>> SearchProductsAsync(string searchTerm);
           Task<bool> IncreaseProductQuantityAsync( int[] ImportOrderItmesID, string ActionByUser);
           Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser);

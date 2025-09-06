@@ -1,8 +1,10 @@
-using BAL.Interfaces;
 using BAL.BALDTO;
+using BAL.Interfaces;
 using BAL.Mappers;
-using DAL.IRepo;
+using DAL.EF.DTO;
+using DAL.EF.Filters;
 using DAL.EF.Models;
+using DAL.IRepo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,8 +103,28 @@ namespace BAL.Services
 			var orders = await _orderRepo.GetAllAsync();
 			return orders.ToOrderBALDTOList();
 		}
+      	public async   Task<List<OrderBALDTO>> GetAllOrdersDTOAsync(clsOrderFilter Filter)
+		{
+			List<OrderDTO> dalDTO =await _orderRepo.GetAllDTOAsync(Filter);
+			List<OrderBALDTO> BalOrderDTO = dalDTO.Select(o => new OrderBALDTO
+			{
+				ID=o.OrderID,
+				CustomerID=o.CustomerID,
+				PersonID=o.PersonID,
+				FirstName=o.FirstName,
+				LastName=o.LastName,
+				PhoneNumber=o.PhoneNumber,
+				OrderDate=o.OrderDate,
+				TotalAmount=o.TotalAmount,
+				PaidAmount=o.PaidAmount,
+				PaymentStatus=o.PaymentStatus,
+				ActionByUser=o.ActionByUser,
 
-		public async Task<bool> CreateBALDTOAsync(OrderBALDTO orderBALDTO)
+			}).ToList();
+			return BalOrderDTO;
+		}
+
+        public async Task<bool> CreateBALDTOAsync(OrderBALDTO orderBALDTO)
 		{
 			orderBALDTO.ActionByUser=_currentUserServ.GetCurrentUserId();
             var order = orderBALDTO.ToOrderModel();
@@ -111,8 +133,15 @@ namespace BAL.Services
 			return orderBALDTO.ID > 0;
         }
 
-		public async Task<bool> UpdateBALDTOAsync(OrderBALDTO orderBALDTO)
+
+        public async Task<bool> UpdateBALDTOAsync(OrderBALDTO orderBALDTO)
 		{
+			if (IsPaymentCompletedDTO(orderBALDTO))
+				orderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Completed);
+			else
+				orderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.PendingForPayment);
+
+
 			orderBALDTO.ActionByUser = _currentUserServ.GetCurrentUserId();
             var order = orderBALDTO.ToOrderModel();
 			return await _orderRepo.UpdateAsync(order);
@@ -149,7 +178,7 @@ namespace BAL.Services
 			return await _orderRepo.SearchOrdersAsync(searchTerm);
 		}
 
-		        public async Task<bool> Save()
+		public async Task<bool> Save()
         {
             if (SaveMode == clsGlobal.enSaveMode.Add)
             {
@@ -164,26 +193,15 @@ namespace BAL.Services
             }
         }
 
-        // Payment Methods
-        public async Task<bool> UpdatePaymentStatusAsync(int orderID, byte paymentStatus)
+        public bool IsPaymentCompletedDTO(OrderBALDTO order)
         {
-            try
-            {
-                var order = await _orderRepo.GetByIdAsync(orderID);
-                if (order == null) return false;
-
-                order.PaymentStatus = paymentStatus;
-                order.ActionDate = DateTime.Now;
-                order.ActionType = 1; // Update
-
-                return await UpdateAsync(order);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return order.PaidAmount == order.TotalAmount;
         }
+        public bool IsPaymentCompleted(clsOrder order)
+        {
+            return order.PaidAmount == order.TotalAmount;
 
+        }
         public async Task<bool> AddPaymentAsync(int orderID, float paymentAmount)
         {
             try
@@ -193,16 +211,14 @@ namespace BAL.Services
 
                 order.PaidAmount += paymentAmount;
                 order.ActionDate = DateTime.Now;
-                order.ActionType = 1; // Update
-                
-                // Update payment status based on paid amount
-                if (order.PaidAmount >= order.TotalAmount)
-                    order.PaymentStatus = 2; // Fully paid
-                else if (order.PaidAmount > 0)
-                    order.PaymentStatus = 1; // Partially paid
-                else
-                    order.PaymentStatus = 0; // Not paid
+                order.ActionType = ((int)clsGlobal.enActionType.Update); // Update
 
+				if (IsPaymentCompleted(order))
+					order.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Completed);
+				else
+					order.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.PendingForPayment);
+
+                
                 return await UpdateAsync(order);
             }
             catch (Exception)

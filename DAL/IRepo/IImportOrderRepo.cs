@@ -1,5 +1,6 @@
-﻿using DAL.EF.Models;
-using DAL.EF.DTO;
+﻿using DAL.EF.DTO;
+using DAL.EF.Filters;
+using DAL.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,8 @@ namespace DAL.IRepo
         // DTO Methods
         Task<ImportOrderDTO> GetByIdDTOAsync(int ImportOrderID);
         Task<List<ImportOrderDTO>> GetAllDTOAsync();
-        
+        Task<List<ImportOrderDTO>> GetAllDTOAsync(clsImportOrderFilter filter);
+
         // ImportOrderItems DTO Methods
         Task<ImportOrderItemDTO> GetImportOrderItemByIdDTOAsync(int ImportOrderItemID);
         Task<List<ImportOrderItemDTO>> GetImportOrderItemsByOrderIdDTOAsync(int ImportOrderID);

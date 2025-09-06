@@ -128,7 +128,7 @@ namespace MimiPosStore.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var product = await _productService.GetProductByIdBALDTOAsync(id);
+            var product = await _productService.GetProductByIdAsync(id);
             if (product == null)
             {
                 return NotFound();

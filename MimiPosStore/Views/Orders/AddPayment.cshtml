@@ -68,9 +68,6 @@
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save"></i> إضافة الدفعة
                         </button>
-                        <a asp-action="Save" asp-route-id="@Model.ID" class="btn btn-warning">
-                            <i class="fas fa-plus-circle"></i> إضافة عناصر
-                        </a>
                         <a asp-action="Index" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> العودة للقائمة
                         </a>
@@ -109,18 +106,18 @@
                     <small class="text-muted">المبلغ المتبقي</small>
                 </div>
 
-                @if (Model.PaymentStatus == 2)
+                @if (Model.PaymentStatus == ((byte)BAL.clsGlobal.enPaymentStatus.Completed))
                 {
                     <div class="alert alert-success text-center mt-3">
                         <i class="fas fa-check-circle"></i>
                         <strong>تم الدفع بالكامل</strong>
                     </div>
                 }
-                else if (Model.PaymentStatus == 1)
+                else if (Model.PaymentStatus == ((byte)BAL.clsGlobal.enPaymentStatus.PendingForPayment))
                 {
                     <div class="alert alert-warning text-center mt-3">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <strong>مدفوع جزئياً</strong>
+                        <strong>دفع غير مكتمل</strong>
                     </div>
                 }
                 else
@@ -145,15 +142,13 @@
                 <p><strong>حالة الدفع:</strong><br>
                     @switch (Model.PaymentStatus)
                     {
-                        case 0:
-                            <span class="badge bg-danger">غير مدفوع</span>
+                        case ((byte)BAL.clsGlobal.enPaymentStatus.Completed):
+                            <span class="badge bg-danger">مدفوع بالكامل</span>
                             break;
-                        case 1:
-                            <span class="badge bg-warning">مدفوع جزئياً</span>
+                        case ((byte)BAL.clsGlobal.enPaymentStatus.PendingForPayment):
+                            <span class="badge bg-warning">دفع غير مكتمل</span>
                             break;
-                        case 2:
-                            <span class="badge bg-success">مدفوع بالكامل</span>
-                            break;
+
                     }
                 </p>
                 <p><strong>المستخدم المسؤول:</strong><br>@Model.ActionByUser</p>

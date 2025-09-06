@@ -105,13 +105,12 @@ namespace DAL.IRepoServ
             return await GetProductByIdAsync(product.ID);
         }
 
-        public async Task<bool> DeleteProductAsync(int id,string CurentUserID)
+        public async Task<bool> DeleteProductAsync(clsProduct Product, string CurentUserID)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            if (Product == null)
                 return false;
-
-            _context.Products.Remove(product);
+          
+            _context.Products.Update(Product);
             await _context.SaveChangesAsync();
             
             return true;

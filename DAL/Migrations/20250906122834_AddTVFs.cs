@@ -8,18 +8,20 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class TVFProduct : Migration
+    public partial class AddTVFs : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             clsTVFMigration.AddTVFProductFilter(migrationBuilder);
+            clsTVFMigration.AddTVFOrderFilter(migrationBuilder);
+            clsTVFMigration.AddTVFImportOrderFilter(migrationBuilder);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DROP FUNCTION IF EXISTS dbo.GetProductsFiltered");
+
         }
     }
 }

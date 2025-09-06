@@ -1,7 +1,9 @@
 using DAL.EF.AppDBContext;
-using DAL.EF.Models;
 using DAL.EF.DTO;
+using DAL.EF.Filters;
+using DAL.EF.Models;
 using DAL.IRepo;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -260,7 +262,42 @@ namespace DAL.IRepoServ
                 })
                 .ToListAsync();
         }
+        public async Task<List<ImportOrderDTO>> GetAllDTOAsync(clsImportOrderFilter filter)
+        {
+            string Query = @$"select * from GetImportOrdersFiltered ( {clsDALUtil.GetSqlPrameterString<clsImportOrderFilter>()})";
 
+            using (var connection = _context.Database.GetDbConnection().CreateCommand())
+            {
+                connection.CommandText = Query;
+                connection.CommandType = System.Data.CommandType.Text;
+
+                if (connection.Connection.State != System.Data.ConnectionState.Open)
+                    connection.Connection.Open();
+
+                var arr = clsDALUtil.GetSqlPrameters<clsImportOrderFilter>(filter).ToArray();
+                connection.Parameters.AddRange(arr);
+
+                List<ImportOrderDTO> Orders = new List<ImportOrderDTO>();
+                try
+                {
+                    using (var reader = connection.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var order = new ImportOrderDTO();
+                            clsDALUtil.MapToClass<ImportOrderDTO>(reader, ref order);
+                            Orders.Add(order);
+                        }
+                    }
+                }
+                catch (SqlException s)
+                {
+
+                }
+
+                return Orders;
+            }
+        }
         public async Task<ImportOrderItemDTO> GetImportOrderItemByIdDTOAsync(int ImportOrderItemID)
         {
             return await _context.ImportOrderItems.AsNoTracking()

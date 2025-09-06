@@ -78,8 +78,8 @@ namespace BAL.Services
             {
                 clsUtil.DeleteImage(product.ImagePath, uploadPath);
             }
-
-            return await _productRepo.DeleteProductAsync(id,_currentUserServ.GetCurrentUserId());
+            product.ActionType = ((byte)clsGlobal.enActionType.Delete);
+            return await _productRepo.DeleteProductAsync(product,_currentUserServ.GetCurrentUserId());
         }
 
         public async Task<List<clsProduct>> SearchProductsAsync(string searchTerm)

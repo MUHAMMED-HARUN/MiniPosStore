@@ -39,17 +39,24 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: ImportOrders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(BAL.BALFilters.clsImportOrderFilterBAL filter)
         {
             try
             {
-                var importOrders = await _importOrderService.GetAllSummaryBALDTOAsync();
-                return View(importOrders);
+                // Populate dropdowns for filters
+                ViewBag.PaymentStatusList = new SelectList(BAL.clsGlobal.GetPaymentStatusList(), "Key", "Value");
+
+                var importOrders = await _importOrderService.GetAllSummaryBALDTOAsync(filter);
+
+                // Wrap results in BAL filter model for the view convenience
+                filter.importOrders = importOrders;
+
+                return View(filter);
             }
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل قائمة أوامر الاستيراد: " + ex.Message;
-                return View(new List<ImportOrderBALDTO>());
+                return View(new BAL.BALFilters.clsImportOrderFilterBAL { importOrders = new List<ImportOrderBALDTO>() });
             }
         }
 
@@ -60,7 +67,7 @@ namespace MimiPosStore.Controllers
             var importOrder = new ImportOrderBALDTO 
             { 
                 ImportDate = DateTime.Now,
-                PaymentStatus = 0, // غير مدفوع
+                PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Pending), // غير مدفوع
                 ActionDate = DateTime.Now
             };
             return View(importOrder);
@@ -76,22 +83,18 @@ namespace MimiPosStore.Controllers
             Column.Add("ImportDate");
             Column.Add("ImportOrderID");
             Column.Add("SupplierID");
-            Column.Add("PaymentStatus");
             Column.Add("PaidAmount");
 
             var toRemoveKeys = ModelState.Keys.Where(key => !Column.Contains(key)).ToList();
             toRemoveKeys.ForEach(k => ModelState.Remove(k));
             string Requierd = "الحقل مطلوب";
-            //ModelState.AddModelError("ImportDate", Requierd);
-            //ModelState.AddModelError("", Requierd);
-            //ModelState.AddModelError("", Requierd);
-            //ModelState.AddModelError("", Requierd);
-            //ModelState.AddModelError("", Requierd,???);
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    importOrderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Pending);
+
                     var result = await _importOrderService.AddBALDTOAsync(importOrderBALDTO);
                     if (result)
                     {
@@ -166,14 +169,10 @@ namespace MimiPosStore.Controllers
                             }
                             catch (Exception ex)
                             {
-                                // في حالة فشل تحليل JSON، استخدم العناصر الموجودة
-                                await _productService.IncreaseProductQuantityAsync(importOrderBALDTO.ImportOrderItems?.Select(ioi => ioi.ImportOrderItemID).ToArray() ?? new int[0], _currentUserService.GetCurrentUserId());
+                               
                             }
                         }
-                        else
-                        {
-                            await _productService.IncreaseProductQuantityAsync(importOrderBALDTO.ImportOrderItems?.Select(ioi => ioi.ImportOrderItemID).ToArray() ?? new int[0], _currentUserService.GetCurrentUserId());
-                        }
+          
 
                         // إذا كان الطلب AJAX، أعد JSON
                         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -534,7 +533,7 @@ namespace MimiPosStore.Controllers
                 return NotFound();
             }
 
-            ViewBag.RemainingAmount = await _importOrderService.GetRemainingAmountAsync(id);
+            ViewBag.RemainingAmount = await _importOrderService.GetRemainingAmountAsync(importOrder);
             return View(importOrder);
         }
 

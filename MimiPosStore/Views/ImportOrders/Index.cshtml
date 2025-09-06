@@ -1,4 +1,4 @@
-@model IEnumerable<BAL.BALDTO.ImportOrderBALDTO>
+@model BAL.BALFilters.clsImportOrderFilterBAL
 @using BAL.BALDTO;
 @{
     ViewData["Title"] = "قائمة أوامر الاستيراد";
@@ -6,13 +6,72 @@
 
 <h1>قائمة أوامر الاستيراد</h1>
 
-<p>
+<div class="mb-3">
     <a asp-action="Create" class="btn btn-primary">إنشاء أمر استيراد جديد</a>
-    <a asp-action="AddItems" class="btn btn-warning">
-        <i class="fas fa-plus-circle"></i> إضافة عناصر للطلبات
-    </a>
-    <a asp-action="Search" class="btn btn-info">البحث</a>
-</p>
+</div>
+
+<form asp-action="Index" method="get" class="card card-body mb-3">
+    <div class="row g-2">
+        <div class="col-md-3">
+            <label class="form-label">الاسم الأول</label>
+            <input name="FirstName" value="@Model?.FirstName" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">الاسم الأخير</label>
+            <input name="LastName" value="@Model?.LastName" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">رقم الهاتف</label>
+            <input name="PhoneNumber" value="@Model?.PhoneNumber" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">من تاريخ الاستيراد</label>
+            <input name="StartImportDate" value="@Model?.StartImportDate?.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">إلى تاريخ الاستيراد</label>
+            <input name="EndImportDate" value="@Model?.EndImportDate?.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">المبلغ الإجمالي من</label>
+            <input name="StartTotalAmount" value="@Model?.StartTotalAmount" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">المبلغ الإجمالي إلى</label>
+            <input name="EndTotalAmount" value="@Model?.EndTotalAmount" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">المبلغ المدفوع من</label>
+            <input name="StartPaidAmount" value="@Model?.StartPaidAmount" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">المبلغ المدفوع إلى</label>
+            <input name="EndPaidAmount" value="@Model?.EndPaidAmount" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">حالة الدفع</label>
+            <select name="PaymentStatus" class="form-select" asp-items="ViewBag.PaymentStatusList">
+                <option value="">الكل</option>
+                @if (!string.IsNullOrEmpty(Model?.PaymentStatus))
+                {
+                    <option selected value="@Model.PaymentStatus">@Model.PaymentStatus</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">عدد العناصر من</label>
+            <input name="StartItemsCount" value="@Model?.StartItemsCount" type="number" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">عدد العناصر إلى</label>
+            <input name="EndItemsCount" value="@Model?.EndItemsCount" type="number" class="form-control" />
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-success me-2">تطبيق الفلترة</button>
+            <a asp-action="Index" class="btn btn-secondary">تفريغ</a>
+        </div>
+    </div>
+</form>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -54,7 +113,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.importOrders)
         {
             <tr>
                 <td>@item.ImportOrderID</td>
@@ -67,18 +126,7 @@
                     @item.FormattedRemainingAmount
                 </td>
                 <td>
-                    @if (item.IsFullyPaid)
-                    {
-                        <span class="badge bg-success">@item.PaymentStatusText</span>
-                    }
-                    else if (item.IsPartiallyPaid)
-                    {
-                        <span class="badge bg-warning">@item.PaymentStatusText</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">@item.PaymentStatusText</span>
-                    }
+                    <span class="badge bg-warning">@BAL.clsGlobal.GetPaymentStatusList()[@item.PaymentStatus]</span>
                 </td>
                 <td>
                     <span class="badge bg-info">@item.ItemsCount</span>
@@ -88,13 +136,13 @@
                         <a asp-action="Details" asp-route-id="@item.ImportOrderID" class="btn btn-info btn-sm">
                             <i class="fas fa-eye"></i> تفاصيل
                         </a>
-                        <a asp-action="Edit" asp-route-id="@item.ImportOrderID" class="btn btn-primary btn-sm">
-                            <i class="fas fa-edit"></i> تعديل
-                        </a>
-                        <a asp-action="Edit" asp-route-id="@item.ImportOrderID" class="btn btn-warning btn-sm">
-                            <i class="fas fa-plus-circle"></i> إضافة عناصر
-                        </a>
-                        @if (!item.IsFullyPaid)
+                        @if (item.PaymentStatus == ((byte)BAL.clsGlobal.enPaymentStatus.Pending))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ImportOrderID" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i> تعديل
+                            </a>
+                        }
+                        @if (item.PaymentStatus==((byte)BAL.clsGlobal.enPaymentStatus.PendingForPayment))
                         {
                             <a asp-action="AddPayment" asp-route-id="@item.ImportOrderID" class="btn btn-success btn-sm">
                                 <i class="fas fa-money-bill"></i> دفع
@@ -110,7 +158,7 @@
     </tbody>
 </table>
 
-@if (!Model.Any())
+@if (!Model.importOrders.Any())
 {
     <div class="alert alert-info text-center">
         <i class="fas fa-info-circle"></i>
@@ -118,39 +166,3 @@
     </div>
 }
 
-<!-- Search Modal -->
-<div class="modal fade" id="searchModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">البحث في أوامر الاستيراد</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form asp-action="Search" method="get">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="searchTerm" class="form-label">كلمة البحث</label>
-                        <input type="text" class="form-control" id="searchTerm" name="searchTerm" 
-                               placeholder="ابحث برقم أمر الاستيراد أو اسم المورد">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">بحث</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            // تفعيل البحث
-            $('a[asp-action="Search"]').click(function (e) {
-                e.preventDefault();
-                $('#searchModal').modal('show');
-            });
-        });
-    </script>
-}

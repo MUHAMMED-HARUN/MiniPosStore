@@ -35,28 +35,28 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(BAL.BALFilters.clsOrderFilterBAL filter)
         {
             try
             {
-                var orders = await _orderService.GetAllBALDTOAsync();
-                return View(orders);
+                // Populate dropdowns for filters
+                ViewBag.PaymentStatusList = new SelectList(BAL.clsGlobal.GetPaymentStatusList(), "Key", "Value");
+
+                var orders = await _orderService.GetAllOrdersDTOAsync(filter);
+
+                // Wrap results in BAL filter model for the view convenience
+                filter.orders = orders;
+
+                return View(filter);
             }
             catch (ArgumentException ex)
             {
                 TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل قائمة الطلبات: " + ex.Message;
-                return View(new List<OrderBALDTO>());
+                return View(new BAL.BALFilters.clsOrderFilterBAL { orders = new List<OrderBALDTO>() });
             }
         }
 
-        // GET: Orders/Save (للإضافة)
-        //public async Task<IActionResult> Save()
-        //{
-        //    await PopulateDropDowns();
-        //    return View(new OrderBALDTO { OrderDate = DateTime.Now });
-        //}
 
-        // GET: Orders/Save/5 (للتعديل)
         public async Task<IActionResult> Save(int id)
         {
             var order = await _orderService.GetByIdBALDTOAsync(id);
@@ -65,90 +65,23 @@ namespace MimiPosStore.Controllers
             if (order == null)
             {
                 order = new OrderBALDTO();
+                
                 order.CustomerID = 1;
                 order.OrderDate = DateTime.Now;
                 order.TotalAmount = 0;
                 order.PaidAmount = 0;
                 order.PaymentStatus =((int)clsGlobal.enPaymentStatus.Pending);
-                order.ActionByUser = "95a74952-19d3-4339-8e71-2f1835eea812"; // Placeholder for current user ID
                 order.ActionDate = DateTime.Now;
                 bool Resut = await _orderService.CreateBALDTOAsync(order);
+                order.OrderID = order.ID;
                 return View(order);
             }
+            order.OrderID = order.ID;
 
             return View(order);
         }
 
-        //// POST: Orders/Save
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Save(OrderBALDTO orderBALDTO, string ItemIds=null)
-        //{
 
-        //    ModelState.Remove("PhoneNumber");
-        //    ModelState.Remove("LastName");
-        //    ModelState.Remove("FirstName");
-        //    ModelState.Remove("ActionByUser");
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            // TODO: Get current user ID from authentication
-        //            string currentUserId = "95a74952-19d3-4339-8e71-2f1835eea812"; // Placeholder
-        //            orderBALDTO.ActionByUser = currentUserId;
-        //            // معالجة الطلب
-        //            if (orderBALDTO.ID == 0)
-        //            {
-        //                // إضافة طلب جديد
-        //                await _orderService.CreateBALDTOAsync(orderBALDTO);
-        //                TempData["SuccessMessage"] = "تم إضافة الطلب بنجاح";
-        //            }
-        //            else
-        //            {
-        //                // تحديث طلب موجود
-        //               bool  result =  await _orderService.UpdateBALDTOAsync(orderBALDTO);
-
-        //                if (result)
-        //                {
-        //                    if (!string.IsNullOrEmpty(ItemIds))
-        //                    {
-        //                        try
-        //                        {
-        //                            var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
-        //                            if (ArrayItemsID.Length > 0 && ArrayItemsID != null) 
-        //                         await   _productService.DecreaseProductQuantityAsync(ArrayItemsID, currentUserId);
-        //                        }
-        //                        catch(ArgumentException e)
-        //                        {
-        //                            throw new ArgumentException(e.Message);
-        //                        }
-        //                    }
-        //                    TempData["SuccessMessage"] = "تم تحديث الطلب بنجاح";
-        //                }
-        //                else
-        //                {
-        //                    TempData["ErrorMessage"] = "فشل في تحديث الطلب";
-        //                }
-
-        //            }
-
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            ModelState.AddModelError("", "حدث خطأ أثناء حفظ الطلب: " + ex.Message);
-        //            TempData["ErrorMessage"] = "فشل في تحديث الطلب" + " " + ex.Message;
-        //            ;
-
-        //        }
-        //    }
-
-        //    await PopulateDropDowns();
-        //    return View(orderBALDTO);
-        //}
-
-        // GET: Orders/Delete/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -166,10 +99,9 @@ namespace MimiPosStore.Controllers
 
             try
             {
-                string currentUserId = "95a74952-19d3-4339-8e71-2f1835eea812"; // Placeholder
-                orderBALDTO.ActionByUser = currentUserId;
 
-                if (orderBALDTO.ID == 0)
+                    orderBALDTO.ID = orderBALDTO.OrderID;
+                if (orderBALDTO.OrderID == 0)
                 {
                     await _orderService.CreateBALDTOAsync(orderBALDTO);
                     return Json(new { success = true, message = "تم إضافة الطلب بنجاح" });
@@ -181,7 +113,7 @@ namespace MimiPosStore.Controllers
                     {
                         var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
                         if (ArrayItemsID?.Length > 0)
-                            await _productService.DecreaseProductQuantityAsync(ArrayItemsID, currentUserId);
+                            await _productService.DecreaseProductQuantityAsync(ArrayItemsID, "");
                     }
 
                     if (result)
@@ -468,29 +400,6 @@ namespace MimiPosStore.Controllers
             }
         }
 
-        // GET: Orders/UpdatePaymentStatus
-        [HttpGet]
-        public async Task<IActionResult> UpdatePaymentStatus(int id, byte paymentStatus)
-        {
-            try
-            {
-                var result = await _orderService.UpdatePaymentStatusAsync(id, paymentStatus);
-                if (result)
-                {
-                    TempData["SuccessMessage"] = "تم تحديث حالة الدفع بنجاح";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "فشل في تحديث حالة الدفع";
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = "حدث خطأ أثناء تحديث حالة الدفع: " + ex.Message;
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
 
         // GET: Orders/AddPayment
         [HttpGet]

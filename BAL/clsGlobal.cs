@@ -14,12 +14,20 @@ namespace BAL
             Add = 1,
             Update = 2
         }
-       public enum enPaymentStatus
+        public enum enActionType
+        {
+            Add = 1,
+            Update = 2,
+            Delete = 3,
+            QuantityChange ,
+        }
+        public enum enPaymentStatus
         {
             Completed = 1,
             Pending = 2,
-            Failed = 3,
-            Canceled = 4
+            PendingForPayment = 3,
+            Failed = 4,
+            Canceled = 5
         }
         public static SortedDictionary<int, string> GetPaymentStatusList()
         {
@@ -27,6 +35,7 @@ namespace BAL
         {
             { (int)enPaymentStatus.Completed, "مكتمل" },
             { (int)enPaymentStatus.Pending, "معلق" },
+            { (int)enPaymentStatus.PendingForPayment, "معلق للدفع" },
             { (int)enPaymentStatus.Failed, "فشل" },
             { (int)enPaymentStatus.Canceled, "ملغى" }
         };

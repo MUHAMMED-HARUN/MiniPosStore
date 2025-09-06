@@ -1,5 +1,6 @@
 using BAL;
 using BAL.BALDTO;
+using DAL.EF.Filters;
 using DAL.EF.Models;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace BAL.Interfaces
         // BALDTO Methods
         Task<OrderBALDTO> GetByIdBALDTOAsync(int OrderID);
         Task<List<OrderBALDTO>> GetAllBALDTOAsync();
+        Task<List<OrderBALDTO>> GetAllOrdersDTOAsync(clsOrderFilter Filter);
         Task<bool> CreateBALDTOAsync(OrderBALDTO orderBALDTO);
         Task<bool> UpdateBALDTOAsync(OrderBALDTO orderBALDTO);
         
@@ -44,7 +46,6 @@ namespace BAL.Interfaces
         Task<List<clsOrder>> SearchOrdersAsync(string searchTerm);
         
         // Payment Methods
-        Task<bool> UpdatePaymentStatusAsync(int orderID, byte paymentStatus);
         Task<bool> AddPaymentAsync(int orderID, float paymentAmount);
         Task<float> GetRemainingAmountAsync(int orderID);
         Task<bool> IsFullyPaidAsync(int orderID);

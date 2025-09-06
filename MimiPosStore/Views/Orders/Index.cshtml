@@ -1,4 +1,4 @@
-@model IEnumerable<BAL.BALDTO.OrderBALDTO>
+@model BAL.BALFilters.clsOrderFilterBAL
 @using BAL.BALDTO;
 @{
     ViewData["Title"] = "قائمة الطلبات";
@@ -6,9 +6,64 @@
 
 <h1>قائمة الطلبات</h1>
 
-<p>
+<div class="mb-3">
     <a asp-action="Save" asp-route-id="0" class="btn btn-primary">إنشاء طلب جديد</a>
-</p>
+</div>
+
+<form asp-action="Index" method="get" class="card card-body mb-3">
+    <div class="row g-2">
+        <div class="col-md-3">
+            <label class="form-label">رقم الطلب</label>
+            <input name="OrderID" value="@Model?.OrderID" type="number" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">الاسم الأول</label>
+            <input name="FirstName" value="@Model?.FirstName" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">الاسم الأخير</label>
+            <input name="LastName" value="@Model?.LastName" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">من تاريخ</label>
+            <input name="StartDate" value="@Model?.StartDate?.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">إلى تاريخ</label>
+            <input name="EndDate" value="@Model?.EndDate?.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">المبلغ الإجمالي من</label>
+            <input name="StartTotalAmount" value="@Model?.StartTotalAmount" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">المبلغ الإجمالي إلى</label>
+            <input name="EndTotalAmount" value="@Model?.EndTotalAmount" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">المبلغ المدفوع من</label>
+            <input name="StartPaidAmount" value="@Model?.StartPaidAmount" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">المبلغ المدفوع إلى</label>
+            <input name="EndPaidAmount" value="@Model?.EndPaidAmount" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">حالة الدفع</label>
+            <select name="PaymentStatus" class="form-select" asp-items="ViewBag.PaymentStatusList">
+                <option value="">الكل</option>
+                @if (!string.IsNullOrEmpty(Model?.PaymentStatus))
+                {
+                    <option selected value="@Model.PaymentStatus">@Model.PaymentStatus</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-success me-2">تطبيق الفلترة</button>
+            <a asp-action="Index" class="btn btn-secondary">تفريغ</a>
+        </div>
+    </div>
+</form>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -48,7 +103,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.orders)
         {
             var remainingAmount = item.TotalAmount - item.PaidAmount;
             <tr>
@@ -64,14 +119,17 @@
                     @{
 
                         <span class="badge bg-warning">@BAL.clsGlobal.GetPaymentStatusList()[item.PaymentStatus]</span>
-                    
+
                     }
                 </td>
                 <td>
                     <div class="btn-group" role="group">
-                        <a asp-action="Save" asp-route-id="@item.ID" class="btn btn-primary btn-sm">
-                            <i class="fas fa-edit"></i> تعديل
-                        </a>
+                        @if (item.PaymentStatus == ((byte)BAL.clsGlobal.enPaymentStatus.Pending))
+                        {
+                            <a asp-action="Save" asp-route-id="@item.ID" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i> تعديل
+                            </a>
+                        }
                         @if (remainingAmount > 0)
                         {
                             <a asp-action="AddPayment" asp-route-id="@item.ID" class="btn btn-success btn-sm">
@@ -88,7 +146,7 @@
     </tbody>
 </table>
 
-@if (!Model.Any())
+@if (!Model.orders.Any())
 {
     <div class="alert alert-info text-center">
         <i class="fas fa-info-circle"></i>

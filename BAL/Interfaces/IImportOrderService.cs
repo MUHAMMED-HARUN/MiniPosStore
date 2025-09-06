@@ -1,5 +1,6 @@
 using BAL;
 using BAL.BALDTO;
+using DAL.EF.Filters;
 using DAL.EF.Models;
 using System;
 using System.Collections.Generic;
@@ -40,12 +41,13 @@ namespace BAL.Interfaces
         
         // Summary Methods for Performance
         Task<List<ImportOrderBALDTO>> GetAllSummaryBALDTOAsync();
+        Task<List<ImportOrderBALDTO>> GetAllSummaryBALDTOAsync(clsImportOrderFilter filter);
         Task<ImportOrderBALDTO> GetByIdSummaryBALDTOAsync(int importOrderID);
         
         // Business Logic Methods
         Task<bool> UpdatePaymentStatusAsync(int importOrderID, byte paymentStatus);
         Task<bool> AddPaymentAsync(int importOrderID, float paymentAmount);
-        Task<float> GetRemainingAmountAsync(int importOrderID);
+        Task<float> GetRemainingAmountAsync(ImportOrderBALDTO importOrderID);
         Task<bool> IsFullyPaidAsync(int importOrderID);
         
         Task<bool> Save();

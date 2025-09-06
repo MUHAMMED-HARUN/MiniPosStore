@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.EF.Filters;
+using Microsoft.Data.SqlClient;
 
 namespace DAL.IRepoServ
 {
@@ -100,6 +102,7 @@ namespace DAL.IRepoServ
                 .ThenInclude(oi => oi.Product)
                 .ToListAsync();
         }
+
 
 
         public async Task<int> CreateAsync(clsOrder order)
@@ -293,6 +296,42 @@ namespace DAL.IRepoServ
                     ActionDate = o.ActionDate,
                 })
                 .ToListAsync();
+        }
+        public async Task<List<OrderDTO>> GetAllDTOAsync(clsOrderFilter filter)
+        {
+            string Query = @$"select * from GetOrdersFiltred ( {clsDALUtil.GetSqlPrameterString<clsOrderFilter>()})";
+
+            using (var connection = _context.Database.GetDbConnection().CreateCommand())
+            {
+                connection.CommandText = Query;
+                connection.CommandType = System.Data.CommandType.Text;
+
+                if (connection.Connection.State != System.Data.ConnectionState.Open)
+                    connection.Connection.Open();
+
+                var arr = clsDALUtil.GetSqlPrameters<clsOrderFilter>(filter).ToArray();
+                connection.Parameters.AddRange(arr);
+
+                List<OrderDTO> Orders = new List<OrderDTO>();
+                try
+                {
+                    using (var reader = connection.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var order = new OrderDTO();
+                            clsDALUtil.MapToClass<OrderDTO>(reader, ref order);
+                            Orders.Add(order);
+                        }
+                    }
+                }
+                catch(SqlException s)
+                {
+
+                }
+    
+                return Orders;
+            }
         }
 
         public async Task<OrderItemsDTO> GetOrderItemByIdDTOAsync(int OrderItemID)

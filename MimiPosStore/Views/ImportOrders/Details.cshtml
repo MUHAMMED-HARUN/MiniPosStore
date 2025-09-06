@@ -46,18 +46,7 @@
 
                     <dt class="col-sm-4">حالة الدفع:</dt>
                     <dd class="col-sm-8">
-                        @if (Model.IsFullyPaid)
-                        {
-                            <span class="badge bg-success">@Model.PaymentStatusText</span>
-                        }
-                        else if (Model.IsPartiallyPaid)
-                        {
-                            <span class="badge bg-warning">@Model.PaymentStatusText</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">@Model.PaymentStatusText</span>
-                        }
+                        <span class="badge bg-danger">@BAL.clsGlobal.GetPaymentStatusList()[Model.PaymentStatus]</span>
                     </dd>
 
                     <dt class="col-sm-4">عدد العناصر:</dt>
@@ -175,7 +164,7 @@
                 </h5>
             </div>
             <div class="card-body text-center">
-                @if (Model.IsFullyPaid)
+                @if (Model.PaymentStatus==((byte)BAL.clsGlobal.enPaymentStatus.Completed))
                 {
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle fa-2x"></i>
@@ -183,11 +172,11 @@
                         <p class="mb-0">تم سداد جميع المبالغ</p>
                     </div>
                 }
-                else if (Model.IsPartiallyPaid)
+                else if (Model.PaymentStatus == ((byte)((byte)BAL.clsGlobal.enPaymentStatus.PendingForPayment)))
                 {
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle fa-2x"></i>
-                        <h5>مدفوع جزئياً</h5>
+                        <h5>معلق للدفع</h5>
                         <p class="mb-0">المتبقي: @Model.FormattedRemainingAmount</p>
                     </div>
                 }
@@ -195,7 +184,7 @@
                 {
                     <div class="alert alert-danger">
                         <i class="fas fa-times-circle fa-2x"></i>
-                        <h5>غير مدفوع</h5>
+                        <h5>معلق </h5>
                         <p class="mb-0">المطلوب: @Model.FormattedTotalAmount</p>
                     </div>
                 }
@@ -211,13 +200,17 @@
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
-                    <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-primary">
-                        <i class="fas fa-edit"></i> تعديل
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-warning">
-                        <i class="fas fa-plus-circle"></i> إضافة عناصر
-                    </a>
-                    @if (!Model.IsFullyPaid)
+                    @if (Model.PaymentStatus == ((byte)BAL.clsGlobal.enPaymentStatus.Pending))
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> تعديل
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-warning">
+                            <i class="fas fa-plus-circle"></i> إضافة عناصر
+                        </a>
+                    }
+
+                    @if (Model.PaymentStatus==((byte)BAL.clsGlobal.enPaymentStatus.PendingForPayment))
                     {
                         <a asp-action="AddPayment" asp-route-id="@Model.ImportOrderID" class="btn btn-success">
                             <i class="fas fa-money-bill"></i> إضافة دفعة

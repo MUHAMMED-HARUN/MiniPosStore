@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.EF.Filters;
 
 namespace BAL.Services
 {
@@ -161,11 +162,16 @@ namespace BAL.Services
                 return false;
             }
         }
-
+        
         public async Task<bool> UpdateBALDTOAsync(ImportOrderBALDTO importOrderBALDTO)
         {
             try
             {
+                if (IsPaymentCompletedDTO(importOrderBALDTO))
+                    importOrderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Completed);
+                else
+                    importOrderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.PendingForPayment);
+
                 var importOrder = importOrderBALDTO.ToImportOrderModel();
                 importOrder.ActionByUser = _currentUserService.GetCurrentUserId();
                 return await UpdateAsync(importOrder);
@@ -177,6 +183,14 @@ namespace BAL.Services
         }
 
         // Enhanced DTO Methods with Business Logic
+        public bool IsPaymentCompletedDTO(ImportOrderBALDTO order)
+        {
+            return order.PaidAmount == order.TotalAmount;
+        }
+        public bool IsPaymentCompleted(clsImportOrder order)
+        {
+            return order.PaidAmount == order.TotalAmount;
+        }
         public async Task<ImportOrderBALDTO> GetByIdWithItemsBALDTOAsync(int importOrderID)
         {
             try
@@ -258,6 +272,19 @@ namespace BAL.Services
             }
         }
 
+        public async Task<List<ImportOrderBALDTO>> GetAllSummaryBALDTOAsync(clsImportOrderFilter filter)
+        {
+            try
+            {
+                var importOrders = await _importOrderRepo.GetAllDTOAsync(filter);
+                return importOrders.ToImportOrderBALDTOList();
+            }
+            catch (Exception)
+            {
+                return new List<ImportOrderBALDTO>();
+            }
+        }
+
         public async Task<ImportOrderBALDTO> GetByIdSummaryBALDTOAsync(int importOrderID)
         {
             try
@@ -300,12 +327,10 @@ namespace BAL.Services
                 importOrder.PaidAmount += paymentAmount;
                 
                 // Update payment status based on paid amount
-                if (importOrder.PaidAmount >= importOrder.TotalAmount)
-                    importOrder.PaymentStatus = 2; // Fully paid
-                else if (importOrder.PaidAmount > 0)
-                    importOrder.PaymentStatus = 1; // Partially paid
+                if (IsPaymentCompleted(importOrder))
+                    importOrder.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Completed); // Fully paid
                 else
-                    importOrder.PaymentStatus = 0; // Not paid
+                    importOrder.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.PendingForPayment); // Not paid
 
                 return await UpdateAsync(importOrder);
             }
@@ -315,11 +340,10 @@ namespace BAL.Services
             }
         }
 
-        public async Task<float> GetRemainingAmountAsync(int importOrderID)
+        public async Task<float> GetRemainingAmountAsync(ImportOrderBALDTO importOrderID)
         {
             try
             {
-                var importOrder = await _importOrderRepo.GetByIdAsync(importOrderID);
                 if (importOrder == null) return 0;
                 return importOrder.TotalAmount - importOrder.PaidAmount;
             }

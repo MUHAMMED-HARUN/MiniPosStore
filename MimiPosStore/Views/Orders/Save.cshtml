@@ -1,317 +1,4 @@
-@* @model BAL.BALDTO.OrderBALDTO
-@using BAL.BALDTO;
-@{
-    ViewData["Title"] = Model.ID == 0 ? "إنشاء طلب جديد" : "تعديل الطلب";
-}
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/orders.css" />
-}
-
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Save" method="post" id="orderForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <input type="hidden" asp-for="ID" />
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label asp-for="CustomerID" class="control-label">العميل</label>
-                        <select asp-for="CustomerID" class="form-control" asp-items="ViewBag.CustomerList">
-                            <option value="">-- اختر العميل --</option>
-                        </select>
-                        <span asp-validation-for="CustomerID" class="text-danger"></span>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-group mb-3">
-                        <label asp-for="OrderDate" class="control-label">تاريخ الطلب</label>
-                        <input asp-for="OrderDate" class="form-control" type="date" />
-                        <span asp-validation-for="OrderDate" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label asp-for="TotalAmount" class="control-label">المبلغ الإجمالي</label>
-                        <input asp-for="TotalAmount" class="form-control" readonly />
-                        <span asp-validation-for="TotalAmount" class="text-danger"></span>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label asp-for="PaidAmount" class="control-label">المبلغ المدفوع</label>
-                        <input asp-for="PaidAmount" class="form-control" />
-                        <span asp-validation-for="PaidAmount" class="text-danger"></span>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label asp-for="PaymentStatus" class="control-label">حالة الدفع</label>
-                        <select asp-for="PaymentStatus" class="form-control" asp-items="ViewBag.PaymentStatusList">
-                        </select>
-                        <span asp-validation-for="PaymentStatus" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group mb-3">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> حفظ
-                </button>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> العودة للقائمة
-                </a>
-            </div>
-        </form>
-    </div>
-    
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-info-circle"></i> معلومات العميل
-                </h5>
-            </div>
-            <div class="card-body">
-                <div id="customerInfo">
-                    @if (Model.ID > 0 && !string.IsNullOrEmpty(Model.FirstName))
-                    {
-                        <p><strong>الاسم:</strong> @(Model.FirstName + " " + Model.LastName)</p>
-                        <p><strong>الهاتف:</strong> @Model.PhoneNumber</p>
-                    }
-                    else
-                    {
-                        <p class="text-muted">اختر عميلاً لعرض المعلومات</p>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-@if (Model.ID > 0)
-{
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-list"></i> عناصر الطلب
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                            <i class="fas fa-plus"></i> إضافة عنصر جديد
-                        </button>
-                        @if ((Model.TotalAmount - Model.PaidAmount) > 0)
-                        {
-                            <a asp-action="AddPayment" asp-route-id="@Model.ID" class="btn btn-warning">
-                                <i class="fas fa-money-bill"></i> إضافة دفعة
-                            </a>
-                        }
-                    </div>
-                    
-                    <div id="orderItems">
-                        <!-- سيتم تحميل عناصر الطلب هنا عبر AJAX -->
-                    </div>
-                    
-                    <hr />
-                    
-                    <div class="row">
-                        <div class="col-md-3">
-                            <strong>المبلغ الإجمالي:</strong> <span id="totalAmount">@Model.TotalAmount.ToString("C")</span>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>المبلغ المدفوع:</strong> <span id="paidAmount">@Model.PaidAmount.ToString("C")</span>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>المبلغ المتبقي:</strong> <span id="remainingAmount" class="text-danger">@((Model.TotalAmount - Model.PaidAmount).ToString("C"))</span>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>عدد العناصر:</strong> <span id="itemsCount">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-@if (Model.ID > 0)
-{
-    @await Html.PartialAsync("_AddOrderItem", new OrderItemsBALDTO { OrderID = Model.ID })
-    @await Html.PartialAsync("_EditOrderItem", new OrderItemsBALDTO { OrderID = Model.ID })
-}
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    <script src="~/js/Product.js" asp-append-version="true"></script>
-    <script>
-        $(document).ready(function () {
-            // تحديث معلومات العميل عند تغيير العميل
-            $('#CustomerID').change(function () {
-                var customerId = $(this).val();
-                if (customerId) {
-                    // يمكن إضافة AJAX call هنا لجلب معلومات العميل
-                }
-            });
-            
-            // تحميل عناصر الطلب إذا كان الطلب موجود
-            @if (Model.ID > 0)
-            {
-                <text>
-                loadOrderItems();
-                </text>
-            }
-        });
-        
-        function loadOrderItems() {
-            var orderId = @Model.ID;
-            $.get('/Orders/GetOrderItems', { orderId: orderId })
-                .done(function (data) {
-                    $('#orderItems').html(data);
-                    updateOrderSummary();
-                })
-                .fail(function () {
-                    $('#orderItems').html('<div class="alert alert-danger">حدث خطأ أثناء تحميل عناصر الطلب</div>');
-                });
-        }
-        
-        function updateOrderSummary() {
-            var totalAmount = 0;
-            var itemsCount = 0;
-            
-            $('.order-item-row').each(function () {
-                var itemTotal = parseFloat($(this).find('.item-total').text().replace(/[^\d.-]/g, '')) || 0;
-                totalAmount += itemTotal;
-                itemsCount++;
-            });
-            
-            $('#totalAmount').text(totalAmount.toFixed(2) + ' د.ك');
-            $('#itemsCount').text(itemsCount);
-            
-            var paidAmount = parseFloat($('#PaidAmount').val()) || 0;
-            var remainingAmount = totalAmount - paidAmount;
-            $('#remainingAmount').text(remainingAmount.toFixed(2) + ' د.ك');
-            
-            // تحديث المبلغ الإجمالي في النموذج الرئيسي
-            $('#TotalAmount').val(totalAmount.toFixed(2));
-        }
-        
-        function deleteItem(itemId, orderId) {
-            if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
-                $.post('/Orders/DeleteItem', { itemId: itemId, orderId: orderId })
-                    .done(function () {
-                        loadOrderItems();
-                    })
-                    .fail(function () {
-                        alert('حدث خطأ أثناء حذف العنصر');
-                    });
-            }
-        }
-        
-        function editOrderItem(itemId, orderId) {
-            // تحميل بيانات العنصر للتعديل
-            $.get('/Orders/GetOrderItemForEdit', { itemId: itemId })
-                .done(function (data) {
-                    if (data.success) {
-                        // ملء نموذج التعديل بالبيانات
-                        $('#editItemModal #ID').val(data.item.id);
-                        $('#editItemModal #OrderID').val(data.item.orderID);
-                        $('#editItemModal #editProductSelect').val(data.item.productID);
-                        $('#editItemModal #editQuantityInput').val(data.item.quantity);
-                        $('#editItemModal #availableQuantityDisplay').val(data.item.availableQuantity);
-                        $('#editItemModal #editSellingPriceInput').val(data.item.sellingPrice);
-                        
-                        // تحميل معلومات المنتج
-                        if (data.item.productID) {
-                            loadEditProductInfo(data.item.productID);
-                        }
-                        
-                        // حساب المبلغ الإجمالي
-                        calculateEditItemTotal();
-                        
-                        // فتح Modal التعديل
-                        $('#editItemModal').modal('show');
-                    } else {
-                        alert('خطأ في تحميل بيانات العنصر: ' + data.message);
-                    }
-                })
-                .fail(function () {
-                    alert('حدث خطأ في الاتصال بالخادم');
-                });
-        }
-        
-        function loadEditProductInfo(productId) {
-            $.get('/Orders/GetProductInfo', { productId: productId })
-                .done(function (data) {
-                    if (data.success) {
-                        $('#editBasePrice').text(data.retailPrice + ' ' + data.currencyType);
-                        $('#editAvailableQuantity').text(data.availableQuantity);
-                        $('#editUnitOfMeasure').text(data.uomName);
-                        $('#editAvailableQuantityDisplay').val(data.availableQuantity);
-                    }
-                });
-        }
-        
-        function calculateEditItemTotal() {
-            var quantity = parseFloat($('#editQuantityInput').val()) || 0;
-            var price = parseFloat($('#editSellingPriceInput').val()) || 0;
-            var total = quantity * price;
-            $('#editItemTotalAmount').val(total.toFixed(2));
-        }
-                $(document).ready(function () {
-            var successMessage = '@TempData["SuccessMessage"]';
-            if (successMessage) {
-                showSuccessMessage(successMessage);
-            }
-        });
-
-        function showSuccessMessage(message) {
-            // إنشاء toast notification
-            var toastHtml = `
-                <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="fas fa-check-circle"></i> ${message}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-            `;
-            
-            // إضافة toast إلى الصفحة
-            if ($('#toastContainer').length === 0) {
-                $('body').append('<div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>');
-            }
-            
-            $('#toastContainer').append(toastHtml);
-            
-            // عرض toast
-            var toast = new bootstrap.Toast($('#toastContainer .toast:last'));
-            toast.show();
-            
-            // إزالة toast بعد إغلاقه
-            $('#toastContainer .toast:last').on('hidden.bs.toast', function () {
-                $(this).remove();
-            });
-        }
-    </script>
-}
- *@
 @model BAL.BALDTO.OrderBALDTO
 @using BAL.BALDTO
 @{
@@ -330,9 +17,11 @@
 <div class="row">
     <div class="col-md-8">
         <form asp-action="Save" method="post" id="orderForm">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input type="hidden" asp-for="ID" />
+            <input hidden readonly asp-for="OrderID" />
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -401,7 +90,7 @@
             </div>
             <div class="card-body">
                 <div id="customerInfo">
-                    @if (Model.ID > 0 && !string.IsNullOrEmpty(Model.FirstName))
+                    @if (Model.OrderID > 0 && !string.IsNullOrEmpty(Model.FirstName))
                     {
                         <p><strong>الاسم:</strong> @(Model.FirstName + " " + Model.LastName)</p>
                         <p><strong>الهاتف:</strong> @Model.PhoneNumber</p>
@@ -416,7 +105,7 @@
     </div>
 </div>
 
-@if (Model.ID > 0)
+@if (Model.OrderID > 0)
 {
     <div class="row mt-4">
         <div class="col-12">
@@ -459,7 +148,7 @@
     </div>
 }
 
-@if (Model.ID > 0)
+@if (Model.OrderID > 0)
 {
     @await Html.PartialAsync("_AddOrderItem", new OrderItemsBALDTO { OrderID = Model.ID })
     @await Html.PartialAsync("_EditOrderItem", new OrderItemsBALDTO { OrderID = Model.ID })

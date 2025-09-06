@@ -1,5 +1,6 @@
-﻿using DAL.EF.Models;
-using DAL.EF.DTO;
+﻿using DAL.EF.DTO;
+using DAL.EF.Filters;
+using DAL.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace DAL.IRepo
         Task<bool> DeleteAsync(int OrderID, string CurentUserID);
         Task<clsOrder> GetByIdAsync(int OrderID);
         Task<List<clsOrder>> GetAllAsync();
+
         Task<bool> ConfirmOrderAsync(int OrderID, string CurentUserID);
         Task<bool> CancelOrderAsync(int OrderID,string CurentUserID);
 
@@ -28,7 +30,8 @@ namespace DAL.IRepo
         // DTO Methods
         Task<OrderDTO> GetByIdDTOAsync(int OrderID);
         Task<List<OrderDTO>> GetAllDTOAsync();
-        
+        Task<List<OrderDTO>> GetAllDTOAsync(clsOrderFilter filter);
+
         // OrderItems DTO Methods
         Task<OrderItemsDTO> GetOrderItemByIdDTOAsync(int OrderItemID);
         Task<List<OrderItemsDTO>> GetOrderItemsByOrderIdDTOAsync(int OrderID);
