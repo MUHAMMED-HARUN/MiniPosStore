@@ -113,7 +113,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.importOrders)
         {
             <tr>
                 <td>@item.ImportOrderID</td>
@@ -158,7 +158,7 @@
     </tbody>
 </table>
 
-@if (!Model.Any())
+@if (!Model.importOrders.Any())
 {
     <div class="alert alert-info text-center">
         <i class="fas fa-info-circle"></i>
