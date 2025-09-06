@@ -13,7 +13,6 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            clsTVFMigration.AddTVFProductFilter(migrationBuilder);
             clsTVFMigration.AddTVFOrderFilter(migrationBuilder);
             clsTVFMigration.AddTVFImportOrderFilter(migrationBuilder);
         }
