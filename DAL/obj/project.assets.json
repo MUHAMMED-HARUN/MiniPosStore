@@ -8015,11 +8015,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj",
+      "projectUniqueName": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj",
       "projectName": "DAL",
-      "projectPath": "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj",
+      "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj",
       "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
-      "outputPath": "D:\\Project\\ddd\\MiniPosStore\\DAL\\obj\\",
+      "outputPath": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Visual Studio\\Shared\\NuGetPackages"

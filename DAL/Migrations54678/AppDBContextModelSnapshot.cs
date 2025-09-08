@@ -210,7 +210,7 @@ namespace DAL.Migrations
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
 
-                    b.Property<float>("PriceAdjustment")
+                    b.Property<float?>("PriceAdjustment")
                         .HasColumnType("real");
 
                     b.Property<int>("ProductID")
@@ -492,19 +492,19 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a03358db-fc98-420b-a3e9-c4d18bd8ea03",
+                            Id = "764adc46-37cc-47e5-a32e-ff6e2fd1082d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b1a99b69-e8e4-421d-8827-0eae4311010a",
+                            ConcurrencyStamp = "d335a001-51ac-48e0-90a0-a8c37c960c74",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEN7MaakGYDV/3/kyZ6Iqr9RUDCqaUd8IaN5LrfWe1vG3+NE1LjgTUCrqDIz1PZzEhQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFKVgp4eEIf+qnPbFbQOtYMDTjbovU6Ab+PfCdEBEHkT7zrcONezZszKeSBeY1WSCA==",
                             Permissions = 0,
                             PersonID = 1,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "cdc87da5-3edf-4f02-8fc3-a0efe4941630",
+                            SecurityStamp = "01166ffe-f684-4b70-b194-e03febd0efa5",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -539,7 +539,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "75a3f99a-c704-4335-bbd2-8018c9e17a59",
+                            Id = "fe9db81f-cb23-488f-8392-685b1d4edde7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -634,8 +634,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "a03358db-fc98-420b-a3e9-c4d18bd8ea03",
-                            RoleId = "75a3f99a-c704-4335-bbd2-8018c9e17a59"
+                            UserId = "764adc46-37cc-47e5-a32e-ff6e2fd1082d",
+                            RoleId = "fe9db81f-cb23-488f-8392-685b1d4edde7"
                         });
                 });
 

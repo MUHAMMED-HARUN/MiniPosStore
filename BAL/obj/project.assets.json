@@ -7954,11 +7954,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project\\ddd\\MiniPosStore\\BAL\\BAL.csproj",
+      "projectUniqueName": "D:\\Project\\Gitcommit\\MiniPosStore\\BAL\\BAL.csproj",
       "projectName": "BAL",
-      "projectPath": "D:\\Project\\ddd\\MiniPosStore\\BAL\\BAL.csproj",
+      "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\BAL\\BAL.csproj",
       "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
-      "outputPath": "D:\\Project\\ddd\\MiniPosStore\\BAL\\obj\\",
+      "outputPath": "D:\\Project\\Gitcommit\\MiniPosStore\\BAL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Visual Studio\\Shared\\NuGetPackages"
@@ -7979,8 +7979,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj": {
-              "projectPath": "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj"
+            "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj": {
+              "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj"
             }
           }
         }

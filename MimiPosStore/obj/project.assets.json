@@ -8461,11 +8461,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project\\ddd\\MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
+      "projectUniqueName": "D:\\Project\\Gitcommit\\MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
       "projectName": "MimiPosStore",
-      "projectPath": "D:\\Project\\ddd\\MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
+      "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
       "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
-      "outputPath": "D:\\Project\\ddd\\MiniPosStore\\MimiPosStore\\obj\\",
+      "outputPath": "D:\\Project\\Gitcommit\\MiniPosStore\\MimiPosStore\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Visual Studio\\Shared\\NuGetPackages"
@@ -8486,11 +8486,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Project\\ddd\\MiniPosStore\\BAL\\BAL.csproj": {
-              "projectPath": "D:\\Project\\ddd\\MiniPosStore\\BAL\\BAL.csproj"
+            "D:\\Project\\Gitcommit\\MiniPosStore\\BAL\\BAL.csproj": {
+              "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\BAL\\BAL.csproj"
             },
-            "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj": {
-              "projectPath": "D:\\Project\\ddd\\MiniPosStore\\DAL\\DAL.csproj"
+            "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj": {
+              "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj"
             }
           }
         }

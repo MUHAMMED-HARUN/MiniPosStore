@@ -86,6 +86,7 @@ namespace DAL.Migrations
                             p.WholesalePrice, 
                             p.AvailableQuantity, 
                             p.CurrencyType, 
+                            p.ImagePath,
                             u.Name AS UnitOfMeasureName
                         FROM dbo.Products p
                         INNER JOIN dbo.UnitOfMeasures u ON p.UOMID = u.ID
@@ -262,9 +263,10 @@ RETURN
         p.FirstName,
         p.LastName,
         p.PhoneNumber,
-        SUM(o.TotalAmount - o.PaidAmount) AS RemainingAmount
+        ISNULL(SUM(o.TotalAmount - o.PaidAmount), 0) AS RemainingAmount
+
     FROM dbo.Customers c
-    INNER JOIN dbo.Orders o ON c.ID = o.CustomerID
+    LEFT JOIN dbo.Orders o ON c.ID = o.CustomerID
     INNER JOIN dbo.People p ON c.PersonID = p.ID
     WHERE 
         (@FirstName IS NULL OR p.FirstName LIKE '%' + @FirstName + '%')

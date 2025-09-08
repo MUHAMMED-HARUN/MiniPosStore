@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "V8Rpk+4DZ4w=",
+  "dgSpecHash": "3Nq90hhkcRs=",
   "success": true,
-  "projectFilePath": "D:\\Project\\ddd\\MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
+  "projectFilePath": "D:\\Project\\Gitcommit\\MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\muham\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\muham\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

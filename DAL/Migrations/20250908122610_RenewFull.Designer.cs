@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20250902091932_full")]
-    partial class full
+    [Migration("20250908122610_RenewFull")]
+    partial class RenewFull
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -212,6 +212,9 @@ namespace DAL.Migrations
 
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
+
+                    b.Property<float?>("PriceAdjustment")
+                        .HasColumnType("real");
 
                     b.Property<int>("ProductID")
                         .HasColumnType("int");
@@ -492,19 +495,19 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5d7e9210-914d-421a-9dc2-a6a1a96932f0",
+                            Id = "764adc46-37cc-47e5-a32e-ff6e2fd1082d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e4ad7d7c-becf-426d-891a-461deaf7c89d",
+                            ConcurrencyStamp = "d335a001-51ac-48e0-90a0-a8c37c960c74",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHkm23nGSHD0DiBfWUwzMTBtC1XBekbngFrhLzi2xXbtE0MdVbuhl34KM8JbDiTQQw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFKVgp4eEIf+qnPbFbQOtYMDTjbovU6Ab+PfCdEBEHkT7zrcONezZszKeSBeY1WSCA==",
                             Permissions = 0,
                             PersonID = 1,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "62881c57-c887-4a63-a1e9-95c748429f6c",
+                            SecurityStamp = "01166ffe-f684-4b70-b194-e03febd0efa5",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -539,7 +542,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "707913e6-80a9-4cd3-8b42-7cd1d8e02f52",
+                            Id = "fe9db81f-cb23-488f-8392-685b1d4edde7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -634,8 +637,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "5d7e9210-914d-421a-9dc2-a6a1a96932f0",
-                            RoleId = "707913e6-80a9-4cd3-8b42-7cd1d8e02f52"
+                            UserId = "764adc46-37cc-47e5-a32e-ff6e2fd1082d",
+                            RoleId = "fe9db81f-cb23-488f-8392-685b1d4edde7"
                         });
                 });
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class full : Migration
+    public partial class RenewFull : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -374,7 +374,8 @@ namespace DAL.Migrations
                     OrderID = table.Column<int>(type: "int", nullable: false),
                     ProductID = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<float>(type: "real", nullable: false),
-                    SellingPrice = table.Column<float>(type: "real", nullable: false)
+                    SellingPrice = table.Column<float>(type: "real", nullable: false),
+                    PriceAdjustment = table.Column<float>(type: "real", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -424,7 +425,7 @@ namespace DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "707913e6-80a9-4cd3-8b42-7cd1d8e02f52", null, "Admin", "ADMIN" });
+                values: new object[] { "fe9db81f-cb23-488f-8392-685b1d4edde7", null, "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "People",
@@ -449,12 +450,12 @@ namespace DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "Permissions", "PersonID", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "5d7e9210-914d-421a-9dc2-a6a1a96932f0", 0, "e4ad7d7c-becf-426d-891a-461deaf7c89d", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN", "AQAAAAIAAYagAAAAEHkm23nGSHD0DiBfWUwzMTBtC1XBekbngFrhLzi2xXbtE0MdVbuhl34KM8JbDiTQQw==", 0, 1, null, false, "62881c57-c887-4a63-a1e9-95c748429f6c", false, "admin" });
+                values: new object[] { "764adc46-37cc-47e5-a32e-ff6e2fd1082d", 0, "d335a001-51ac-48e0-90a0-a8c37c960c74", "admin@example.com", true, false, null, "ADMIN@EXAMPLE.COM", "ADMIN", "AQAAAAIAAYagAAAAEFKVgp4eEIf+qnPbFbQOtYMDTjbovU6Ab+PfCdEBEHkT7zrcONezZszKeSBeY1WSCA==", 0, 1, null, false, "01166ffe-f684-4b70-b194-e03febd0efa5", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "707913e6-80a9-4cd3-8b42-7cd1d8e02f52", "5d7e9210-914d-421a-9dc2-a6a1a96932f0" });
+                values: new object[] { "fe9db81f-cb23-488f-8392-685b1d4edde7", "764adc46-37cc-47e5-a32e-ff6e2fd1082d" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -571,6 +572,10 @@ namespace DAL.Migrations
                 name: "IX_Suppliers_PersonID",
                 table: "Suppliers",
                 column: "PersonID");
+            clsTVFMigration.AddTVFProductFilter(migrationBuilder);
+            clsTVFMigration.AddTVFOrderFilter(migrationBuilder);
+            clsTVFMigration.AddTVFCustomersFilter(migrationBuilder);
+            clsTVFMigration.AddTVFImportOrderFilter(migrationBuilder);
         }
 
         /// <inheritdoc />

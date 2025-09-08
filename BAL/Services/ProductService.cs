@@ -41,7 +41,7 @@ namespace BAL.Services
                 CurrencyType = p.CurrencyType,
                 CurrencyName = p.CurrencyName,
                 UOMName = p.UOMName,
-
+                ImagePath=p.ImagePath
             }).ToList();
           return products;
         }
@@ -129,7 +129,7 @@ namespace BAL.Services
         public async Task<bool> CreateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath)
         {
             var product = productBALDTO.ToProductModel();
-            product.ActionByUser = _currentUserServ.GetCurrentUserId(); ;
+            product.ActionByUser = _currentUserServ.GetCurrentUserId(); 
             product.ActionDate = DateTime.Now;
             product.ActionType = 1; // Add
             

@@ -28,7 +28,6 @@ namespace MimiPosStore.Controllers
             try
             {
                 var customers = await _customerService.GetAllBALDTOAsync(filter);
-                
                 // Wrap results in BAL filter model for the view convenience
                 filter.customers = customers;
                 
