@@ -1,4 +1,4 @@
-@model IEnumerable<BAL.BALDTO.CustomerBALDTO>
+@model BAL.BALFilters.clsCustomerFilterBAL
 @using BAL.BALDTO;
 @{
     ViewData["Title"] = "قائمة العملاء";
@@ -6,11 +6,36 @@
 
 <h1>قائمة العملاء</h1>
 
-<p>
+<div class="mb-3">
     <a asp-action="Create" class="btn btn-primary">إضافة عميل جديد</a>
     <a asp-action="AddCustomer" class="btn btn-success">إضافة عميل من الأشخاص</a>
     <a asp-action="Search" class="btn btn-info">البحث عن عميل</a>
-</p>
+</div>
+
+<form asp-action="Index" method="get" class="card card-body mb-3">
+    <div class="row g-2">
+        <div class="col-md-4">
+            <label class="form-label">الاسم الأول</label>
+            <input name="FirstName" value="@Model?.FirstName" class="form-control" placeholder="ابحث بالاسم الأول" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">الاسم الأخير</label>
+            <input name="LastName" value="@Model?.LastName" class="form-control" placeholder="ابحث بالاسم الأخير" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">رقم الهاتف</label>
+            <input name="PhoneNumber" value="@Model?.PhoneNumber" class="form-control" placeholder="ابحث برقم الهاتف" />
+        </div>
+        <div class="col-md-12 d-flex align-items-end">
+            <button type="submit" class="btn btn-success me-2">
+                <i class="fas fa-search"></i> تطبيق الفلترة
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times"></i> تفريغ
+            </a>
+        </div>
+    </div>
+</form>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -45,11 +70,12 @@
             <th>الاسم الأخير</th>
             <th>الاسم الكامل</th>
             <th>رقم الهاتف</th>
+            <th>مبلغ الدين</th>
             <th>الإجراءات</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.customers)
         {
             <tr>
                 <td>@item.CustomerID</td>
@@ -58,6 +84,7 @@
                 <td>@item.LastName</td>
                 <td>@(item.FirstName + " " + item.LastName)</td>
                 <td>@item.PhoneNumber</td>
+                <td>@item.RemainingAmount</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.CustomerID" class="btn btn-info btn-sm">
                         <i class="fas fa-eye"></i> تفاصيل
@@ -74,7 +101,7 @@
     </tbody>
 </table>
 
-@if (!Model.Any())
+@if (!Model.customers.Any())
 {
     <div class="alert alert-info text-center">
         <i class="fas fa-info-circle"></i>

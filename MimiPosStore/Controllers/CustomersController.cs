@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BAL.Interfaces;
 using BAL.BALDTO;
+using BAL.BALFilters;
 using DAL.EF.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using DAL.EF.Filters;
 
 namespace MimiPosStore.Controllers
 {
@@ -21,10 +23,22 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(clsCustomerFilterBAL filter)
         {
-            var customers = await _customerService.GetAllBALDTOAsync();
-            return View(customers);
+            try
+            {
+                var customers = await _customerService.GetAllBALDTOAsync(filter);
+                
+                // Wrap results in BAL filter model for the view convenience
+                filter.customers = customers;
+                
+                return View(filter);
+            }
+            catch (ArgumentException ex)
+            {
+                TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل قائمة العملاء: " + ex.Message;
+                return View(new clsCustomerFilterBAL { customers = new List<CustomerBALDTO>() });
+            }
         }
 
         // GET: Customers/Create

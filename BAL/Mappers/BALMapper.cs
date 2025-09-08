@@ -110,6 +110,7 @@ namespace BAL.Mappers
                 Quantity = orderItemDTO.Quantity,
                 SellingPrice = orderItemDTO.SellingPrice,
                 AvailableQuantity = orderItemDTO.AvailableQuantity
+                ,PriceAdjustment=orderItem.PriceAdjustment
             };
         }
 
@@ -124,6 +125,7 @@ namespace BAL.Mappers
                 ProductSaleAmount = orderItemBALDTO.ProductSaleAmount,
                 Quantity = orderItemBALDTO.Quantity,
                 SellingPrice = orderItemBALDTO.SellingPrice,
+                PriceAdjustment = orderItemBALDTO.PriceAdjustment,
                 AvailableQuantity = orderItemBALDTO.AvailableQuantity
 
             };

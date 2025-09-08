@@ -1,8 +1,11 @@
-using BAL.Interfaces;
 using BAL.BALDTO;
+using BAL.BALFilters;
+using BAL.Interfaces;
 using BAL.Mappers;
-using DAL.IRepo;
+using DAL.EF.DTO;
+using DAL.EF.Filters;
 using DAL.EF.Models;
+using DAL.IRepo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +70,20 @@ namespace BAL.Services
             var customers = await _customerRepo.GetAllAsync();
             return customers.ToCustomerBALDTOList();
         }
-
+      public  async Task<List<CustomerBALDTO>> GetAllBALDTOAsync(clsCustomerFilterBAL filter)
+        {
+                var Customer =await _customerRepo.GetAllDTOAsync(filter);
+            return Customer.Select(c => new CustomerBALDTO
+            {
+                CustomerID = c.CustomerID,
+                PersonID = c.PersonID,
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                PhoneNumber = c.PhoneNumber,
+                RemainingAmount = c.RemainingAmount,
+            }).ToList();
+   
+        }
         public async Task<bool> AddBALDTOAsync(CustomerBALDTO customerBALDTO)
         {
             var customer = customerBALDTO.ToCustomerModel();

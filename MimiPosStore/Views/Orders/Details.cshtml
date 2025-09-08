@@ -1,0 +1,367 @@
+@model BAL.BALDTO.OrderBALDTO
+@using BAL.BALDTO;
+@{
+    ViewData["Title"] = "تفاصيل الطلب";
+}
+
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-file-invoice text-primary"></i>
+                    تفاصيل الطلب رقم @Model.ID
+                </h1>
+                <div class="btn-group">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i> العودة للقائمة
+                    </a>
+                    @if (Model.PaymentStatus == ((byte)BAL.clsGlobal.enPaymentStatus.Pending))
+                    {
+                        <a asp-action="Save" asp-route-id="@Model.ID" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> تعديل الطلب
+                        </a>
+                    }
+                    @if ((Model.TotalAmount - Model.PaidAmount) > 0)
+                    {
+                        <a asp-action="AddPayment" asp-route-id="@Model.ID" class="btn btn-success">
+                            <i class="fas fa-money-bill"></i> إضافة دفعة
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Order Information Card -->
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle"></i>
+                        معلومات الطلب
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>رقم الطلب:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-primary fs-6">@Model.ID</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>تاريخ الطلب:</strong>
+                        </div>
+                        <div class="col-6">
+                            @Model.OrderDate;
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>حالة الدفع:</strong>
+                        </div>
+                        <div class="col-6">
+                            @{
+                                var paymentStatus = BAL.clsGlobal.GetPaymentStatusList()[Model.PaymentStatus];
+                                var statusClass = Model.PaymentStatus == ((byte)BAL.clsGlobal.enPaymentStatus.Completed) ? "bg-success" :
+                                                Model.PaymentStatus == ((byte)BAL.clsGlobal.enPaymentStatus.PendingForPayment) ? "bg-warning" : "bg-danger";
+                            }
+                            <span class="badge @statusClass">@paymentStatus</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>المبلغ الإجمالي:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-primary fw-bold">@Model.TotalAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>المبلغ المدفوع:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-success fw-bold">@Model.PaidAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>المبلغ المتبقي:</strong>
+                        </div>
+                        <div class="col-6">
+                            @{
+                                var remainingAmount = Model.TotalAmount - Model.PaidAmount;
+                                var remainingClass = remainingAmount > 0 ? "text-danger" : "text-success";
+                            }
+                            <span class="@remainingClass fw-bold">@remainingAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Information Card -->
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-user"></i>
+                        معلومات العميل
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>الاسم الكامل:</strong>
+                        </div>
+                        <div class="col-6">
+                            @(Model.FirstName + " " + Model.LastName)
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>رقم الهاتف:</strong>
+                        </div>
+                        <div class="col-6">
+                            <a href="tel:@Model.PhoneNumber" class="text-decoration-none">
+                                <i class="fas fa-phone"></i> @Model.PhoneNumber
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>معرف العميل:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-secondary">@Model.CustomerID</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary Card -->
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-calculator"></i>
+                        ملخص الطلب
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>عدد العناصر:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-info fs-6">@Model.OrderItems.Count</span>
+                        </div>
+                    </div>
+                    
+                    @{
+                        var totalQuantity = Model.OrderItems.Sum(item => item.Quantity);
+                        var totalDiscount = Model.OrderItems.Sum(item => item.DiscountAmount);
+                        var totalSubTotal = Model.OrderItems.Sum(item => item.SubTotal);
+                        var totalFinal = Model.OrderItems.Sum(item => item.FinalAmount);
+                    }
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>إجمالي الكمية:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-primary">@totalQuantity.ToString("F2")</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>إجمالي الخصومات:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-warning fw-bold">@totalDiscount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>المجموع الفرعي:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-primary fw-bold">@totalSubTotal.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <strong>المجموع النهائي:</strong>
+                        </div>
+                        <div class="col-6">
+                            <span class="text-success fw-bold fs-5">@totalFinal.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Items Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-list"></i>
+                        عناصر الطلب
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.OrderItems != null && Model.OrderItems.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>المنتج</th>
+                                        <th>الكمية</th>
+                                        <th>سعر البيع</th>
+                                        <th>المبلغ الإجمالي</th>
+                                        <th>المبلغ المخصوم</th>
+                                        <th>المبلغ بعد الخصم</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.OrderItems.Count; i++)
+                                    {
+                                        var item = Model.OrderItems[i];
+                                        <tr>
+                                            <td>@(i + 1)</td>
+                                            <td>
+                                                <strong>@(string.IsNullOrEmpty(item.ProductName) ? "غير محدد" : item.ProductName)</strong>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">@item.Quantity.ToString("F2")</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-success">@item.SellingPrice.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-primary fw-bold">@item.SubTotal.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-warning fw-bold">@item.DiscountAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-success fw-bold">@item.FinalAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <th colspan="4" class="text-end">المجموع:</th>
+                                        <th class="text-primary">@totalSubTotal.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</th>
+                                        <th class="text-warning">@totalDiscount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</th>
+                                        <th class="text-success fs-5">@totalFinal.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info text-center">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>لا توجد عناصر في هذا الطلب</strong>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information Card -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cog"></i>
+                        معلومات النظام
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>المستخدم المسؤول:</strong>
+                            <br />
+                            <span class="text-muted">@(string.IsNullOrEmpty(Model.ActionByUser) ? "غير محدد" : Model.ActionByUser)</span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>تاريخ العملية:</strong>
+                            <br />
+                            <span class="text-muted">@Model.ActionDate.ToString("dd/MM/yyyy HH:mm")</span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>نوع العملية:</strong>
+                            <br />
+                            <span class="badge bg-info">@(Model.ActionType == 0 ? "إضافة" : Model.ActionType == 1 ? "تحديث" : "حذف")</span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>معرف الطلب:</strong>
+                            <br />
+                            <span class="text-muted">@Model.OrderID</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // إضافة تأثيرات بصرية للبطاقات
+            $('.card').hover(
+                function() {
+                    $(this).addClass('shadow-lg');
+                },
+                function() {
+                    $(this).removeClass('shadow-lg');
+                }
+            );
+        });
+    </script>
+}

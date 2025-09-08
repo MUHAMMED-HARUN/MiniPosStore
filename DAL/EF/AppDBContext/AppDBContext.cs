@@ -25,9 +25,9 @@ namespace DAL.EF.AppDBContext
             var databaseCreator = Database.GetService<IRelationalDatabaseCreator>() as RelationalDatabaseCreator;
             if (databaseCreator != null)
             {
+                    Database.Migrate();
                 if (!databaseCreator.CanConnect())
                 {
-                    Database.Migrate();
                 }
                 if (!databaseCreator.HasTables())
                 {

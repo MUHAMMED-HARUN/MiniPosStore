@@ -12,6 +12,12 @@ namespace BAL.BALDTO
             get => base.Quantity;
             set => base.Quantity = value;
         }
+        [IsPriceAdjustmentInRange(Message = "ÊÚÏíá ÇáÓÚÑ ÛíÑ ÕÇáÍ")]
+        public new float? PriceAdjustment
+        {
+            get => base.PriceAdjustment;
+            set => base.PriceAdjustment = value;
+        }
     }
 
 }

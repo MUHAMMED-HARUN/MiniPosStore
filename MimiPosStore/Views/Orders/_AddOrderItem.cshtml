@@ -59,11 +59,20 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label asp-for="SellingPrice" class="control-label">سعر البيع</label>
-                                <input asp-for="SellingPrice" class="form-control" type="number" min="0" step="0.01" id="sellingPriceInput" />
+                                <input asp-for="SellingPrice" class="form-control" type="text" readonly id="sellingPriceInput" />
                                 <span asp-validation-for="SellingPrice" class="text-danger"></span>
                             </div>
                         </div>
-                        
+
+             
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="PriceAdjustment" class="control-label">الخصم</label>
+                                    <input asp-for="PriceAdjustment" class="form-control" pattern="[0-9]*" type="number" min="0" id="editSellingPriceInput" />
+                                    <span asp-validation-for="PriceAdjustment" class="text-danger"></span>
+                                </div>
+                            </div>
+
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="control-label">المبلغ الإجمالي للعنصر</label>
@@ -119,7 +128,7 @@ $(document).ready(function () {
     });
     
     // حساب المبلغ الإجمالي للعنصر
-    $('#quantityInput, #sellingPriceInput').on('input', function () {
+    $('#quantityInput, #sellingPriceInput, #PriceAdjustment').on('input', function () {
         calculateItemTotal();
     });
     
@@ -161,8 +170,10 @@ $(document).ready(function () {
     function calculateItemTotal() {
         var quantity = parseFloat($('#quantityInput').val()) || 0;
         var price = parseFloat($('#sellingPriceInput').val()) || 0;
-        var total = quantity * price;
-        $('#itemTotalAmount').val(total.toFixed(2));
+        var discount = parseFloat($('#PriceAdjustment').val()) || 0;
+        var subtotal = quantity * price;
+        var finalAmount = subtotal - discount;
+        $('#itemTotalAmount').val(finalAmount.toFixed(2));
     }
     
     // إعادة تحميل عناصر الطلب بعد إضافة عنصر جديد

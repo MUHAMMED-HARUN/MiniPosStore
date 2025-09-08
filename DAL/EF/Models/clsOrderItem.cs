@@ -23,6 +23,6 @@ namespace DAL.EF.Models
 
         public float Quantity { get; set; }
         public float SellingPrice { get; set; }
-
+        public float? PriceAdjustment { get; set; }
     }
 }

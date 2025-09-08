@@ -1,5 +1,6 @@
-using DAL.EF.Models;
 using DAL.EF.DTO;
+using DAL.EF.Filters;
+using DAL.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace DAL.IRepo
         // DTO Methods
         Task<CustomerDTO> GetByIdDTOAsync(int customerID);
         Task<List<CustomerDTO>> GetAllDTOAsync();
+        Task<List<CustomerDTO>> GetAllDTOAsync(clsCustomerFilter filter);
     }
 }

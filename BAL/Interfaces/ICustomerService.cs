@@ -1,5 +1,6 @@
 using BAL;
 using BAL.BALDTO;
+using BAL.BALFilters;
 using DAL.EF.Models;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace BAL.Interfaces
         // BALDTO Methods
         Task<CustomerBALDTO> GetByIdBALDTOAsync(int customerID);
         Task<List<CustomerBALDTO>> GetAllBALDTOAsync();
+        Task<List<CustomerBALDTO>> GetAllBALDTOAsync(clsCustomerFilterBAL filter);
         Task<bool> AddBALDTOAsync(CustomerBALDTO customerBALDTO);
         Task<bool> UpdateBALDTOAsync(CustomerBALDTO customerBALDTO);
         

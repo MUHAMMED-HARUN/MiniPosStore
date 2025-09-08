@@ -1,7 +1,9 @@
 using DAL.EF.AppDBContext;
-using DAL.EF.Models;
 using DAL.EF.DTO;
+using DAL.EF.Filters;
+using DAL.EF.Models;
 using DAL.IRepo;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -113,6 +115,46 @@ namespace DAL.IRepoServ
                     PhoneNumber = c.Person.PhoneNumber,
                 })
                 .ToListAsync();
+        }
+
+        public async Task<List<CustomerDTO>> GetAllDTOAsync(clsCustomerFilter filter)
+        {
+
+            {
+                string Query = @$"select * from GetCustomersFiltred ( {clsDALUtil.GetSqlPrameterString<clsCustomerFilter>()})";
+
+                using (var connection = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    connection.CommandText = Query;
+                    connection.CommandType = System.Data.CommandType.Text;
+
+                    if (connection.Connection.State != System.Data.ConnectionState.Open)
+                        connection.Connection.Open();
+
+                    var arr = clsDALUtil.GetSqlPrameters<clsCustomerFilter>(filter).ToArray();
+                    connection.Parameters.AddRange(arr);
+
+                    List<CustomerDTO> Customers = new List<CustomerDTO>();
+                    try
+                    {
+                        using (var reader = connection.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                var customer = new CustomerDTO();
+                                clsDALUtil.MapToClass<CustomerDTO>(reader, ref customer);
+                                Customers.Add(customer);
+                            }
+                        }
+                    }
+                    catch (SqlException s)
+                    {
+
+                    }
+
+                    return Customers;
+                }
+            }
         }
     }
 }

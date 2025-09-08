@@ -8,19 +8,19 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTVFs : Migration
+    public partial class UpdateORderItemTable : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            clsTVFMigration.AddTVFOrderFilter(migrationBuilder);
-            clsTVFMigration.AddTVFImportOrderFilter(migrationBuilder);
+clsTVFMigration.AddColumnPriceAdjustmentToOrderItem(migrationBuilder);
+            clsTVFMigration.AddTVFCustomersFilter(migrationBuilder);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.DropColumn(
+                name: "PriceAdjustment",
+                table: "OrderItems");
         }
     }
 }

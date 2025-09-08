@@ -40,7 +40,7 @@ namespace DAL.Migrations
                         FROM dbo.Products p
                         INNER JOIN dbo.UnitOfMeasures u ON p.UOMID = u.ID
                         WHERE
-                            (p.ActionType !=3) and
+                            
                             (@Name IS NULL OR p.Name LIKE '%' + @Name + '%') AND
                             (@Description IS NULL OR p.Description LIKE '%' + @Description + '%') AND
         
@@ -235,5 +235,49 @@ GO
 
 ");
         }
+        public static void AddColumnPriceAdjustmentToOrderItem(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AddColumn<float>(
+               name: "PriceAdjustment",
+               table: "OrderItems",
+               type: "real",
+               nullable: true,
+               defaultValue: 0f);
+        }
+        public static void AddTVFCustomersFilter(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.Sql(@"CREATE FUNCTION dbo.GetCustomersFiltred
+(
+    @FirstName NVARCHAR(100) = NULL,
+    @LastName NVARCHAR(100) = NULL,
+    @PhoneNumber NVARCHAR(50) = NULL
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        c.ID as CustomerID,
+        c.PersonID,
+        p.FirstName,
+        p.LastName,
+        p.PhoneNumber,
+        SUM(o.TotalAmount - o.PaidAmount) AS RemainingAmount
+    FROM dbo.Customers c
+    INNER JOIN dbo.Orders o ON c.ID = o.CustomerID
+    INNER JOIN dbo.People p ON c.PersonID = p.ID
+    WHERE 
+        (@FirstName IS NULL OR p.FirstName LIKE '%' + @FirstName + '%')
+        AND (@LastName IS NULL OR p.LastName LIKE '%' + @LastName + '%')
+        AND (@PhoneNumber IS NULL OR p.PhoneNumber LIKE '%' + @PhoneNumber + '%')
+    GROUP BY c.ID, c.PersonID, p.FirstName, p.LastName, p.PhoneNumber
+);
+GO
+
+
+");
+        }
     }
 }
+// add new column
+// add Customer TVF

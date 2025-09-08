@@ -368,6 +368,31 @@ namespace MimiPosStore.Controllers
             }
         }
 
+        // GET: Orders/Details/5
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                var order = await _orderService.GetByIdBALDTOAsync(id);
+                if (order == null)
+                {
+                    TempData["ErrorMessage"] = "الطلب غير موجود";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // جلب عناصر الطلب
+                var orderItems = await _orderService.GetOrderItemsByOrderIdBALDTOAsync(id);
+                order.OrderItems = orderItems.Cast<OrderItemsDTO>().ToList();
+
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل تفاصيل الطلب: " + ex.Message;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
         // GET: Orders/GetOrderItemForEdit
         [HttpGet]
         public async Task<IActionResult> GetOrderItemForEdit(int itemId)

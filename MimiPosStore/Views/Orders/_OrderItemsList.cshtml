@@ -12,6 +12,8 @@
                     <th>الكمية</th>
                     <th>سعر البيع</th>
                     <th>المبلغ الإجمالي</th>
+                    <th>المبلغ المخصوم</th>
+                    <th>المبلغ بعد الخصم</th>
                     <th>الإجراءات</th>
                 </tr>
             </thead>
@@ -31,7 +33,13 @@
                             <span class="text-success">@item.SellingPrice @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                         </td>
                         <td>
-                            <span class="item-total text-primary fw-bold">@item.ProductSaleAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                            <span class="item-total text-primary fw-bold">@item.SubTotal.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </td>
+                        <td>
+                            <span class="item-discount text-warning fw-bold">@item.DiscountAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </td>
+                        <td>
+                            <span class="item-final text-success fw-bold">@item.FinalAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                         </td>
                         <td>
                             <div class="btn-group" role="group">
@@ -42,6 +50,7 @@
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
+
                         </td>
                     </tr>
                 }

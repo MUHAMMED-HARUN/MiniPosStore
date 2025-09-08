@@ -158,69 +158,60 @@ namespace DAL.IRepoServ
                     product.AvailableQuantity += item.Quantity;
                     product.ActionDate = DateTime.Now;
                     product.ActionByUser = actionByUser;
-                    product.ActionType = 3; // Quantity Change
+                    product.ActionType = 2 ; // Quantity Change or UpdateMode
                 }
             }
 
             // 6?? ��� ��������� �� ����� ��������
             return await _context.SaveChangesAsync() > 0;
         }
-        public async Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser)
+
+        public async Task<bool> DecreaseProductQuantityAsync(int[] orderItemIds, string actionByUser)
         {
-            if (OrderItemsID == null || OrderItemsID.Length == 0)
+            if (orderItemIds == null || orderItemIds.Length == 0)
                 return false;
 
-            // 1?? ��� ����� ��������� ��������
-            var OrderItems =  _context.OrderItems
-                .Where(oi => OrderItemsID.Contains(oi.ID))
-                .ToList();
+            // 1. اجلب OrderItems مع المنتجات المرتبطة
+            List<clsOrderItem> orderItems = await _context.OrderItems
+                .Include(oi => oi.Product)
+                .Where(oi => orderItemIds.Contains(oi.ID))
+                .ToListAsync();
 
-            if (!OrderItems.Any())
+            if (!orderItems.Any())
                 return false;
 
-            // 2?? ������� ������ �������� ��������
-            var productIds = OrderItems.Select(ioi => ioi.ProductID).Distinct().ToList();
-            var products = new List<clsProduct>();
-            try
-            {
-                products =  _context.Products
-                    .Where(p => productIds.Contains(p.ID))
-                    .ToList();
-            }
-            catch (SqlException e)
-            {
-                return false; // �� ������� �� ����� ��� ������
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
+            // 2. جهز Dictionary للمنتجات لمزيد من السرعة
+            List<int> productIds = orderItems.Select(oi => oi.ProductID).Distinct().ToList();
+            Dictionary<int,clsProduct>? products = await _context.Products
+                .Where(p => productIds.Contains(p.ID))
+                .ToDictionaryAsync(p => p.ID);
 
+         
+            Dictionary<int,float> requiredQuantities = orderItems
+                .GroupBy(oi => oi.ProductID)
+                .ToDictionary(g => g.Key, g => g.Sum(oi => oi.Quantity));
 
-            // 4?? ����� �������� ��� Dictionary ����� ������
-            var productDict = products.ToDictionary(p => p.ID);
+           
+            bool isAvailable = requiredQuantities.All(rq =>
+                products.ContainsKey(rq.Key) && products[rq.Key].AvailableQuantity >= rq.Value);
 
-            // 5?? ����� ������� ��� ����
-            foreach (var item in OrderItems)
+            if (!isAvailable)
+                return false; 
+
+            
+            foreach (var rq in requiredQuantities)
             {
-                if (productDict.TryGetValue(item.ProductID, out var product))
-                {
-                    if (product.AvailableQuantity - item.Quantity < 0)
-                    {
-                        throw new ArgumentException("كمية المنتج غير كافية.");
-                    }
-
-                    product.AvailableQuantity -= item.Quantity;
-                    product.ActionDate = DateTime.Now;
-                    product.ActionByUser = actionByUser;
-                    product.ActionType = 3; // Quantity Change
-                }
+                products[rq.Key].AvailableQuantity -= rq.Value;
+                products[rq.Key].ActionByUser = actionByUser;
+                products[rq.Key].ActionDate = DateTime.Now;
+                _context.Products.Update(products[rq.Key]);
             }
 
-            // 6?? ��� ��������� �� ����� ��������
-            return await _context.SaveChangesAsync() > 0;
+            await _context.SaveChangesAsync();
+            return true;
         }
-       public async Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm)
+
+        public async Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm)
         {
             return await _context.Products.Where(p => p.Name==searchTerm).Include(p => p.UnitOfMeasure).FirstOrDefaultAsync();
         }

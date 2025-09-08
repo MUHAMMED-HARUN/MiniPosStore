@@ -90,7 +90,8 @@ namespace DAL.Mapper
                 ProductName = orderItem.Product?.Name ?? "",
                 ProductSaleAmount = orderItem.Quantity * orderItem.SellingPrice,
                 Quantity = orderItem.Quantity,
-                SellingPrice = orderItem.SellingPrice
+                SellingPrice = orderItem.SellingPrice,
+                PriceAdjustment=orderItem.PriceAdjustment
             };
         }
 
@@ -105,6 +106,7 @@ namespace DAL.Mapper
                 ProductID = orderItemDTO.ProductID,
                 Quantity = orderItemDTO.Quantity,
                 SellingPrice = orderItemDTO.SellingPrice,
+                PriceAdjustment = orderItemDTO.PriceAdjustment,
 
             };
         }

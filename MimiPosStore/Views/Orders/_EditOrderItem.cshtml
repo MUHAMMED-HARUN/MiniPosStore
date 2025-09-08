@@ -20,8 +20,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="Quantity" class="control-label">الكمية</label>
-                                <input asp-for="Quantity" class="form-control" type="number" min="1" step="1" id="editQuantityInput" />
+                                <label  asp-for="Quantity" class="control-label">الكمية</label>
+                                <input    asp-for="Quantity" class="form-control" type="number" min="1" step="1" id="editQuantityInput" />
                                 <span asp-validation-for="Quantity" class="text-danger"></span>
                             </div>
                         </div>
@@ -36,11 +36,19 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label asp-for="SellingPrice" class="control-label">سعر البيع</label>
-                                    <input asp-for="SellingPrice" class="form-control" pattern="[0-9]*" type="number" min="0" step="0.01" id="editSellingPriceInput" />
+                                    <input asp-for="SellingPrice" readonly class="form-control" pattern="[0-9]*" type="text"  id="editSellingPriceInput" />
                                 <span asp-validation-for="SellingPrice" class="text-danger"></span>
                             </div>
                         </div>
-                        
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="PriceAdjustment" class="control-label">الخصم</label>
+                                    <input asp-for="PriceAdjustment" class="form-control" pattern="[0-9]*" type="number" min="0" id="editSellingPriceInput" />
+                                    <span asp-validation-for="PriceAdjustment" class="text-danger"></span>
+                                </div>
+                            </div>
+
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="control-label">المبلغ الإجمالي للعنصر</label>
@@ -90,7 +98,7 @@ $(document).ready(function () {
     });
     
     // حساب المبلغ الإجمالي للعنصر في نموذج التعديل
-    $('#editQuantityInput, #editSellingPriceInput').on('input', function () {
+    $('#editQuantityInput, #editSellingPriceInput, #PriceAdjustment').on('input', function () {
         calculateEditItemTotal();
     });
     
@@ -132,8 +140,10 @@ $(document).ready(function () {
     function calculateEditItemTotal() {
         var quantity = parseFloat($('#editQuantityInput').val()) || 0;
         var price = parseFloat($('#editSellingPriceInput').val()) || 0;
-        var total = quantity * price;
-        $('#editItemTotalAmount').val(total.toFixed(2));
+        var discount = parseFloat($('#PriceAdjustment').val()) || 0;
+        var subtotal = quantity * price;
+        var finalAmount = subtotal - discount;
+        $('#editItemTotalAmount').val(finalAmount.toFixed(2));
     }
     
     // إعادة تحميل عناصر الطلب بعد تعديل عنصر

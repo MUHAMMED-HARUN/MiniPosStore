@@ -60,13 +60,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="form-group mb-3">
-                        <label asp-for="PaymentStatus" class="control-label">حالة الدفع</label>
-                        <select asp-for="PaymentStatus" class="form-control" asp-items="ViewBag.PaymentStatusList"></select>
-                        <span asp-validation-for="PaymentStatus" class="text-danger"></span>
-                    </div>
-                </div>
+           
             </div>
 
             <div class="form-group mb-3">
@@ -216,22 +210,29 @@
 
         function updateOrderSummary() {
             var totalAmount = 0;
+            var totalDiscount = 0;
+            var finalAmount = 0;
             var itemsCount = 0;
 
             $('.order-item-row').each(function () {
                 var itemTotal = parseFloat($(this).find('.item-total').text().replace(/[^\d.-]/g, '')) || 0;
+                var itemDiscount = parseFloat($(this).find('.item-discount').text().replace(/[^\d.-]/g, '')) || 0;
+                var itemFinal = parseFloat($(this).find('.item-final').text().replace(/[^\d.-]/g, '')) || 0;
+                
                 totalAmount += itemTotal;
+                totalDiscount += itemDiscount;
+                finalAmount += itemFinal;
                 itemsCount++;
             });
 
-            $('#totalAmount').text(totalAmount.toFixed(2) + ' د.ك');
+            $('#totalAmount').text(finalAmount.toFixed(2) + ' د.ك');
             $('#itemsCount').text(itemsCount);
 
             var paidAmount = parseFloat($('#PaidAmount').val()) || 0;
-            var remainingAmount = totalAmount - paidAmount;
+            var remainingAmount = finalAmount - paidAmount;
             $('#remainingAmount').text(remainingAmount.toFixed(2) + ' د.ك');
 
-            $('#TotalAmount').val(totalAmount.toFixed(2));
+            $('#TotalAmount').val(finalAmount.toFixed(2));
         }
 
         function deleteItem(itemId, orderId) {

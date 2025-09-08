@@ -48,17 +48,7 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label asp-for="PaymentStatus" class="form-label">حالة الدفع</label>
-                            <select asp-for="PaymentStatus" class="form-select" asp-items="ViewBag.PaymentStatusList">
-                                <option value="">-- اختر حالة الدفع --</option>
-                            </select>
-                            <span asp-validation-for="PaymentStatus" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
+      
 
                 <div class="form-group text-center">
                     <button type="submit" class="btn btn-primary">

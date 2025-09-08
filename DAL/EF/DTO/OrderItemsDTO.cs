@@ -34,10 +34,18 @@ namespace DAL.EF.DTO
         [Display(Name = "سعر البيع")]
         [Range(0, double.MaxValue, ErrorMessage = "سعر البيع يجب أن يكون أكبر من أو يساوي صفر")]
         public float SellingPrice { get; set; }
-        
+        [Display(Name = "خصومات او اضافات")]
+        public float? PriceAdjustment { get; set; }
         // خصائص محسوبة
         [Display(Name = "المجموع الفرعي")]
         public float SubTotal => Quantity * SellingPrice;
+        
+        [Display(Name = "المبلغ المخصوم")]
+        public float DiscountAmount => PriceAdjustment ?? 0;
+        
+        [Display(Name = "المبلغ بعد الخصم")]
+        public float FinalAmount => SubTotal - DiscountAmount;
+        
         [Display(Name ="الكمية في المخزن")]
         public float AvailableQuantity { get; set; }
     }
