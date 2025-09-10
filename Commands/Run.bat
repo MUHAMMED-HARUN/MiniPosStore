@@ -1,11 +1,14 @@
 @echo off
 echo 🚀 Starting Docker Compose...
 
-:: Go one level up (from Commands to project folder)
-cd ..
+:: تشغيل Docker Compose بدون إعادة البناء
+docker compose -f docker-compose.local.yml up -d
 
-:: Run Docker Compose
-docker compose -f docker-compose.local.yml up --build
+:: تعيين restart policy لكل حاوية
+echo 🔄 Setting restart policy for containers...
+docker update --restart unless-stopped MiniPosStoreDB
+docker update --restart unless-stopped mimiposstore-local
+docker update --restart unless-stopped ef-tools
 
-echo ✅ Docker Compose finished.
+echo ✅ Docker Compose started and restart policies applied.
 pause
