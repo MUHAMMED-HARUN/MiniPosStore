@@ -1,9 +1,9 @@
-using BAL.BALDTO;
+
 using BAL.Interfaces;
 using BAL.Mappers;
-using DAL.EF.DTO;
-using DAL.EF.Filters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -27,23 +27,11 @@ namespace BAL.Services
         {
             return await _productRepo.GetAllProductsAsync();
         }
-        public async Task<List<ProductBALDTO>> GetAllProductsAsync(clsProductFilter Filter)
+        public async Task<List<ProductDTO>> GetAllProductsAsync(clsProductFilter Filter)
         {
             List<ProductDTO> productsDAL = await _productRepo.GetAllProductsAsync(Filter);
-            List<ProductBALDTO> products = productsDAL.Select(p => new ProductBALDTO
-            {
-                ID = p.ID,
-                Name = p.Name,
-                Description = p.Description,
-                RetailPrice = p.RetailPrice,
-                WholesalePrice = p.WholesalePrice,
-                AvailableQuantity = p.AvailableQuantity,
-                CurrencyType = p.CurrencyType,
-                CurrencyName = p.CurrencyName,
-                UOMName = p.UOMName,
-                ImagePath=p.ImagePath
-            }).ToList();
-          return products;
+         
+          return productsDAL;
         }
         public async Task<clsProduct> GetProductByIdAsync(int id)
         {
@@ -108,27 +96,31 @@ namespace BAL.Services
         }
 
         // BALDTO Methods
-        public async Task<List<ProductBALDTO>> GetAllProductsBALDTOAsync()
+        public async Task<List<ProductDTO>> GetAllProductsBALDTOAsync()
         {
-            var products = await _productRepo.GetAllProductsAsync();
-            return products.ToProductBALDTOList();
+            clsProductFilter filter = new clsProductFilter();
+            var products = await _productRepo.GetAllProductsAsync(filter);
+            return products;
         }
 
-        public async Task<ProductBALDTO> GetProductByIdBALDTOAsync(int id)
+        public async Task<ProductDTO> GetProductByIdBALDTOAsync(int id)
+        {
+            clsProductFilter filter = new clsProductFilter();
+            filter.Id = id;
+
+            var product = await _productRepo.GetAllProductsAsync(filter);
+            return product.FirstOrDefault();
+        }
+
+        public async Task<ProductDTO> GetByIdBALDTOAsync(int id)
         {
             var product = await _productRepo.GetProductByIdAsync(id);
-            return product?.ToProductBALDTO();
+            return product?.ToProductDTO();
         }
 
-        public async Task<ProductBALDTO> GetByIdBALDTOAsync(int id)
+        public async Task<bool> CreateProductDTOAsync(ProductDTO ProductDTO, string currentUserId, string uploadPath)
         {
-            var product = await _productRepo.GetProductByIdAsync(id);
-            return product?.ToProductBALDTO();
-        }
-
-        public async Task<bool> CreateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath)
-        {
-            var product = productBALDTO.ToProductModel();
+            var product = ProductDTO.ToProductModel();
             product.ActionByUser = _currentUserServ.GetCurrentUserId(); 
             product.ActionDate = DateTime.Now;
             product.ActionType = 1; // Add
@@ -137,9 +129,9 @@ namespace BAL.Services
             return createdProduct != null;
         }
 
-        public async Task<bool> UpdateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath)
+        public async Task<bool> UpdateProductDTOAsync(ProductDTO ProductDTO, string currentUserId, string uploadPath)
         {
-            var product = productBALDTO.ToProductModel();
+            var product = ProductDTO.ToProductModel();
             product.ActionByUser = _currentUserServ.GetCurrentUserId(); ;
             product.ActionDate = DateTime.Now;
             product.ActionType = 2; // Update
@@ -148,15 +140,15 @@ namespace BAL.Services
             return updatedProduct != null;
         }
 
-        public async Task<List<ProductBALDTO>> SearchProductsBALDTOAsync(string searchTerm)
+        public async Task<List<ProductDTO>> SearchProductsBALDTOAsync(string searchTerm)
         {
             var products = await _productRepo.SearchProductsAsync(searchTerm);
-            return products.ToProductBALDTOList();
+            return products.ToProductDTOList();
         }
-     public async   Task<ProductBALDTO> SearchProductByNameBALDTOAsync(string searchTerm)
+     public async   Task<ProductDTO> SearchProductByNameBALDTOAsync(string searchTerm)
         {
            var product =await _productRepo.SearchProductByNameBALDTOAsync(searchTerm);
-            return product.ToProductBALDTO();
+            return product.ToProductDTO();
         }
         // دالة مساعدة لمعالجة رفع الصور
         public string HandleImageUpload(IFormFile imageFile, string currentImagePath, string uploadPath)

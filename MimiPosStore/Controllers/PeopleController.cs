@@ -1,5 +1,5 @@
 using BAL.Interfaces;
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

@@ -1,6 +1,6 @@
 
-@model BAL.BALDTO.OrderBALDTO
-@using BAL.BALDTO
+@model SharedModels.EF.DTO.OrderDTO
+@using SharedModels.EF.DTO
 @{
     ViewData["Title"] = Model.ID == 0 ? "إنشاء طلب جديد" : "تعديل الطلب";
 }
@@ -20,7 +20,7 @@
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input hidden readonly asp-for="OrderID" />
+            <input hidden readonly asp-for="ID" />
 
 
             <div class="row">
@@ -144,8 +144,8 @@
 
 @if (Model.OrderID > 0)
 {
-    @await Html.PartialAsync("_AddOrderItem", new OrderItemsBALDTO { OrderID = Model.ID })
-    @await Html.PartialAsync("_EditOrderItem", new OrderItemsBALDTO { OrderID = Model.ID })
+    @await Html.PartialAsync("_AddOrderItem", new OrderItemsDTO { OrderID = Model.ID })
+    @await Html.PartialAsync("_EditOrderItem", new OrderItemsDTO { OrderID = Model.ID })
 }
 
 @section Scripts {

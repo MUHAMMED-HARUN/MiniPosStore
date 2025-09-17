@@ -1,7 +1,7 @@
 using BAL;
-using BAL.BALDTO;
-using BAL.BALFilters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +23,11 @@ namespace BAL.Interfaces
         Task<clsCustomer> GetByPersonIdAsync(int personID);
         
         // BALDTO Methods
-        Task<CustomerBALDTO> GetByIdBALDTOAsync(int customerID);
-        Task<List<CustomerBALDTO>> GetAllBALDTOAsync();
-        Task<List<CustomerBALDTO>> GetAllBALDTOAsync(clsCustomerFilterBAL filter);
-        Task<bool> AddBALDTOAsync(CustomerBALDTO customerBALDTO);
-        Task<bool> UpdateBALDTOAsync(CustomerBALDTO customerBALDTO);
+        Task<CustomerDTO> GetByIdBALDTOAsync(int customerID);
+        Task<List<CustomerDTO>> GetAllBALDTOAsync();
+        Task<List<CustomerDTO>> GetAllBALDTOAsync(clsCustomerFilter filter);
+        Task<bool> AddBALDTOAsync(CustomerDTO CustomerDTO);
+        Task<bool> UpdateBALDTOAsync(CustomerDTO CustomerDTO);
         
         Task<bool> Save();
     }

@@ -1,4 +1,4 @@
-﻿@using DAL.EF.Models
+﻿@using SharedModels.EF.Models
 @inject SignInManager<clsUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

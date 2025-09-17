@@ -1,8 +1,8 @@
-using DAL.EF.DTO;
+using SharedModels.EF.DTO;
 
 namespace BAL.BALDTO
 {
-    public class CustomerBALDTO : CustomerDTO
+    public class CustomerDTO : CustomerDTO
     {
     }
 }

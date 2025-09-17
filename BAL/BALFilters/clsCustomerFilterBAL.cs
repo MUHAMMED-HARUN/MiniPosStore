@@ -1,5 +1,5 @@
 ﻿using BAL.BALDTO;
-using DAL.EF.Filters;
+using SharedModels.EF.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,6 @@ namespace BAL.BALFilters
 {
     public class clsCustomerFilterBAL:clsCustomerFilter
     {
-        public List<CustomerBALDTO> customers { set; get; } = new List<CustomerBALDTO>();
+        public List<CustomerDTO> customers { set; get; } = new List<CustomerDTO>();
     }
 }

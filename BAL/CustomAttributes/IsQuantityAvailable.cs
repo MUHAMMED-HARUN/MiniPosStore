@@ -1,4 +1,5 @@
-﻿using DAL.EF.Models;
+﻿using SharedModels.EF.DTO;
+using SharedModels.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,8 @@ namespace BAL.CustomAttributes
         public string Message = "القيمة غير صالحة";
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var f =(BALDTO.OrderItemsBALDTO) validationContext.ObjectInstance;
+            var f =(OrderItemsDTO) validationContext.ObjectInstance;
+
             if ((float)value <= f.AvailableQuantity)
                 return ValidationResult.Success;
             else

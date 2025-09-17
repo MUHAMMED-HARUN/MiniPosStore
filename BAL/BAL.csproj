@@ -7,11 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BALDTO\**" />
+    <Compile Remove="BALFilters\**" />
+    <EmbeddedResource Remove="BALDTO\**" />
+    <EmbeddedResource Remove="BALFilters\**" />
+    <None Remove="BALDTO\**" />
+    <None Remove="BALFilters\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.18" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\SharedModels\SharedModels.csproj" />
   </ItemGroup>
 
 </Project>

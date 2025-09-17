@@ -1,5 +1,5 @@
-using DAL.EF.Models;
-using DAL.EF.DTO;
+using SharedModels.EF.Models;
+using SharedModels.EF.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

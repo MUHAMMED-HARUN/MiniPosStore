@@ -1,7 +1,7 @@
-using DAL.EF.DTO;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Models;
 using DAL.Mapper;
-using BAL.BALDTO;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,81 +11,78 @@ namespace BAL.Mappers
     public static class BALMappers
     {
         // Customer Mappers
-        public static CustomerBALDTO ToCustomerBALDTO(this clsCustomer customer)
+        public static CustomerDTO ToCustomerDTO(this clsCustomer customer)
         {
-            var customerDTO = customer.ToCustomerDTO();
-            return new CustomerBALDTO
+            if (customer == null) return null;
+            
+            return new CustomerDTO
             {
-                CustomerID = customerDTO.CustomerID,
-                PersonID = customerDTO.PersonID,
-                FirstName = customerDTO.FirstName,
-                LastName = customerDTO.LastName,
-                PhoneNumber = customerDTO.PhoneNumber
+                CustomerID = customer.ID,
+                PersonID = customer.PersonID,
+                FirstName = customer.Person?.FirstName ?? "",
+                LastName = customer.Person?.LastName ?? "",
+                PhoneNumber = customer.Person?.PhoneNumber ?? ""
             };
         }
 
-        public static clsCustomer ToCustomerModel(this CustomerBALDTO customerBALDTO)
+        public static clsCustomer ToCustomerModel(this CustomerDTO CustomerDTO)
         {
-            var customerDTO = new CustomerDTO
+            if (CustomerDTO == null) return null;
+            
+            return new clsCustomer
             {
-                CustomerID = customerBALDTO.CustomerID,
-                PersonID = customerBALDTO.PersonID,
-                FirstName = customerBALDTO.FirstName,
-                LastName = customerBALDTO.LastName,
-                PhoneNumber = customerBALDTO.PhoneNumber
+                ID = CustomerDTO.CustomerID,
+                PersonID = CustomerDTO.PersonID
             };
-            return customerDTO.ToCustomerModel();
         }
 
         // Order Mappers
-        public static OrderBALDTO ToOrderBALDTO(this clsOrder order)
+        public static OrderDTO ToOrderDTO(this clsOrder order)
         {
-            var orderDTO = order.ToOrderDTO();
-            return new OrderBALDTO
+            if (order == null) return null;
+            
+            return new OrderDTO
             {
-                CustomerID = orderDTO.CustomerID,
-                PersonID = orderDTO.PersonID,
-                FirstName = orderDTO.FirstName,
-                LastName = orderDTO.LastName,
-                PhoneNumber = orderDTO.PhoneNumber,
-                ID = orderDTO.ID,
-                OrderDate = orderDTO.OrderDate,
-                TotalAmount = orderDTO.TotalAmount,
-                PaidAmount = orderDTO.PaidAmount,
-                PaymentStatus = orderDTO.PaymentStatus,
-                ActionByUser = orderDTO.ActionByUser,
-                ActionType = orderDTO.ActionType,
-                ActionDate = orderDTO.ActionDate
+                CustomerID = order.CustomerID,
+                PersonID = order.Customer?.PersonID ?? 0,
+                FirstName = order.Customer?.Person?.FirstName ?? "",
+                LastName = order.Customer?.Person?.LastName ?? "",
+                PhoneNumber = order.Customer?.Person?.PhoneNumber ?? "",
+                ID = order.ID,
+                OrderDate = order.OrderDate,
+                TotalAmount = order.TotalAmount,
+                PaidAmount = order.PaidAmount,
+                PaymentStatus = order.PaymentStatus,
+                ActionByUser = order.ActionByUser,
+                ActionType = order.ActionType,
+                ActionDate = order.ActionDate
             };
         }
 
-        public static clsOrder ToOrderModel(this OrderBALDTO orderBALDTO)
+        public static clsOrder ToOrderModel(this OrderDTO OrderDTO)
         {
-            var orderDTO = new OrderDTO
+            if (OrderDTO == null) return null;
+            
+            return new clsOrder
             {
-                CustomerID = orderBALDTO.CustomerID,
-                PersonID = orderBALDTO.PersonID,
-                FirstName = orderBALDTO.FirstName,
-                LastName = orderBALDTO.LastName,
-                PhoneNumber = orderBALDTO.PhoneNumber,
-                ID = orderBALDTO.ID,
-                OrderDate = orderBALDTO.OrderDate,
-                TotalAmount = orderBALDTO.TotalAmount,
-                PaidAmount = orderBALDTO.PaidAmount,
-                PaymentStatus = orderBALDTO.PaymentStatus,
-                ActionByUser = orderBALDTO.ActionByUser,
-                ActionType = orderBALDTO.ActionType,
-                ActionDate = orderBALDTO.ActionDate
+                ID = OrderDTO.ID,
+                CustomerID = OrderDTO.CustomerID,
+                OrderDate = OrderDTO.OrderDate,
+                TotalAmount = OrderDTO.TotalAmount,
+                PaidAmount = OrderDTO.PaidAmount,
+                PaymentStatus = OrderDTO.PaymentStatus,
+                ActionByUser = OrderDTO.ActionByUser,
+                ActionType = OrderDTO.ActionType,
+                ActionDate = OrderDTO.ActionDate
             };
-            return orderDTO.ToOrderModel();
         }
 
         // OrderItem Mappers
-        public static OrderItemsBALDTO FromDALToOrderItemsBALDTO(this OrderItemsDTO orderItemDTO)
+        public static OrderItemsDTO FromDALToOrderItemsDTO(this OrderItemsDTO orderItemDTO)
         {
             if (orderItemDTO == null) return null;
 
-            return new OrderItemsBALDTO
+            return new OrderItemsDTO
             {
                 ID = orderItemDTO.ID,
                 OrderID = orderItemDTO.OrderID,
@@ -97,366 +94,347 @@ namespace BAL.Mappers
                 AvailableQuantity = orderItemDTO.AvailableQuantity
             };
         }
-        public static OrderItemsBALDTO ToOrderItemsBALDTO(this clsOrderItem orderItem)
+        
+        public static OrderItemsDTO ToOrderItemsDTO(this clsOrderItem orderItem)
         {
-            var orderItemDTO = orderItem.ToOrderItemsDTO();
-            return new OrderItemsBALDTO
+            if (orderItem == null) return null;
+            
+            return new OrderItemsDTO
             {
-                OrderID = orderItemDTO.OrderID,
-                ID = orderItemDTO.ID,
-                ProductID = orderItemDTO.ProductID,
-                ProductName = orderItemDTO.ProductName,
-                ProductSaleAmount = orderItemDTO.ProductSaleAmount,
-                Quantity = orderItemDTO.Quantity,
-                SellingPrice = orderItemDTO.SellingPrice,
-                AvailableQuantity = orderItemDTO.AvailableQuantity
-                ,PriceAdjustment=orderItem.PriceAdjustment
+                OrderID = orderItem.OrderID,
+                ID = orderItem.ID,
+                ProductID = orderItem.ProductID,
+                ProductName = orderItem.Product?.Name ?? "",
+                ProductSaleAmount = orderItem.Quantity * orderItem.SellingPrice,
+                Quantity = orderItem.Quantity,
+                SellingPrice = orderItem.SellingPrice,
+                PriceAdjustment = orderItem.PriceAdjustment
             };
         }
 
-        public static clsOrderItem ToOrderItemModel(this OrderItemsBALDTO orderItemBALDTO)
+        public static clsOrderItem ToOrderItemModel(this OrderItemsDTO orderItemBALDTO)
         {
-            var orderItemDTO = new OrderItemsDTO
+            if (orderItemBALDTO == null) return null;
+            
+            return new clsOrderItem
             {
-                OrderID = orderItemBALDTO.OrderID,
                 ID = orderItemBALDTO.ID,
+                OrderID = orderItemBALDTO.OrderID,
                 ProductID = orderItemBALDTO.ProductID,
-                ProductName = orderItemBALDTO.ProductName,
-                ProductSaleAmount = orderItemBALDTO.ProductSaleAmount,
                 Quantity = orderItemBALDTO.Quantity,
                 SellingPrice = orderItemBALDTO.SellingPrice,
-                PriceAdjustment = orderItemBALDTO.PriceAdjustment,
-                AvailableQuantity = orderItemBALDTO.AvailableQuantity
-
+                PriceAdjustment = orderItemBALDTO.PriceAdjustment
             };
-            return orderItemDTO.ToOrderItemModel();
         }
 
         // Product Mappers
-        public static ProductBALDTO ToProductBALDTO(this clsProduct product)
+        public static ProductDTO ToProductDTO(this clsProduct product)
         {
-            var productDTO = product.ToProductDTO();
-            return new ProductBALDTO
+            if (product == null) return null;
+            
+            return new ProductDTO
             {
-                ID = productDTO.ID,
-                Name = productDTO.Name,
-                Description = productDTO.Description,
-                RetailPrice = productDTO.RetailPrice,
-                WholesalePrice = productDTO.WholesalePrice,
-                AvailableQuantity = productDTO.AvailableQuantity,
-                CurrencyType = productDTO.CurrencyType,
-                CurrencyName= productDTO.CurrencyName,
-                ImagePath = productDTO.ImagePath,
-                UOMID = productDTO.UOMID,
-                UOMName = productDTO.UOMName,
-                UOMSymbol = productDTO.UOMSymbol,
-                ActionByUser = productDTO.ActionByUser,
-                ActionType = productDTO.ActionType,
-                ActionDate = productDTO.ActionDate
+                ID = product.ID,
+                Name = product.Name,
+                Description = product.Description,
+                RetailPrice = product.RetailPrice,
+                WholesalePrice = product.WholesalePrice,
+                AvailableQuantity = product.AvailableQuantity,
+                CurrencyType = product.CurrencyType,
+                ImagePath = product.ImagePath,
+                UOMID = product.UOMID,
+                UOMName = product.UnitOfMeasure?.Name ?? "",
+                UOMSymbol = product.UnitOfMeasure?.Seymbol ?? "",
+                ActionByUser = product.ActionByUser,
+                ActionType = product.ActionType,
+                ActionDate = product.ActionDate
             };
         }
 
-        public static clsProduct ToProductModel(this ProductBALDTO productBALDTO)
+        public static clsProduct ToProductModel(this ProductDTO ProductDTO)
         {
-            var productDTO = new ProductDTO
+            if (ProductDTO == null) return null;
+            
+            return new clsProduct
             {
-                ID = productBALDTO.ID,
-                Name = productBALDTO.Name,
-                Description = productBALDTO.Description,
-                RetailPrice = productBALDTO.RetailPrice,
-                WholesalePrice = productBALDTO.WholesalePrice,
-                AvailableQuantity = productBALDTO.AvailableQuantity,
-                CurrencyType = productBALDTO.CurrencyType,
-                CurrencyName = productBALDTO.CurrencyName,
-                ImagePath = productBALDTO.ImagePath,
-                UOMID = productBALDTO.UOMID,
-                UOMName = productBALDTO.UOMName,
-                UOMSymbol = productBALDTO.UOMSymbol,
-                ActionByUser = productBALDTO.ActionByUser,
-                ActionType = productBALDTO.ActionType,
-                ActionDate = productBALDTO.ActionDate
+                ID = ProductDTO.ID,
+                Name = ProductDTO.Name,
+                Description = ProductDTO.Description,
+                RetailPrice = ProductDTO.RetailPrice,
+                WholesalePrice = ProductDTO.WholesalePrice,
+                AvailableQuantity = ProductDTO.AvailableQuantity,
+                CurrencyType = ProductDTO.CurrencyType,
+                ImagePath = ProductDTO.ImagePath,
+                UOMID = ProductDTO.UOMID,
+                ActionByUser = ProductDTO.ActionByUser,
+                ActionType = ProductDTO.ActionType,
+                ActionDate = ProductDTO.ActionDate
             };
-            return productDTO.ToProductModel();
         }
 
         // ImportOrder Mappers
-        public static ImportOrderBALDTO ToImportOrderBALDTO(this clsImportOrder importOrder)
+        public static ImportOrderDTO ToImportOrderDTO(this clsImportOrder importOrder)
         {
-            var importOrderDTO = importOrder.ToImportOrderDTO();
-            return new ImportOrderBALDTO
+            if (importOrder == null) return null;
+            
+            return new ImportOrderDTO
             {
-                ImportOrderID = importOrderDTO.ImportOrderID,
-                SupplierID = importOrderDTO.SupplierID,
-                SupplierName = importOrderDTO.SupplierName,
-                SupplierPhone = importOrderDTO.SupplierPhone,
-                SupplierAddress = importOrderDTO.SupplierAddress,
-                TotalAmount = importOrderDTO.TotalAmount,
-                PaidAmount = importOrderDTO.PaidAmount,
-                ImportDate = importOrderDTO.ImportDate,
-                PaymentStatus = importOrderDTO.PaymentStatus,
-                PaymentStatusText = importOrderDTO.PaymentStatusText,
-                ActionByUser = importOrderDTO.ActionByUser,
-                UserName = importOrderDTO.UserName,
-                ActionType = importOrderDTO.ActionType,
-                ActionDate = importOrderDTO.ActionDate,
-                ItemsCount = importOrderDTO.ItemsCount,
-                ImportOrderItems = importOrderDTO.ImportOrderItems?.Select(item => new ImportOrderItemDTO
+                ImportOrderID = importOrder.ID,
+                SupplierID = importOrder.SupplierID,
+                SupplierName = importOrder.Supplier?.StoreName ?? "",
+                SupplierPhone = importOrder.Supplier?.Person?.PhoneNumber ?? "",
+                SupplierAddress = importOrder.Supplier?.StoreAddress ?? "",
+                TotalAmount = importOrder.TotalAmount,
+                PaidAmount = importOrder.PaidAmount,
+                ImportDate = importOrder.ImportDate,
+                PaymentStatus = importOrder.PaymentStatus,
+                PaymentStatusText = GetPaymentStatusText(importOrder.PaymentStatus),
+                ActionByUser = importOrder.ActionByUser,
+                UserName = importOrder.User?.UserName ?? "",
+                ActionType = importOrder.ActionType,
+                ActionDate = importOrder.ActionDate,
+                ItemsCount = importOrder.ImportOrderItems?.Count ?? 0,
+                ImportOrderItems = importOrder.ImportOrderItems?.Select(item => new ImportOrderItemDTO
                 {
                     ImportOrderID = item.ImportOrderID,
-                    ImportOrderItemID = item.ImportOrderItemID,
+                    ImportOrderItemID = item.ID,
                     ProductID = item.ProductID,
-                    ProductName = item.ProductName,
+                    ProductName = item.Product?.Name ?? "",
                     Quantity = item.Quantity,
                     SellingPrice = item.SellingPrice,
-                    TotalItemAmount = item.TotalItemAmount,
-                    CurrencyType = item.CurrencyType,
-                    CurrencyName = item.CurrencyName,
-                    UOMName = item.UOMName,
-                    UOMSymbol = item.UOMSymbol,
-                    ImportedQuantity = item.ImportedQuantity
+                    TotalItemAmount = item.Quantity * item.SellingPrice,
+                    CurrencyType = item.Product?.CurrencyType ?? "",
+                    CurrencyName = GetCurrencyName(item.Product?.CurrencyType ?? ""),
+                    UOMName = item.Product?.UnitOfMeasure?.Name ?? "",
+                    UOMSymbol = item.Product?.UnitOfMeasure?.Seymbol ?? "",
+                    ImportedQuantity = item.Quantity
                 }).ToList()
             };
         }
 
-        public static clsImportOrder ToImportOrderModel(this ImportOrderBALDTO importOrderBALDTO)
+        public static clsImportOrder ToImportOrderModel(this ImportOrderDTO ImportOrderDTO)
         {
-            var importOrderDTO = new ImportOrderDTO
+            if (ImportOrderDTO == null) return null;
+            
+            return new clsImportOrder
             {
-                ImportOrderID = importOrderBALDTO.ImportOrderID,
-                SupplierID = importOrderBALDTO.SupplierID,
-                SupplierName = importOrderBALDTO.SupplierName,
-                SupplierPhone = importOrderBALDTO.SupplierPhone,
-                SupplierAddress = importOrderBALDTO.SupplierAddress,
-                TotalAmount = importOrderBALDTO.TotalAmount,
-                PaidAmount = importOrderBALDTO.PaidAmount,
-                ImportDate = importOrderBALDTO.ImportDate,
-                PaymentStatus = importOrderBALDTO.PaymentStatus,
-                PaymentStatusText = importOrderBALDTO.PaymentStatusText,
-                ActionByUser = importOrderBALDTO.ActionByUser,
-                UserName = importOrderBALDTO.UserName,
-                ActionType = importOrderBALDTO.ActionType,
-                ActionDate = importOrderBALDTO.ActionDate,
-                ItemsCount = importOrderBALDTO.ItemsCount,
-                ImportOrderItems = importOrderBALDTO.ImportOrderItems?.Select(item => new ImportOrderItemDTO
+                ID = ImportOrderDTO.ImportOrderID,
+                SupplierID = ImportOrderDTO.SupplierID,
+                TotalAmount = ImportOrderDTO.TotalAmount,
+                PaidAmount = ImportOrderDTO.PaidAmount,
+                ImportDate = ImportOrderDTO.ImportDate,
+                PaymentStatus = ImportOrderDTO.PaymentStatus,
+                ActionByUser = ImportOrderDTO.ActionByUser,
+                ActionType = ImportOrderDTO.ActionType,
+                ActionDate = ImportOrderDTO.ActionDate,
+                ImportOrderItems = ImportOrderDTO.ImportOrderItems?.Select(item => new clsImportOrderItem
                 {
+                    ID = item.ImportOrderItemID,
                     ImportOrderID = item.ImportOrderID,
-                    ImportOrderItemID = item.ImportOrderItemID,
                     ProductID = item.ProductID,
-                    ProductName = item.ProductName,
                     Quantity = item.Quantity,
-                    SellingPrice = item.SellingPrice,
-                    TotalItemAmount = item.TotalItemAmount,
-                    CurrencyType = item.CurrencyType,
-                    CurrencyName = item.CurrencyName,
-                    UOMName = item.UOMName,
-                    UOMSymbol = item.UOMSymbol,
-                    ImportedQuantity = item.ImportedQuantity
-                }).ToList() ?? new List<ImportOrderItemDTO>()
+                    SellingPrice = item.SellingPrice
+                }).ToList()
             };
-            return importOrderDTO.ToImportOrderModel();
         }
 
         // ImportOrderItem Mappers
-        public static ImportOrderItemBALDTO ToImportOrderItemBALDTO(this clsImportOrderItem importOrderItem)
+        public static ImportOrderItemDTO ToImportOrderItemDTO(this clsImportOrderItem importOrderItem)
         {
-            var importOrderItemDTO = importOrderItem.ToImportOrderItemDTO();
-            return new ImportOrderItemBALDTO
+            if (importOrderItem == null) return null;
+            
+            return new ImportOrderItemDTO
             {
-                ImportOrderID = importOrderItemDTO.ImportOrderID,
-                ImportOrderItemID = importOrderItemDTO.ImportOrderItemID,
-                ProductID = importOrderItemDTO.ProductID,
-                ProductName = importOrderItemDTO.ProductName,
-                Quantity = importOrderItemDTO.Quantity,
-                SellingPrice = importOrderItemDTO.SellingPrice,
-                TotalItemAmount = importOrderItemDTO.TotalItemAmount,
-                CurrencyType = importOrderItemDTO.CurrencyType,
-                CurrencyName = importOrderItemDTO.CurrencyName,
-                UOMName = importOrderItemDTO.UOMName,
-                UOMSymbol = importOrderItemDTO.UOMSymbol,
-                ImportedQuantity = importOrderItemDTO.ImportedQuantity
+                ImportOrderID = importOrderItem.ImportOrderID,
+                ImportOrderItemID = importOrderItem.ID,
+                ProductID = importOrderItem.ProductID,
+                ProductName = importOrderItem.Product?.Name ?? "",
+                Quantity = importOrderItem.Quantity,
+                SellingPrice = importOrderItem.SellingPrice,
+                TotalItemAmount = importOrderItem.Quantity * importOrderItem.SellingPrice,
+                CurrencyType = importOrderItem.Product?.CurrencyType ?? "",
+                CurrencyName = GetCurrencyName(importOrderItem.Product?.CurrencyType ?? ""),
+                UOMName = importOrderItem.Product?.UnitOfMeasure?.Name ?? "",
+                UOMSymbol = importOrderItem.Product?.UnitOfMeasure?.Seymbol ?? "",
+                ImportedQuantity = importOrderItem.Quantity
             };
         }
 
-        public static clsImportOrderItem ToImportOrderItemModel(this ImportOrderItemBALDTO importOrderItemBALDTO)
+        public static clsImportOrderItem ToImportOrderItemModel(this ImportOrderItemDTO ImportOrderItemDTO)
         {
-            var importOrderItemDTO = new ImportOrderItemDTO
+            if (ImportOrderItemDTO == null) return null;
+            
+            return new clsImportOrderItem
             {
-                ImportOrderID = importOrderItemBALDTO.ImportOrderID,
-                ImportOrderItemID = importOrderItemBALDTO.ImportOrderItemID,
-                ProductID = importOrderItemBALDTO.ProductID,
-                ProductName = importOrderItemBALDTO.ProductName,
-                Quantity = importOrderItemBALDTO.Quantity,
-                SellingPrice = importOrderItemBALDTO.SellingPrice,
-                TotalItemAmount = importOrderItemBALDTO.TotalItemAmount,
-                CurrencyType = importOrderItemBALDTO.CurrencyType,
-                CurrencyName = importOrderItemBALDTO.CurrencyName,
-                UOMName = importOrderItemBALDTO.UOMName,
-                UOMSymbol = importOrderItemBALDTO.UOMSymbol,
-                ImportedQuantity = importOrderItemBALDTO.ImportedQuantity
+                ID = ImportOrderItemDTO.ImportOrderItemID,
+                ImportOrderID = ImportOrderItemDTO.ImportOrderID,
+                ProductID = ImportOrderItemDTO.ProductID,
+                Quantity = ImportOrderItemDTO.Quantity,
+                SellingPrice = ImportOrderItemDTO.SellingPrice
             };
-            return importOrderItemDTO.ToImportOrderItemModel();
         }
 
         // Supplier Mappers
-        public static SupplierBALDTO ToSupplierBALDTO(this clsSupplier supplier)
+        public static SupplierDTO ToSupplierDTO(this clsSupplier supplier)
         {
-            var supplierDTO = supplier.ToSupplierDTO();
-            return new SupplierBALDTO
+            if (supplier == null) return null;
+            
+            return new SupplierDTO
             {
-                SupplierID = supplierDTO.SupplierID,
-                PersonID = supplierDTO.PersonID,
-                ShopName = supplierDTO.ShopName,
-                Address = supplierDTO.Address,
-                FirstName = supplierDTO.FirstName,
-                LastName = supplierDTO.LastName,
-                PhoneNumber = supplierDTO.PhoneNumber
+                SupplierID = supplier.ID,
+                PersonID = supplier.PersonID,
+                ShopName = supplier.StoreName,
+                Address = supplier.StoreAddress,
+                FirstName = supplier.Person?.FirstName ?? "",
+                LastName = supplier.Person?.LastName ?? "",
+                PhoneNumber = supplier.Person?.PhoneNumber ?? ""
             };
         }
 
-        public static clsSupplier ToSupplierModel(this SupplierBALDTO supplierBALDTO)
+        public static clsSupplier ToSupplierModel(this SupplierDTO SupplierDTO)
         {
-            var supplierDTO = new SupplierDTO
+            if (SupplierDTO == null) return null;
+            
+            return new clsSupplier
             {
-                SupplierID = supplierBALDTO.SupplierID,
-                PersonID = supplierBALDTO.PersonID,
-                ShopName = supplierBALDTO.ShopName,
-                Address = supplierBALDTO.Address,
-                FirstName = supplierBALDTO.FirstName,
-                LastName = supplierBALDTO.LastName,
-                PhoneNumber = supplierBALDTO.PhoneNumber
+                ID = SupplierDTO.SupplierID,
+                PersonID = SupplierDTO.PersonID,
+                StoreName = SupplierDTO.ShopName,
+                StoreAddress = SupplierDTO.Address
             };
-            return supplierDTO.ToSupplierModel();
         }
 
         // List Mappers
-        public static List<CustomerBALDTO> ToCustomerBALDTOList(this IEnumerable<clsCustomer> customers)
+        public static List<CustomerDTO> ToCustomerDTOList(this IEnumerable<clsCustomer> customers)
         {
-            return customers?.Select(c => c.ToCustomerBALDTO()).ToList() ?? new List<CustomerBALDTO>();
+            return customers?.Select(c => c.ToCustomerDTO()).ToList() ?? new List<CustomerDTO>();
         }
 
-        public static List<clsCustomer> ToCustomerModelList(this IEnumerable<CustomerBALDTO> customerBALDTOs)
+        public static List<clsCustomer> ToCustomerModelList(this IEnumerable<CustomerDTO> CustomerDTOs)
         {
-            return customerBALDTOs?.Select(c => c.ToCustomerModel()).ToList() ?? new List<clsCustomer>();
+            return CustomerDTOs?.Select(c => c.ToCustomerModel()).ToList() ?? new List<clsCustomer>();
         }
 
-        public static List<OrderBALDTO> ToOrderBALDTOList(this IEnumerable<clsOrder> orders)
+        public static List<OrderDTO> ToOrderDTOList(this IEnumerable<clsOrder> orders)
         {
-            return orders?.Select(o => o.ToOrderBALDTO()).ToList() ?? new List<OrderBALDTO>();
+            return orders?.Select(o => o.ToOrderDTO()).ToList() ?? new List<OrderDTO>();
         }
 
-        public static List<clsOrder> ToOrderModelList(this IEnumerable<OrderBALDTO> orderBALDTOs)
+        public static List<clsOrder> ToOrderModelList(this IEnumerable<OrderDTO> OrderDTOs)
         {
-            return orderBALDTOs?.Select(o => o.ToOrderModel()).ToList() ?? new List<clsOrder>();
+            return OrderDTOs?.Select(o => o.ToOrderModel()).ToList() ?? new List<clsOrder>();
         }
 
-        public static List<OrderItemsBALDTO> ToOrderItemsBALDTOList(this IEnumerable<clsOrderItem> orderItems)
+        public static List<OrderItemsDTO> ToOrderItemsDTOList(this IEnumerable<clsOrderItem> orderItems)
         {
-            return orderItems?.Select(oi => oi.ToOrderItemsBALDTO()).ToList() ?? new List<OrderItemsBALDTO>();
+            return orderItems?.Select(oi => oi.ToOrderItemsDTO()).ToList() ?? new List<OrderItemsDTO>();
         }
 
-        public static List<clsOrderItem> ToOrderItemModelList(this IEnumerable<OrderItemsBALDTO> orderItemBALDTOs)
+        public static List<clsOrderItem> ToOrderItemModelList(this IEnumerable<OrderItemsDTO> orderItemBALDTOs)
         {
             return orderItemBALDTOs?.Select(oi => oi.ToOrderItemModel()).ToList() ?? new List<clsOrderItem>();
         }
 
-        public static List<ProductBALDTO> ToProductBALDTOList(this IEnumerable<clsProduct> products)
+        public static List<ProductDTO> ToProductDTOList(this IEnumerable<clsProduct> products)
         {
-            return products?.Select(p => p.ToProductBALDTO()).ToList() ?? new List<ProductBALDTO>();
+            return products?.Select(p => p.ToProductDTO()).ToList() ?? new List<ProductDTO>();
         }
 
-        public static List<clsProduct> ToProductModelList(this IEnumerable<ProductBALDTO> productBALDTOs)
+        public static List<clsProduct> ToProductModelList(this IEnumerable<ProductDTO> ProductDTOs)
         {
-            return productBALDTOs?.Select(p => p.ToProductModel()).ToList() ?? new List<clsProduct>();
+            return ProductDTOs?.Select(p => p.ToProductModel()).ToList() ?? new List<clsProduct>();
         }
 
-        public static List<ImportOrderBALDTO> ToImportOrderBALDTOList(this IEnumerable<clsImportOrder> importOrders)
+        public static List<ImportOrderDTO> ToImportOrderDTOList(this IEnumerable<clsImportOrder> importOrders)
         {
-            return importOrders?.Select(io => io.ToImportOrderBALDTO()).ToList() ?? new List<ImportOrderBALDTO>();
+            return importOrders?.Select(io => io.ToImportOrderDTO()).ToList() ?? new List<ImportOrderDTO>();
         }
 
-        public static List<clsImportOrder> ToImportOrderModelList(this IEnumerable<ImportOrderBALDTO> importOrderBALDTOs)
+        public static List<clsImportOrder> ToImportOrderModelList(this IEnumerable<ImportOrderDTO> ImportOrderDTOs)
         {
-            return importOrderBALDTOs?.Select(io => io.ToImportOrderModel()).ToList() ?? new List<clsImportOrder>();
+            return ImportOrderDTOs?.Select(io => io.ToImportOrderModel()).ToList() ?? new List<clsImportOrder>();
         }
 
-        public static List<ImportOrderItemBALDTO> ToImportOrderItemBALDTOList(this IEnumerable<clsImportOrderItem> importOrderItems)
+        public static List<ImportOrderItemDTO> ToImportOrderItemDTOList(this IEnumerable<clsImportOrderItem> importOrderItems)
         {
-            return importOrderItems?.Select(ioi => ioi.ToImportOrderItemBALDTO()).ToList() ?? new List<ImportOrderItemBALDTO>();
+            return importOrderItems?.Select(ioi => ioi.ToImportOrderItemDTO()).ToList() ?? new List<ImportOrderItemDTO>();
         }
 
-        public static List<clsImportOrderItem> ToImportOrderItemModelList(this IEnumerable<ImportOrderItemBALDTO> importOrderItemBALDTOs)
+        public static List<clsImportOrderItem> ToImportOrderItemModelList(this IEnumerable<ImportOrderItemDTO> ImportOrderItemDTOs)
         {
-            return importOrderItemBALDTOs?.Select(ioi => ioi.ToImportOrderItemModel()).ToList() ?? new List<clsImportOrderItem>();
+            return ImportOrderItemDTOs?.Select(ioi => ioi.ToImportOrderItemModel()).ToList() ?? new List<clsImportOrderItem>();
         }
 
-        public static List<SupplierBALDTO> ToSupplierBALDTOList(this IEnumerable<clsSupplier> suppliers)
+        public static List<SupplierDTO> ToSupplierDTOList(this IEnumerable<clsSupplier> suppliers)
         {
-            return suppliers?.Select(s => s.ToSupplierBALDTO()).ToList() ?? new List<SupplierBALDTO>();
+            return suppliers?.Select(s => s.ToSupplierDTO()).ToList() ?? new List<SupplierDTO>();
         }
 
-        public static List<clsSupplier> ToSupplierModelList(this IEnumerable<SupplierBALDTO> supplierBALDTOs)
+        public static List<clsSupplier> ToSupplierModelList(this IEnumerable<SupplierDTO> SupplierDTOs)
         {
-            return supplierBALDTOs?.Select(s => s.ToSupplierModel()).ToList() ?? new List<clsSupplier>();
+            return SupplierDTOs?.Select(s => s.ToSupplierModel()).ToList() ?? new List<clsSupplier>();
         }
 
         // Additional ImportOrder BAL Mappers for different scenarios
-        public static ImportOrderBALDTO ToImportOrderSummaryBALDTO(this clsImportOrder importOrder)
+        public static ImportOrderDTO ToImportOrderSummaryBALDTO(this clsImportOrder importOrder)
         {
-            var importOrderDTO = importOrder.ToImportOrderSummaryDTO();
-            return new ImportOrderBALDTO
+            if (importOrder == null) return null;
+            
+            return new ImportOrderDTO
             {
-                ImportOrderID = importOrderDTO.ImportOrderID,
-                SupplierID = importOrderDTO.SupplierID,
-                SupplierName = importOrderDTO.SupplierName,
-                SupplierPhone = importOrderDTO.SupplierPhone,
-                TotalAmount = importOrderDTO.TotalAmount,
-                PaidAmount = importOrderDTO.PaidAmount,
-                ImportDate = importOrderDTO.ImportDate,
-                PaymentStatus = importOrderDTO.PaymentStatus,
-                PaymentStatusText = importOrderDTO.PaymentStatusText,
-                ActionByUser = importOrderDTO.ActionByUser,
-                UserName = importOrderDTO.UserName,
-                ActionType = importOrderDTO.ActionType,
-                ActionDate = importOrderDTO.ActionDate,
-                ItemsCount = importOrderDTO.ItemsCount
+                ImportOrderID = importOrder.ID,
+                SupplierID = importOrder.SupplierID,
+                SupplierName = importOrder.Supplier?.StoreName ?? "",
+                SupplierPhone = importOrder.Supplier?.Person?.PhoneNumber ?? "",
+                TotalAmount = importOrder.TotalAmount,
+                PaidAmount = importOrder.PaidAmount,
+                ImportDate = importOrder.ImportDate,
+                PaymentStatus = importOrder.PaymentStatus,
+                PaymentStatusText = GetPaymentStatusText(importOrder.PaymentStatus),
+                ActionByUser = importOrder.ActionByUser,
+                UserName = importOrder.User?.UserName ?? "",
+                ActionType = importOrder.ActionType,
+                ActionDate = importOrder.ActionDate,
+                ItemsCount = importOrder.ImportOrderItems?.Count ?? 0
             };
         }
 
-        public static ImportOrderItemBALDTO ToImportOrderItemSummaryBALDTO(this clsImportOrderItem importOrderItem)
+        public static ImportOrderItemDTO ToImportOrderItemSummaryBALDTO(this clsImportOrderItem importOrderItem)
         {
-            var importOrderItemDTO = importOrderItem.ToImportOrderItemSummaryDTO();
-            return new ImportOrderItemBALDTO
+            if (importOrderItem == null) return null;
+            
+            return new ImportOrderItemDTO
             {
-                ImportOrderID = importOrderItemDTO.ImportOrderID,
-                ImportOrderItemID = importOrderItemDTO.ImportOrderItemID,
-                ProductID = importOrderItemDTO.ProductID,
-                ProductName = importOrderItemDTO.ProductName,
-                Quantity = importOrderItemDTO.Quantity,
-                SellingPrice = importOrderItemDTO.SellingPrice,
-                TotalItemAmount = importOrderItemDTO.TotalItemAmount,
-                CurrencyType = importOrderItemDTO.CurrencyType,
-                CurrencyName = importOrderItemDTO.CurrencyName,
-                UOMName = importOrderItemDTO.UOMName,
-                UOMSymbol = importOrderItemDTO.UOMSymbol,
-                ImportedQuantity = importOrderItemDTO.ImportedQuantity
+                ImportOrderID = importOrderItem.ImportOrderID,
+                ImportOrderItemID = importOrderItem.ID,
+                ProductID = importOrderItem.ProductID,
+                ProductName = importOrderItem.Product?.Name ?? "",
+                Quantity = importOrderItem.Quantity,
+                SellingPrice = importOrderItem.SellingPrice,
+                TotalItemAmount = importOrderItem.Quantity * importOrderItem.SellingPrice,
+                CurrencyType = importOrderItem.Product?.CurrencyType ?? "",
+                CurrencyName = GetCurrencyName(importOrderItem.Product?.CurrencyType ?? ""),
+                UOMName = importOrderItem.Product?.UnitOfMeasure?.Name ?? "",
+                UOMSymbol = importOrderItem.Product?.UnitOfMeasure?.Seymbol ?? "",
+                ImportedQuantity = importOrderItem.Quantity
             };
         }
 
         // List Mappers for Summary DTOs
-        public static List<ImportOrderBALDTO> ToImportOrderSummaryBALDTOList(this IEnumerable<clsImportOrder> importOrders)
+        public static List<ImportOrderDTO> ToImportOrderSummaryBALDTOList(this IEnumerable<clsImportOrder> importOrders)
         {
-            return importOrders?.Select(io => io.ToImportOrderSummaryBALDTO()).ToList() ?? new List<ImportOrderBALDTO>();
+            return importOrders?.Select(io => io.ToImportOrderSummaryBALDTO()).ToList() ?? new List<ImportOrderDTO>();
         }
 
-        public static List<ImportOrderItemBALDTO> ToImportOrderItemSummaryBALDTOList(this IEnumerable<clsImportOrderItem> importOrderItems)
+        public static List<ImportOrderItemDTO> ToImportOrderItemSummaryBALDTOList(this IEnumerable<clsImportOrderItem> importOrderItems)
         {
-            return importOrderItems?.Select(ioi => ioi.ToImportOrderItemSummaryBALDTO()).ToList() ?? new List<ImportOrderItemBALDTO>();
+            return importOrderItems?.Select(ioi => ioi.ToImportOrderItemSummaryBALDTO()).ToList() ?? new List<ImportOrderItemDTO>();
         }
 
-        // ImportOrderItemDTO to ImportOrderItemBALDTO Mappers
-        public static ImportOrderItemBALDTO ToImportOrderItemBALDTO(this ImportOrderItemDTO importOrderItemDTO)
+        // ImportOrderItemDTO to ImportOrderItemDTO Mappers
+        public static ImportOrderItemDTO ToImportOrderItemDTO(this ImportOrderItemDTO importOrderItemDTO)
         {
-            return new ImportOrderItemBALDTO
+            return new ImportOrderItemDTO
             {
                 ImportOrderID = importOrderItemDTO.ImportOrderID,
                 ImportOrderItemID = importOrderItemDTO.ImportOrderItemID,
@@ -473,40 +451,40 @@ namespace BAL.Mappers
             };
         }
 
-        public static ImportOrderItemDTO ToImportOrderItemDTO(this ImportOrderItemBALDTO importOrderItemBALDTO)
-        {
-            return new ImportOrderItemDTO
-            {
-                ImportOrderID = importOrderItemBALDTO.ImportOrderID,
-                ImportOrderItemID = importOrderItemBALDTO.ImportOrderItemID,
-                ProductID = importOrderItemBALDTO.ProductID,
-                ProductName = importOrderItemBALDTO.ProductName,
-                Quantity = importOrderItemBALDTO.Quantity,
-                SellingPrice = importOrderItemBALDTO.SellingPrice,
-                TotalItemAmount = importOrderItemBALDTO.TotalItemAmount,
-                CurrencyType = importOrderItemBALDTO.CurrencyType,
-                CurrencyName = importOrderItemBALDTO.CurrencyName,
-                UOMName = importOrderItemBALDTO.UOMName,
-                UOMSymbol = importOrderItemBALDTO.UOMSymbol,
-                ImportedQuantity = importOrderItemBALDTO.ImportedQuantity
-            };
-        }
+        //public static ImportOrderItemDTO ToImportOrderItemDTO(this ImportOrderItemDTO ImportOrderItemDTO)
+        //{
+        //    return new ImportOrderItemDTO
+        //    {
+        //        ImportOrderID = ImportOrderItemDTO.ImportOrderID,
+        //        ImportOrderItemID = ImportOrderItemDTO.ImportOrderItemID,
+        //        ProductID = ImportOrderItemDTO.ProductID,
+        //        ProductName = ImportOrderItemDTO.ProductName,
+        //        Quantity = ImportOrderItemDTO.Quantity,
+        //        SellingPrice = ImportOrderItemDTO.SellingPrice,
+        //        TotalItemAmount = ImportOrderItemDTO.TotalItemAmount,
+        //        CurrencyType = ImportOrderItemDTO.CurrencyType,
+        //        CurrencyName = ImportOrderItemDTO.CurrencyName,
+        //        UOMName = ImportOrderItemDTO.UOMName,
+        //        UOMSymbol = ImportOrderItemDTO.UOMSymbol,
+        //        ImportedQuantity = ImportOrderItemDTO.ImportedQuantity
+        //    };
+        //}
 
         // List Mappers for ImportOrderItemDTO
-        public static List<ImportOrderItemBALDTO> ToImportOrderItemBALDTOList(this IEnumerable<ImportOrderItemDTO> importOrderItemDTOs)
+        //public static List<ImportOrderItemDTO> ToImportOrderItemDTOList(this IEnumerable<ImportOrderItemDTO> importOrderItemDTOs)
+        //{
+        //    return importOrderItemDTOs?.Select(ioi => ioi.ToImportOrderItemDTO()).ToList() ?? new List<ImportOrderItemDTO>();
+        //}
+
+        public static List<ImportOrderItemDTO> ToImportOrderItemDTOList(this IEnumerable<ImportOrderItemDTO> ImportOrderItemDTOs)
         {
-            return importOrderItemDTOs?.Select(ioi => ioi.ToImportOrderItemBALDTO()).ToList() ?? new List<ImportOrderItemBALDTO>();
+            return ImportOrderItemDTOs?.Select(ioi => ioi.ToImportOrderItemDTO()).ToList() ?? new List<ImportOrderItemDTO>();
         }
 
-        public static List<ImportOrderItemDTO> ToImportOrderItemDTOList(this IEnumerable<ImportOrderItemBALDTO> importOrderItemBALDTOs)
+        // ImportOrderDTO to ImportOrderDTO Mappers
+        public static ImportOrderDTO ToImportOrderDTO(this ImportOrderDTO importOrderDTO)
         {
-            return importOrderItemBALDTOs?.Select(ioi => ioi.ToImportOrderItemDTO()).ToList() ?? new List<ImportOrderItemDTO>();
-        }
-
-        // ImportOrderDTO to ImportOrderBALDTO Mappers
-        public static ImportOrderBALDTO ToImportOrderBALDTO(this ImportOrderDTO importOrderDTO)
-        {
-            return new ImportOrderBALDTO
+            return new ImportOrderDTO
             {
                 ImportOrderID = importOrderDTO.ImportOrderID,
                 SupplierID = importOrderDTO.SupplierID,
@@ -528,9 +506,49 @@ namespace BAL.Mappers
         }
 
         // List Mappers for ImportOrderDTO
-        public static List<ImportOrderBALDTO> ToImportOrderBALDTOList(this IEnumerable<ImportOrderDTO> importOrderDTOs)
+        public static List<ImportOrderDTO> ToImportOrderDTOList(this IEnumerable<ImportOrderDTO> importOrderDTOs)
         {
-            return importOrderDTOs?.Select(io => io.ToImportOrderBALDTO()).ToList() ?? new List<ImportOrderBALDTO>();
+            return importOrderDTOs?.Select(io => io.ToImportOrderDTO()).ToList() ?? new List<ImportOrderDTO>();
+        }
+
+        // Helper Methods
+        private static string GetPaymentStatusText(byte paymentStatus)
+        {
+            return paymentStatus switch
+            {
+                0 => "غير مدفوع",
+                1 => "مدفوع جزئياً",
+                2 => "مدفوع بالكامل",
+                _ => "غير محدد"
+            };
+        }
+
+        private static string GetCurrencyName(string currencyType)
+        {
+            return currencyType?.ToUpper() switch
+            {
+                "USD" => "دولار أمريكي",
+                "EUR" => "يورو",
+                "GBP" => "جنيه إسترليني",
+                "SAR" => "ريال سعودي",
+                "AED" => "درهم إماراتي",
+                "QAR" => "ريال قطري",
+                "KWD" => "دينار كويتي",
+                "BHD" => "دينار بحريني",
+                "OMR" => "ريال عماني",
+                "JOD" => "دينار أردني",
+                "EGP" => "جنيه مصري",
+                "IQD" => "دينار عراقي",
+                "LYD" => "دينار ليبي",
+                "TND" => "دينار تونسي",
+                "MAD" => "درهم مغربي",
+                "DZD" => "دينار جزائري",
+                "SDG" => "جنيه سوداني",
+                "YER" => "ريال يمني",
+                "SYP" => "ليرة سورية",
+                "LBP" => "ليرة لبنانية",
+                _ => currencyType ?? "غير محدد"
+            };
         }
     }
 }

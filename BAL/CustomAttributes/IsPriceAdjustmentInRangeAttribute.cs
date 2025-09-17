@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedModels.EF.DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace BAL.CustomAttributes
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
         
-            var f = (BALDTO.OrderItemsBALDTO)validationContext.ObjectInstance;
+            var f = (OrderItemsDTO)validationContext.ObjectInstance;
             if (value==null ||(float)value <= f.SellingPrice*f.Quantity)
                 return ValidationResult.Success;
             else

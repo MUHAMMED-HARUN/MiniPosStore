@@ -63,6 +63,7 @@ namespace DAL.Migrations
         {
             migrationBuilder.Sql(@"ALTER  FUNCTION dbo.GetProductsFiltered
                     (
+                        @id int =null,
                         @Name NVARCHAR(200) = NULL,
                         @Description NVARCHAR(MAX) = NULL,
                         @MinRetailPrice DECIMAL(18,2) = NULL,
@@ -92,6 +93,7 @@ namespace DAL.Migrations
                         INNER JOIN dbo.UnitOfMeasures u ON p.UOMID = u.ID
                         WHERE
                             (p.ActionType !=3) and
+                            (@id IS NULL OR p.id = @id) AND
                             (@Name IS NULL OR p.Name LIKE '%' + @Name + '%') AND
                             (@Description IS NULL OR p.Description LIKE '%' + @Description + '%') AND
         

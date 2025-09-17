@@ -1,5 +1,5 @@
 using DAL.EF.AppDBContext;
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

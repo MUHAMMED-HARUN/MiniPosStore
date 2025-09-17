@@ -1,7 +1,7 @@
 using DAL.EF.AppDBContext;
-using DAL.EF.DTO;
-using DAL.EF.Filters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -326,6 +326,8 @@ namespace DAL.IRepoServ
                     ProductName = ioi.Product.Name,
                     Quantity = ioi.Quantity,
                     SellingPrice = ioi.SellingPrice,
+                    TotalItemAmount = ioi.Quantity * ioi.SellingPrice,
+              
                 })
                 .ToListAsync();
         }

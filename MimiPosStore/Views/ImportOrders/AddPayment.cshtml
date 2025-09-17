@@ -1,4 +1,4 @@
-@model BAL.BALDTO.ImportOrderBALDTO
+@model SharedModels.EF.DTO.ImportOrderDTO
 @{
     ViewData["Title"] = "إضافة دفعة";
 }
@@ -36,13 +36,13 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="form-label">المبلغ الإجمالي</label>
-                                <input type="text" class="form-control" value="@Model.FormattedTotalAmount" readonly />
+                                <input type="text" class="form-control" value="@Model.TotalAmount" readonly />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="form-label">المبلغ المدفوع حالياً</label>
-                                <input type="text" class="form-control" value="@Model.FormattedPaidAmount" readonly />
+                                <input type="text" class="form-control" value="@Model.PaidAmount" readonly />
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="form-label">المبلغ المتبقي</label>
-                                <input type="text" class="form-control text-danger" value="@Model.FormattedRemainingAmount" readonly />
+                                <input type="text" class="form-control text-danger" value="@(Model.TotalAmount - Model.PaidAmount)" readonly />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -59,7 +59,7 @@
                                 <label for="paymentAmount" class="form-label">مبلغ الدفعة الجديدة</label>
                                 <input type="number" id="paymentAmount" name="paymentAmount" class="form-control" 
                                        step="0.01" min="0.01" max="@(Model.TotalAmount - Model.PaidAmount)" required />
-                                <div class="form-text">أقصى مبلغ يمكن دفعه: @Model.FormattedRemainingAmount</div>
+                                <div class="form-text">أقصى مبلغ يمكن دفعه: @(Model.TotalAmount - Model.PaidAmount)</div>
                             </div>
                         </div>
                     </div>
@@ -68,9 +68,7 @@
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save"></i> إضافة الدفعة
                         </button>
-                        <a asp-action="Edit" asp-route-id="@Model.ImportOrderID" class="btn btn-warning">
-                            <i class="fas fa-plus-circle"></i> إضافة عناصر
-                        </a>
+          
                         <a asp-action="Index" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> العودة للقائمة
                         </a>
@@ -92,20 +90,20 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="text-center">
-                            <h4 class="text-primary">@Model.FormattedTotalAmount</h4>
+                            <h4 class="text-primary">@Model.TotalAmount</h4>
                             <small class="text-muted">المبلغ الإجمالي</small>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="text-center">
-                            <h4 class="text-success">@Model.FormattedPaidAmount</h4>
+                            <h4 class="text-success">@Model.PaidAmount</h4>
                             <small class="text-muted">المدفوع</small>
                         </div>
                     </div>
                 </div>
                 <hr>
                 <div class="text-center">
-                    <h4 class="text-danger">@Model.FormattedRemainingAmount</h4>
+                    <h4 class="text-danger">@(Model.TotalAmount - Model.PaidAmount)</h4>
                     <small class="text-muted">المتبقي</small>
                 </div>
             </div>
@@ -119,19 +117,19 @@
                 </h5>
             </div>
             <div class="card-body text-center">
-                @if (Model.IsFullyPaid)
+                @if (Model.PaymentStatus == (byte)BAL.clsGlobal.enPaymentStatus.Completed)
                 {
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle fa-2x"></i>
                         <h5>مدفوع بالكامل</h5>
                     </div>
                 }
-                else if (Model.IsPartiallyPaid)
+                else if (Model.PaidAmount<Model.TotalAmount)
                 {
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle fa-2x"></i>
                         <h5>مدفوع جزئياً</h5>
-                        <p class="mb-0">المتبقي: @Model.FormattedRemainingAmount</p>
+                        <p class="mb-0">المتبقي: @(Model.TotalAmount - Model.PaidAmount)</p>
                     </div>
                 }
                 else
@@ -139,7 +137,7 @@
                     <div class="alert alert-danger">
                         <i class="fas fa-times-circle fa-2x"></i>
                         <h5>غير مدفوع</h5>
-                        <p class="mb-0">المطلوب: @Model.FormattedTotalAmount</p>
+                        <p class="mb-0">المطلوب: @Model.TotalAmount</p>
                     </div>
                 }
             </div>
@@ -153,7 +151,7 @@
                 </h5>
             </div>
             <div class="card-body">
-                <p><strong>تاريخ الاستيراد:</strong><br>@Model.FormattedImportDate</p>
+                <p><strong>تاريخ الاستيراد:</strong><br>@Model.ImportDate</p>
                 <p><strong>عدد العناصر:</strong><br>@Model.ItemsCount</p>
                 <p><strong>المستخدم المسؤول:</strong><br>@Model.UserName</p>
             </div>
@@ -177,7 +175,7 @@
                     $(this).next('.form-text').addClass('text-danger').text('يجب أن يكون المبلغ أكبر من صفر');
                 } else {
                     $(this).removeClass('is-invalid');
-                    $(this).next('.form-text').removeClass('text-danger').text('أقصى مبلغ يمكن دفعه: @Model.FormattedRemainingAmount');
+                    $(this).next('.form-text').removeClass('text-danger').text('أقصى مبلغ يمكن دفعه: @(Model.TotalAmount - Model.PaidAmount)');
                 }
             });
 

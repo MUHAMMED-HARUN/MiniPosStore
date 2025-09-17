@@ -1,4 +1,4 @@
-﻿using DAL.EF.Models;
+﻿using SharedModels.EF.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;

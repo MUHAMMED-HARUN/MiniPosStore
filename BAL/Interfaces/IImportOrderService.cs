@@ -1,7 +1,7 @@
 using BAL;
-using BAL.BALDTO;
-using DAL.EF.Filters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,30 +24,30 @@ namespace BAL.Interfaces
         Task<clsImportOrder> GetBySupplierIdAsync(int supplierID);
         
         // BALDTO Methods
-        Task<ImportOrderBALDTO> GetByIdBALDTOAsync(int importOrderID);
-        Task<List<ImportOrderBALDTO>> GetAllBALDTOAsync();
-        Task<List<ImportOrderBALDTO>> GetBySupplierIdBALDTOAsync(int supplierID);
-        Task<bool> AddBALDTOAsync(ImportOrderBALDTO importOrderBALDTO);
-        Task<bool> UpdateBALDTOAsync(ImportOrderBALDTO importOrderBALDTO);
+        Task<ImportOrderDTO> GetByIdBALDTOAsync(int importOrderID);
+        Task<List<ImportOrderDTO>> GetAllBALDTOAsync();
+        Task<List<ImportOrderDTO>> GetBySupplierIdBALDTOAsync(int supplierID);
+        Task<bool> AddBALDTOAsync(ImportOrderDTO ImportOrderDTO);
+        Task<bool> UpdateBALDTOAsync(ImportOrderDTO ImportOrderDTO);
         
         // Enhanced DTO Methods with Business Logic
-        Task<ImportOrderBALDTO> GetByIdWithItemsBALDTOAsync(int importOrderID);
-        Task<List<ImportOrderBALDTO>> GetAllWithItemsBALDTOAsync();
-        Task<List<ImportOrderBALDTO>> GetByDateRangeBALDTOAsync(DateTime startDate, DateTime endDate);
-        Task<List<ImportOrderBALDTO>> GetByPaymentStatusBALDTOAsync(byte paymentStatus);
-        Task<List<ImportOrderBALDTO>> GetUnpaidOrdersBALDTOAsync();
-        Task<List<ImportOrderBALDTO>> GetPartiallyPaidOrdersBALDTOAsync();
-        Task<List<ImportOrderBALDTO>> GetFullyPaidOrdersBALDTOAsync();
+        Task<ImportOrderDTO> GetByIdWithItemsBALDTOAsync(int importOrderID);
+        Task<List<ImportOrderDTO>> GetAllWithItemsBALDTOAsync();
+        Task<List<ImportOrderDTO>> GetByDateRangeBALDTOAsync(DateTime startDate, DateTime endDate);
+        Task<List<ImportOrderDTO>> GetByPaymentStatusBALDTOAsync(byte paymentStatus);
+        Task<List<ImportOrderDTO>> GetUnpaidOrdersBALDTOAsync();
+        Task<List<ImportOrderDTO>> GetPartiallyPaidOrdersBALDTOAsync();
+        Task<List<ImportOrderDTO>> GetFullyPaidOrdersBALDTOAsync();
         
         // Summary Methods for Performance
-        Task<List<ImportOrderBALDTO>> GetAllSummaryBALDTOAsync();
-        Task<List<ImportOrderBALDTO>> GetAllSummaryBALDTOAsync(clsImportOrderFilter filter);
-        Task<ImportOrderBALDTO> GetByIdSummaryBALDTOAsync(int importOrderID);
+        Task<List<ImportOrderDTO>> GetAllSummaryBALDTOAsync();
+        Task<List<ImportOrderDTO>> GetAllSummaryBALDTOAsync(clsImportOrderFilter filter);
+        Task<ImportOrderDTO> GetByIdSummaryBALDTOAsync(int importOrderID);
         
         // Business Logic Methods
         Task<bool> UpdatePaymentStatusAsync(int importOrderID, byte paymentStatus);
         Task<bool> AddPaymentAsync(int importOrderID, float paymentAmount);
-        Task<float> GetRemainingAmountAsync(ImportOrderBALDTO importOrderID);
+        Task<float> GetRemainingAmountAsync(ImportOrderDTO importOrderID);
         Task<bool> IsFullyPaidAsync(int importOrderID);
         
         Task<bool> Save();

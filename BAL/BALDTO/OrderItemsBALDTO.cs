@@ -1,5 +1,5 @@
 using BAL.CustomAttributes;
-using DAL.EF.DTO;
+using SharedModels.EF.DTO;
 using System.ComponentModel.DataAnnotations;
 
 namespace BAL.BALDTO

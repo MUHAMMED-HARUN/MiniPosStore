@@ -1,4 +1,4 @@
-@model BAL.BALDTO.ImportOrderBALDTO
+@model SharedModels.EF.DTO.ImportOrderDTO
 @{
     ViewData["Title"] = "حذف أمر الاستيراد";
 }
@@ -30,31 +30,28 @@
             <dd class="col-sm-8">@Model.SupplierPhone</dd>
 
             <dt class="col-sm-4">تاريخ الاستيراد:</dt>
-            <dd class="col-sm-8">@Model.FormattedImportDate</dd>
+            <dd class="col-sm-8">@Model.ImportDate</dd>
 
             <dt class="col-sm-4">المبلغ الإجمالي:</dt>
-            <dd class="col-sm-8">@Model.FormattedTotalAmount</dd>
+            <dd class="col-sm-8">@Model.TotalAmount</dd>
 
             <dt class="col-sm-4">المبلغ المدفوع:</dt>
-            <dd class="col-sm-8">@Model.FormattedPaidAmount</dd>
+            <dd class="col-sm-8">@Model.PaidAmount</dd>
 
             <dt class="col-sm-4">المبلغ المتبقي:</dt>
             <dd class="col-sm-8">
-                <span class="@(Model.IsNotPaid ? "text-danger" : Model.IsPartiallyPaid ? "text-warning" : "text-success")">
-                    @Model.FormattedRemainingAmount
-                </span>
+                <td class="@(Model.PaidAmount == 0 ? "text-danger" : Model.PaidAmount < Model.TotalAmount ? "text-warning" : "text-success")">
+                    @(Model.TotalAmount - Model.PaidAmount)
+                </td>
             </dd>
 
             <dt class="col-sm-4">حالة الدفع:</dt>
             <dd class="col-sm-8">
-                @if (Model.IsFullyPaid)
+                @if (Model.PaymentStatus == (byte)BAL.clsGlobal.enPaymentStatus.Completed)
                 {
                     <span class="badge bg-success">@Model.PaymentStatusText</span>
                 }
-                else if (Model.IsPartiallyPaid)
-                {
-                    <span class="badge bg-warning">@Model.PaymentStatusText</span>
-                }
+     
                 else
                 {
                     <span class="badge bg-danger">@Model.PaymentStatusText</span>
@@ -113,11 +110,11 @@
     </div>
 }
 
-@if (!Model.IsFullyPaid)
+@if (Model.PaymentStatus!= (byte)BAL.clsGlobal.enPaymentStatus.Completed)
 {
     <div class="alert alert-warning">
         <h5><i class="fas fa-exclamation-triangle"></i> تنبيه</h5>
-        <p>هذا أمر الاستيراد لم يتم سداده بالكامل. المبلغ المتبقي: <strong>@Model.FormattedRemainingAmount</strong></p>
+        <p>هذا أمر الاستيراد لم يتم سداده بالكامل. المبلغ المتبقي: <strong>@(Model.TotalAmount - Model.PaidAmount)</strong></p>
     </div>
 }
 

@@ -1,5 +1,6 @@
-using DAL.EF.Models;
-using BAL.BALDTO;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Models;
+
 
 namespace BAL.Interfaces
 {
@@ -18,23 +19,21 @@ namespace BAL.Interfaces
         Task<List<clsImportOrderItem>> GetByProductIdAsync(int productID);
         
         // BALDTO Methods
-        Task<ImportOrderItemBALDTO> GetByIdBALDTOAsync(int importOrderItemID);
-        Task<List<ImportOrderItemBALDTO>> GetAllBALDTOAsync();
-        Task<List<ImportOrderItemBALDTO>> GetByImportOrderIdBALDTOAsync(int importOrderID);
-        Task<List<ImportOrderItemBALDTO>> GetByProductIdBALDTOAsync(int productID);
-        Task<bool> AddBALDTOAsync(ImportOrderItemBALDTO importOrderItemBALDTO);
-        Task<bool> UpdateBALDTOAsync(ImportOrderItemBALDTO importOrderItemBALDTO);
-        
+        Task<ImportOrderItemDTO> GetByIdBALDTOAsync(int importOrderItemID);
+        Task<List<ImportOrderItemDTO>> GetAllBALDTOAsync();
+        Task<List<ImportOrderItemDTO>> GetByImportOrderIdBALDTOAsync(int importOrderID);
+        Task<List<ImportOrderItemDTO>> GetByProductIdBALDTOAsync(int productID);
+        Task<bool> AddBALDTOAsync(ImportOrderItemDTO ImportOrderItemDTO);
+        Task<bool> UpdateBALDTOAsync(ImportOrderItemDTO ImportOrderItemDTO);
+        Task<bool> UpdateBALDTOAsync(clsImportOrderItem ImportOrderItem);
+
         // Enhanced DTO Methods with Business Logic
-        Task<List<ImportOrderItemBALDTO>> GetHighValueItemsBALDTOAsync(float minAmount = 1000);
-        Task<List<ImportOrderItemBALDTO>> GetByDateRangeBALDTOAsync(DateTime startDate, DateTime endDate);
-        Task<List<ImportOrderItemBALDTO>> GetByCurrencyTypeBALDTOAsync(string currencyType);
-        Task<List<ImportOrderItemBALDTO>> GetByUOMBALDTOAsync(string uomName);
+        Task<List<ImportOrderItemDTO>> GetHighValueItemsBALDTOAsync(float minAmount = 1000);
+        Task<List<ImportOrderItemDTO>> GetByDateRangeBALDTOAsync(DateTime startDate, DateTime endDate);
+        Task<List<ImportOrderItemDTO>> GetByCurrencyTypeBALDTOAsync(string currencyType);
+        Task<List<ImportOrderItemDTO>> GetByUOMBALDTOAsync(string uomName);
         
         // Summary Methods for Performance
-        Task<List<ImportOrderItemBALDTO>> GetAllSummaryBALDTOAsync();
-        Task<ImportOrderItemBALDTO> GetByIdSummaryBALDTOAsync(int importOrderItemID);
-        Task<List<ImportOrderItemBALDTO>> GetByImportOrderIdSummaryBALDTOAsync(int importOrderID);
         
         // Business Logic Methods
         Task<float> GetTotalAmountByImportOrderAsync(int importOrderID);
@@ -46,7 +45,7 @@ namespace BAL.Interfaces
         
         // Bulk Operations
         Task<bool> AddMultipleItemsAsync(List<clsImportOrderItem> importOrderItems);
-        Task<bool> AddMultipleItemsBALDTOAsync(List<ImportOrderItemBALDTO> importOrderItemBALDTOs);
+        Task<bool> AddMultipleItemsBALDTOAsync(List<ImportOrderItemDTO> ImportOrderItemDTOs);
         Task<bool> DeleteMultipleItemsAsync(int[] importOrderItemIDs);
         
         Task<bool> Save();

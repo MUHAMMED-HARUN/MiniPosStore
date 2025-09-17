@@ -1,11 +1,12 @@
 using DAL.EF.AppDBContext;
-using DAL.EF.Models;
-using DAL.EF.DTO;
+using SharedModels.EF.Models;
+using SharedModels.EF.DTO;
 using DAL.IRepo;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
 namespace DAL.IRepoServ
 {
@@ -57,7 +58,7 @@ namespace DAL.IRepoServ
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch(SqlException e)
             {
                 return false;
             }

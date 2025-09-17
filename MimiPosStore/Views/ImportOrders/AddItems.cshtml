@@ -1,5 +1,5 @@
-@model IEnumerable<BAL.BALDTO.ImportOrderBALDTO>
-@using BAL.BALDTO;
+@model IEnumerable<SharedModels.EF.DTO.ImportOrderDTO>
+
 @{
     ViewData["Title"] = "إضافة عناصر لأوامر الاستيراد";
 }
@@ -64,22 +64,19 @@
                                                 <small class="text-muted">@item.SupplierPhone</small>
                                             </div>
                                         </td>
-                                        <td>@item.FormattedImportDate</td>
+                                        <td>@item.ImportDate</td>
                                         <td>
-                                            <span class="text-primary fw-bold">@item.FormattedTotalAmount</span>
+                                            <span class="text-primary fw-bold">@item.TotalAmount</span>
                                         </td>
                                         <td>
                                             <span class="badge bg-info">@item.ItemsCount عنصر</span>
                                         </td>
                                         <td>
-                                            @if (item.IsFullyPaid)
+                                            @if (item.PaymentStatus==((byte)BAL.clsGlobal.enPaymentStatus.Completed))
                                             {
                                                 <span class="badge bg-success">@item.PaymentStatusText</span>
                                             }
-                                            else if (item.IsPartiallyPaid)
-                                            {
-                                                <span class="badge bg-warning">@item.PaymentStatusText</span>
-                                            }
+                                           
                                             else
                                             {
                                                 <span class="badge bg-danger">@item.PaymentStatusText</span>

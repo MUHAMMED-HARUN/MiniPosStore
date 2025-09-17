@@ -1,7 +1,7 @@
 using BAL;
-using BAL.BALDTO;
-using DAL.EF.Filters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,17 +30,17 @@ namespace BAL.Interfaces
         Task<List<clsOrderItem>> GetItemsByOrderID(int OrderID);
         
         // BALDTO Methods
-        Task<OrderBALDTO> GetByIdBALDTOAsync(int OrderID);
-        Task<List<OrderBALDTO>> GetAllBALDTOAsync();
-        Task<List<OrderBALDTO>> GetAllOrdersDTOAsync(clsOrderFilter Filter);
-        Task<bool> CreateBALDTOAsync(OrderBALDTO orderBALDTO);
-        Task<bool> UpdateBALDTOAsync(OrderBALDTO orderBALDTO);
+        Task<OrderDTO> GetByIdBALDTOAsync(int OrderID);
+        Task<List<OrderDTO>> GetAllBALDTOAsync();
+        Task<List<OrderDTO>> GetAllOrdersDTOAsync(clsOrderFilter Filter);
+        Task<bool> CreateBALDTOAsync(OrderDTO OrderDTO);
+        Task<bool> UpdateBALDTOAsync(OrderDTO OrderDTO);
         
         // OrderItems BALDTO Methods
-        Task<OrderItemsBALDTO> GetOrderItemByIdBALDTOAsync(int OrderItemID);
-        Task<List<OrderItemsBALDTO>> GetOrderItemsByOrderIdBALDTOAsync(int OrderID);
-        Task<bool> AddItemBALDTOAsync(OrderItemsBALDTO orderItemBALDTO);
-        Task<bool> UpdateItemBALDTOAsync(OrderItemsBALDTO orderItemBALDTO);
+        Task<OrderItemsDTO> GetOrderItemByIdBALDTOAsync(int OrderItemID);
+        Task<List<OrderItemsDTO>> GetOrderItemsByOrderIdBALDTOAsync(int OrderID);
+        Task<bool> AddItemBALDTOAsync(OrderItemsDTO orderItemBALDTO);
+        Task<bool> UpdateItemBALDTOAsync(OrderItemsDTO orderItemBALDTO);
         
         // Search Methods
         Task<List<clsOrder>> SearchOrdersAsync(string searchTerm);

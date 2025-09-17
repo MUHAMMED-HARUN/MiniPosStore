@@ -1,12 +1,13 @@
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using BAL.Interfaces;
-using BAL.BALDTO;
+
 using BAL.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SharedModels.EF.DTO;
 
 namespace BAL.Services
 {
@@ -14,15 +15,18 @@ namespace BAL.Services
     {
         private readonly IImportOrderItemRepo _importOrderItemRepo;
         private readonly ICurrentUserService _currentUserService;
-        
+        private readonly IImportOrderRepo _importOrderRepo;
+
+
         public clsGlobal.enSaveMode SaveMode { get; set; }
         public virtual clsImportOrderItem importOrderItem { get; set; }
 
-        public ImportOrderItemService(IImportOrderItemRepo importOrderItemRepo, ICurrentUserService currentUserService)
+        public ImportOrderItemService(IImportOrderItemRepo importOrderItemRepo, ICurrentUserService currentUserService,IImportOrderRepo importOrder)
         {
             _importOrderItemRepo = importOrderItemRepo;
             _currentUserService = currentUserService;
             SaveMode = clsGlobal.enSaveMode.Add;
+            _importOrderRepo = importOrder; 
         }
 
         // Basic CRUD Operations
@@ -111,12 +115,13 @@ namespace BAL.Services
         }
 
         // BALDTO Methods
-        public async Task<ImportOrderItemBALDTO> GetByIdBALDTOAsync(int importOrderItemID)
+        public async Task<ImportOrderItemDTO> GetByIdBALDTOAsync(int importOrderItemID)
         {
             try
             {
-                var importOrderItem = await _importOrderItemRepo.GetByIdDTOAsync(importOrderItemID);
-                return importOrderItem?.ToImportOrderItemBALDTO();
+                
+                var importOrderItem = await _importOrderRepo.GetImportOrderItemByIdDTOAsync(importOrderItemID); ;
+                return importOrderItem;
             }
             catch (Exception)
             {
@@ -124,50 +129,51 @@ namespace BAL.Services
             }
         }
 
-        public async Task<List<ImportOrderItemBALDTO>> GetAllBALDTOAsync()
+        public async Task<List<ImportOrderItemDTO>> GetAllBALDTOAsync()
         {
             try
             {
-                var importOrderItems = await _importOrderItemRepo.GetAllDTOAsync();
-                return importOrderItems.ToImportOrderItemBALDTOList();
+                //var importOrderItems = await _importOrderItemRepo.GetAllAsync();
+                return null;
             }
             catch (Exception)
             {
-                return new List<ImportOrderItemBALDTO>();
+                return new List<ImportOrderItemDTO>();
             }
         }
 
-        public async Task<List<ImportOrderItemBALDTO>> GetByImportOrderIdBALDTOAsync(int importOrderID)
+        public async Task<List<ImportOrderItemDTO>> GetByImportOrderIdBALDTOAsync(int importOrderID)
         {
             try
             {
-                var importOrderItems = await _importOrderItemRepo.GetByImportOrderIdDTOAsync(importOrderID);
-                return importOrderItems.ToImportOrderItemBALDTOList();
+                var importOrderItems = await _importOrderRepo.GetImportOrderItemsByOrderIdDTOAsync(importOrderID); ;
+                return importOrderItems;
             }
             catch (Exception)
             {
-                return new List<ImportOrderItemBALDTO>();
+                return new List<ImportOrderItemDTO>();
             }
         }
 
-        public async Task<List<ImportOrderItemBALDTO>> GetByProductIdBALDTOAsync(int productID)
+        public async Task<List<ImportOrderItemDTO>> GetByProductIdBALDTOAsync(int productID)
         {
             try
             {
-                var importOrderItems = await _importOrderItemRepo.GetByProductIdDTOAsync(productID);
-                return importOrderItems.ToImportOrderItemBALDTOList();
+                
+                var importOrderItems = await _importOrderItemRepo.GetByProductIdAsync(productID);
+                return importOrderItems.ToImportOrderItemDTOList();
             }
             catch (Exception)
             {
-                return new List<ImportOrderItemBALDTO>();
+                return new List<ImportOrderItemDTO>();
             }
         }
 
-        public async Task<bool> AddBALDTOAsync(ImportOrderItemBALDTO importOrderItemBALDTO)
+        public async Task<bool> AddBALDTOAsync(ImportOrderItemDTO ImportOrderItemDTO)
         {
             try
             {
-                var importOrderItem = importOrderItemBALDTO.ToImportOrderItemModel();
+                var importOrderItem = ImportOrderItemDTO.ToImportOrderItemModel();
                 return await AddAsync(importOrderItem);
             }
             catch (Exception)
@@ -176,12 +182,24 @@ namespace BAL.Services
             }
         }
 
-        public async Task<bool> UpdateBALDTOAsync(ImportOrderItemBALDTO importOrderItemBALDTO)
+        public async Task<bool> UpdateBALDTOAsync(ImportOrderItemDTO ImportOrderItemDTO)
         {
             try
             {
-                var importOrderItem = importOrderItemBALDTO.ToImportOrderItemModel();
+                var importOrderItem = ImportOrderItemDTO.ToImportOrderItemModel();
                 return await UpdateAsync(importOrderItem);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> UpdateBALDTOAsync(clsImportOrderItem ImportOrderItem)
+        {
+            try
+            {
+              
+                return await UpdateAsync(ImportOrderItem);
             }
             catch (Exception)
             {
@@ -190,97 +208,64 @@ namespace BAL.Services
         }
 
         // Enhanced DTO Methods with Business Logic
-        public async Task<List<ImportOrderItemBALDTO>> GetHighValueItemsBALDTOAsync(float minAmount = 1000)
+        public async Task<List<ImportOrderItemDTO>> GetHighValueItemsBALDTOAsync(float minAmount = 1000)
         {
             try
             {
                 var importOrderItems = await _importOrderItemRepo.GetHighValueItemsAsync(minAmount);
-                return importOrderItems.ToImportOrderItemBALDTOList();
+                return importOrderItems;
             }
             catch (Exception)
             {
-                return new List<ImportOrderItemBALDTO>();
+                return new List<ImportOrderItemDTO>();
             }
         }
 
-        public async Task<List<ImportOrderItemBALDTO>> GetByDateRangeBALDTOAsync(DateTime startDate, DateTime endDate)
+        public async Task<List<ImportOrderItemDTO>> GetByDateRangeBALDTOAsync(DateTime startDate, DateTime endDate)
         {
             try
             {
                 var importOrderItems = await _importOrderItemRepo.GetByDateRangeAsync(startDate, endDate);
-                return importOrderItems.ToImportOrderItemBALDTOList();
+                return importOrderItems;
             }
             catch (Exception)
             {
-                return new List<ImportOrderItemBALDTO>();
+                return new List<ImportOrderItemDTO>();
             }
         }
 
-        public async Task<List<ImportOrderItemBALDTO>> GetByCurrencyTypeBALDTOAsync(string currencyType)
+        public async Task<List<ImportOrderItemDTO>> GetByCurrencyTypeBALDTOAsync(string currencyType)
         {
             try
             {
                 var importOrderItems = await _importOrderItemRepo.GetByCurrencyTypeAsync(currencyType);
-                return importOrderItems.ToImportOrderItemBALDTOList();
+                return importOrderItems;
             }
             catch (Exception)
             {
-                return new List<ImportOrderItemBALDTO>();
+                return new List<ImportOrderItemDTO>();
             }
         }
 
-        public async Task<List<ImportOrderItemBALDTO>> GetByUOMBALDTOAsync(string uomName)
+        public async Task<List<ImportOrderItemDTO>> GetByUOMBALDTOAsync(string uomName)
         {
             try
             {
                 var importOrderItems = await _importOrderItemRepo.GetByUOMAsync(uomName);
-                return importOrderItems.ToImportOrderItemBALDTOList();
+                return importOrderItems;
             }
             catch (Exception)
             {
-                return new List<ImportOrderItemBALDTO>();
+                return new List<ImportOrderItemDTO>();
             }
         }
 
         // Summary Methods for Performance
-        public async Task<List<ImportOrderItemBALDTO>> GetAllSummaryBALDTOAsync()
-        {
-            try
-            {
-                var importOrderItems = await _importOrderItemRepo.GetAllSummaryDTOAsync();
-                return importOrderItems.ToImportOrderItemBALDTOList();
-            }
-            catch (Exception)
-            {
-                return new List<ImportOrderItemBALDTO>();
-            }
-        }
+  
 
-        public async Task<ImportOrderItemBALDTO> GetByIdSummaryBALDTOAsync(int importOrderItemID)
-        {
-            try
-            {
-                var importOrderItem = await _importOrderItemRepo.GetByIdSummaryDTOAsync(importOrderItemID);
-                return importOrderItem?.ToImportOrderItemBALDTO();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
+    
 
-        public async Task<List<ImportOrderItemBALDTO>> GetByImportOrderIdSummaryBALDTOAsync(int importOrderID)
-        {
-            try
-            {
-                var importOrderItems = await _importOrderItemRepo.GetByImportOrderIdSummaryDTOAsync(importOrderID);
-                return importOrderItems.ToImportOrderItemBALDTOList();
-            }
-            catch (Exception)
-            {
-                return new List<ImportOrderItemBALDTO>();
-            }
-        }
+        
 
         // Business Logic Methods
         public async Task<float> GetTotalAmountByImportOrderAsync(int importOrderID)
@@ -386,11 +371,11 @@ namespace BAL.Services
             }
         }
 
-        public async Task<bool> AddMultipleItemsBALDTOAsync(List<ImportOrderItemBALDTO> importOrderItemBALDTOs)
+        public async Task<bool> AddMultipleItemsBALDTOAsync(List<ImportOrderItemDTO> ImportOrderItemDTOs)
         {
             try
             {
-                var importOrderItems = importOrderItemBALDTOs.Select(dto => dto.ToImportOrderItemModel()).ToList();
+                var importOrderItems = ImportOrderItemDTOs.Select(dto => dto.ToImportOrderItemModel()).ToList();
                 return await AddMultipleItemsAsync(importOrderItems);
             }
             catch (Exception)

@@ -1,4 +1,4 @@
-﻿using DAL.EF.Models;
+﻿using SharedModels.EF.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace DAL.EF.Models

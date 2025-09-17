@@ -1,5 +1,5 @@
-@model BAL.BALFilters.clsProductFilterBAL
-@using BAL.BALDTO;
+@model SharedModels.EF.Filters.clsProductFilter
+
 @{
     ViewData["Title"] = "قائمة المنتجات";
 }
@@ -110,7 +110,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.ProductDTOList)
+        @foreach (var item in Model.products)
         {
             <tr>
                 <!-- الصورة -->
@@ -152,7 +152,7 @@
 </table>
 
 
-@if (!Model.ProductDTOList.Any())
+@if (!Model.products.Any())
 {
     <div class="alert alert-info text-center">
         <i class="fas fa-info-circle"></i>

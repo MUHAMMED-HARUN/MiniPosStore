@@ -1,13 +1,14 @@
 using DAL.EF.AppDBContext;
-using DAL.EF.DTO;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Models;
 using DAL.IRepo;
-using DAL.Mapper;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.Mapper;
 
 namespace DAL.IRepoServ
 {
@@ -135,57 +136,8 @@ namespace DAL.IRepoServ
         }
 
         // DTO Methods
-        public async Task<ImportOrderItemDTO> GetByIdDTOAsync(int importOrderItemID)
-        {
-            try
-            {
-                var importOrderItem = await GetByIdAsync(importOrderItemID);
-                return importOrderItem?.ToImportOrderItemDTO();
-            }
-            catch
-            {
-                return null;
-            }
-        }
 
-        public async Task<List<ImportOrderItemDTO>> GetAllDTOAsync()
-        {
-            try
-            {
-                var importOrderItems = await GetAllAsync();
-                return importOrderItems.ToImportOrderItemDTOList();
-            }
-            catch
-            {
-                return new List<ImportOrderItemDTO>();
-            }
-        }
 
-        public async Task<List<ImportOrderItemDTO>> GetByImportOrderIdDTOAsync(int importOrderID)
-        {
-            try
-            {
-                var importOrderItems = await GetByImportOrderIdAsync(importOrderID);
-                return importOrderItems.ToImportOrderItemDTOList();
-            }
-            catch
-            {
-                return new List<ImportOrderItemDTO>();
-            }
-        }
-
-        public async Task<List<ImportOrderItemDTO>> GetByProductIdDTOAsync(int productID)
-        {
-            try
-            {
-                var importOrderItems = await GetByProductIdAsync(productID);
-                return importOrderItems.ToImportOrderItemDTOList();
-            }
-            catch
-            {
-                return new List<ImportOrderItemDTO>();
-            }
-        }
 
         public async Task<List<ImportOrderItemDTO>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
         {
@@ -196,8 +148,9 @@ namespace DAL.IRepoServ
                     .Include(ioi => ioi.ImportOrder)
                     .AsNoTracking()
                     .Where(ioi => ioi.ImportOrder.ImportDate >= startDate && ioi.ImportOrder.ImportDate <= endDate)
+                    .Select(ioi=> ioi.ToImportOrderItemDTO())
                     .ToListAsync();
-                return importOrderItems.ToImportOrderItemDTOList();
+                return importOrderItems;
             }
             catch
             {
@@ -259,45 +212,7 @@ namespace DAL.IRepoServ
             }
         }
 
-        // Summary DTO Methods
-        public async Task<ImportOrderItemDTO> GetByIdSummaryDTOAsync(int importOrderItemID)
-        {
-            try
-            {
-                var importOrderItem = await GetByIdAsync(importOrderItemID);
-                return importOrderItem?.ToImportOrderItemSummaryDTO();
-            }
-            catch
-            {
-                return null;
-            }
-        }
 
-        public async Task<List<ImportOrderItemDTO>> GetAllSummaryDTOAsync()
-        {
-            try
-            {
-                var importOrderItems = await GetAllAsync();
-                return importOrderItems.ToImportOrderItemSummaryDTOList();
-            }
-            catch
-            {
-                return new List<ImportOrderItemDTO>();
-            }
-        }
-
-        public async Task<List<ImportOrderItemDTO>> GetByImportOrderIdSummaryDTOAsync(int importOrderID)
-        {
-            try
-            {
-                var importOrderItems = await GetByImportOrderIdAsync(importOrderID);
-                return importOrderItems.ToImportOrderItemSummaryDTOList();
-            }
-            catch
-            {
-                return new List<ImportOrderItemDTO>();
-            }
-        }
     }
 }
 

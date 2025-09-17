@@ -1,6 +1,6 @@
 using BAL.Interfaces;
 using DAL.IRepo;
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

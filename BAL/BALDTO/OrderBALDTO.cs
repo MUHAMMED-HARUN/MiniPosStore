@@ -1,8 +1,8 @@
-using DAL.EF.DTO;
+using SharedModels.EF.DTO;
 
 namespace BAL.BALDTO
 {
-    public class OrderBALDTO : OrderDTO
+    public class OrderDTO : OrderDTO
     {
     }
 }

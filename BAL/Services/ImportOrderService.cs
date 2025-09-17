@@ -1,13 +1,14 @@
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using BAL.Interfaces;
-using BAL.BALDTO;
+
 using BAL.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DAL.EF.Filters;
+using SharedModels.EF.Filters;
+using SharedModels.EF.DTO;
 
 namespace BAL.Services
 {
@@ -110,12 +111,12 @@ namespace BAL.Services
         }
 
         // BALDTO Methods
-        public async Task<ImportOrderBALDTO> GetByIdBALDTOAsync(int importOrderID)
+        public async Task<ImportOrderDTO> GetByIdBALDTOAsync(int importOrderID)
         {
             try
             {
                 var importOrder = await _importOrderRepo.GetByIdDTOAsync(importOrderID);
-                return importOrder?.ToImportOrderBALDTO();
+                return importOrder;
             }
             catch (Exception)
             {
@@ -123,37 +124,37 @@ namespace BAL.Services
             }
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetAllBALDTOAsync()
+        public async Task<List<ImportOrderDTO>> GetAllBALDTOAsync()
         {
             try
             {
                 var importOrders = await _importOrderRepo.GetAllDTOAsync();
-                return importOrders.ToImportOrderBALDTOList();
+                return importOrders;
             }
             catch (Exception)
             {
-                return new List<ImportOrderBALDTO>();
+                return new List<ImportOrderDTO>();
             }
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetBySupplierIdBALDTOAsync(int supplierID)
+        public async Task<List<ImportOrderDTO>> GetBySupplierIdBALDTOAsync(int supplierID)
         {
             try
             {
                 var importOrders = await _importOrderRepo.GetBySupplierIdDTOAsync(supplierID);
-                return importOrders.ToImportOrderBALDTOList();
+                return importOrders.ToImportOrderDTOList();
             }
             catch (Exception)
             {
-                return new List<ImportOrderBALDTO>();
+                return new List<ImportOrderDTO>();
             }
         }
 
-        public async Task<bool> AddBALDTOAsync(ImportOrderBALDTO importOrderBALDTO)
+        public async Task<bool> AddBALDTOAsync(ImportOrderDTO ImportOrderDTO)
         {
             try
             {
-                var importOrder = importOrderBALDTO.ToImportOrderModel();
+                var importOrder = ImportOrderDTO.ToImportOrderModel();
                 importOrder.ActionByUser = _currentUserService.GetCurrentUserId();
                 return await AddAsync(importOrder);
             }
@@ -163,16 +164,16 @@ namespace BAL.Services
             }
         }
         
-        public async Task<bool> UpdateBALDTOAsync(ImportOrderBALDTO importOrderBALDTO)
+        public async Task<bool> UpdateBALDTOAsync(ImportOrderDTO ImportOrderDTO)
         {
             try
             {
-                if (IsPaymentCompletedDTO(importOrderBALDTO))
-                    importOrderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Completed);
+                if (IsPaymentCompletedDTO(ImportOrderDTO))
+                    ImportOrderDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Completed);
                 else
-                    importOrderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.PendingForPayment);
+                    ImportOrderDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.PendingForPayment);
 
-                var importOrder = importOrderBALDTO.ToImportOrderModel();
+                var importOrder = ImportOrderDTO.ToImportOrderModel();
                 importOrder.ActionByUser = _currentUserService.GetCurrentUserId();
                 return await UpdateAsync(importOrder);
             }
@@ -183,7 +184,7 @@ namespace BAL.Services
         }
 
         // Enhanced DTO Methods with Business Logic
-        public bool IsPaymentCompletedDTO(ImportOrderBALDTO order)
+        public bool IsPaymentCompletedDTO(ImportOrderDTO order)
         {
             return order.PaidAmount == order.TotalAmount;
         }
@@ -191,12 +192,24 @@ namespace BAL.Services
         {
             return order.PaidAmount == order.TotalAmount;
         }
-        public async Task<ImportOrderBALDTO> GetByIdWithItemsBALDTOAsync(int importOrderID)
+        public async Task<ImportOrderDTO> GetByIdWithItemsBALDTOAsync(int importOrderID)
         {
             try
             {
-                var importOrder = await _importOrderRepo.GetByIdWithItemsAsync(importOrderID);
-                return importOrder?.ToImportOrderBALDTO();
+                // Get the import order
+                clsImportOrderFilter filter = new clsImportOrderFilter();
+                filter.IOID = importOrderID;
+                var importOrder = await _importOrderRepo.GetAllDTOAsync(filter);
+                var order = importOrder.FirstOrDefault();
+                
+                if (order != null)
+                {
+                    // Get the import order items
+                    var items = await _importOrderRepo.GetImportOrderItemsByOrderIdDTOAsync(importOrderID);
+                    order.ImportOrderItems = items ?? new List<ImportOrderItemDTO>();
+                }
+                
+                return order;
             }
             catch (Exception)
             {
@@ -204,88 +217,88 @@ namespace BAL.Services
             }
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetAllWithItemsBALDTOAsync()
+        public async Task<List<ImportOrderDTO>> GetAllWithItemsBALDTOAsync()
         {
             try
             {
                 var importOrders = await _importOrderRepo.GetAllWithItemsAsync();
-                return importOrders.ToImportOrderBALDTOList();
+                return importOrders.ToImportOrderDTOList();
             }
             catch (Exception)
             {
-                return new List<ImportOrderBALDTO>();
+                return new List<ImportOrderDTO>();
             }
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetByDateRangeBALDTOAsync(DateTime startDate, DateTime endDate)
+        public async Task<List<ImportOrderDTO>> GetByDateRangeBALDTOAsync(DateTime startDate, DateTime endDate)
         {
             try
             {
                 var importOrders = await _importOrderRepo.GetByDateRangeAsync(startDate, endDate);
-                return importOrders.ToImportOrderBALDTOList();
+                return importOrders.ToImportOrderDTOList();
             }
             catch (Exception)
             {
-                return new List<ImportOrderBALDTO>();
+                return new List<ImportOrderDTO>();
             }
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetByPaymentStatusBALDTOAsync(byte paymentStatus)
+        public async Task<List<ImportOrderDTO>> GetByPaymentStatusBALDTOAsync(byte paymentStatus)
         {
             try
             {
                 var importOrders = await _importOrderRepo.GetByPaymentStatusAsync(paymentStatus);
-                return importOrders.ToImportOrderBALDTOList();
+                return importOrders.ToImportOrderDTOList();
             }
             catch (Exception)
             {
-                return new List<ImportOrderBALDTO>();
+                return new List<ImportOrderDTO>();
             }
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetUnpaidOrdersBALDTOAsync()
+        public async Task<List<ImportOrderDTO>> GetUnpaidOrdersBALDTOAsync()
         {
             return await GetByPaymentStatusBALDTOAsync(0);
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetPartiallyPaidOrdersBALDTOAsync()
+        public async Task<List<ImportOrderDTO>> GetPartiallyPaidOrdersBALDTOAsync()
         {
             return await GetByPaymentStatusBALDTOAsync(1);
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetFullyPaidOrdersBALDTOAsync()
+        public async Task<List<ImportOrderDTO>> GetFullyPaidOrdersBALDTOAsync()
         {
             return await GetByPaymentStatusBALDTOAsync(2);
         }
 
         // Summary Methods for Performance
-        public async Task<List<ImportOrderBALDTO>> GetAllSummaryBALDTOAsync()
+        public async Task<List<ImportOrderDTO>> GetAllSummaryBALDTOAsync()
         {
             try
             {
                 var importOrders = await _importOrderRepo.GetAllDTOAsync();
-                return importOrders.ToImportOrderBALDTOList();
+                return importOrders.ToImportOrderDTOList();
             }
             catch (Exception)
             {
-                return new List<ImportOrderBALDTO>();
+                return new List<ImportOrderDTO>();
             }
         }
 
-        public async Task<List<ImportOrderBALDTO>> GetAllSummaryBALDTOAsync(clsImportOrderFilter filter)
+        public async Task<List<ImportOrderDTO>> GetAllSummaryBALDTOAsync(clsImportOrderFilter filter)
         {
             try
             {
                 var importOrders = await _importOrderRepo.GetAllDTOAsync(filter);
-                return importOrders.ToImportOrderBALDTOList();
+                return importOrders.ToImportOrderDTOList();
             }
             catch (Exception)
             {
-                return new List<ImportOrderBALDTO>();
+                return new List<ImportOrderDTO>();
             }
         }
 
-        public async Task<ImportOrderBALDTO> GetByIdSummaryBALDTOAsync(int importOrderID)
+        public async Task<ImportOrderDTO> GetByIdSummaryBALDTOAsync(int importOrderID)
         {
             try
             {
@@ -340,7 +353,7 @@ namespace BAL.Services
             }
         }
 
-        public async Task<float> GetRemainingAmountAsync(ImportOrderBALDTO importOrderID)
+        public async Task<float> GetRemainingAmountAsync(ImportOrderDTO importOrderID)
         {
             try
             {

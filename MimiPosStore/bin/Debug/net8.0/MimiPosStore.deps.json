@@ -617,6 +617,12 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Http.Features/5.0.17": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "8.0.0",
+          "System.IO.Pipelines": "7.0.0"
+        }
+      },
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore/8.0.18": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Relational": "8.0.18",
@@ -1337,6 +1343,14 @@
           "lib/net8.0/Microsoft.Extensions.DependencyModel.dll": {
             "assemblyVersion": "8.0.0.2",
             "fileVersion": "8.0.1024.46610"
+          }
+        }
+      },
+      "Microsoft.Extensions.Features/8.0.18": {
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Features.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.1825.31706"
           }
         }
       },
@@ -2166,7 +2180,8 @@
       "BAL/1.0.0": {
         "dependencies": {
           "DAL": "1.0.0",
-          "Microsoft.Extensions.Identity.Stores": "8.0.18"
+          "Microsoft.Extensions.Identity.Stores": "8.0.18",
+          "SharedModels": "1.0.0"
         },
         "runtime": {
           "BAL.dll": {
@@ -2181,10 +2196,26 @@
           "Microsoft.AspNetCore.Identity.UI": "8.0.18",
           "Microsoft.EntityFrameworkCore": "8.0.18",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.18",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "8.0.7"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "8.0.7",
+          "SharedModels": "1.0.0"
         },
         "runtime": {
           "DAL.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SharedModels/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.18",
+          "Microsoft.EntityFrameworkCore": "8.0.18",
+          "Microsoft.Extensions.Features": "8.0.18",
+          "Microsoft.Extensions.Identity.Core": "8.0.18"
+        },
+        "runtime": {
+          "SharedModels.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -2576,6 +2607,13 @@
       "path": "microsoft.aspnetcore.cryptography.keyderivation/8.0.18",
       "hashPath": "microsoft.aspnetcore.cryptography.keyderivation.8.0.18.nupkg.sha512"
     },
+    "Microsoft.AspNetCore.Http.Features/5.0.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3jG2xS+dx8DDCGV/F+STdPTg89lX3ao3dF/VEPvJaz3wzBIjuadipTtYNEXDIVuOPZwb6jdmhrX9jkzOIBm5cw==",
+      "path": "microsoft.aspnetcore.http.features/5.0.17",
+      "hashPath": "microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore/8.0.18": {
       "type": "package",
       "serviceable": true,
@@ -2841,6 +2879,13 @@
       "sha512": "sha512-mUBDZZRgZrSyFOsJ2qJJ9fXfqd/kXJwf3AiDoqLD9m6TjY5OO/vLNOb9fb4juC0487eq4hcGN/M2Rh/CKS7QYw==",
       "path": "microsoft.extensions.dependencymodel/8.0.2",
       "hashPath": "microsoft.extensions.dependencymodel.8.0.2.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Features/8.0.18": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TflSnyz8Cc16IWNif+/sbZ5GsCcoD2od8oe6tajW75DbUtYGOsDv3tNRBV+8nRsOz/ETBuMPFAgXbllNdHFQxQ==",
+      "path": "microsoft.extensions.features/8.0.18",
+      "hashPath": "microsoft.extensions.features.8.0.18.nupkg.sha512"
     },
     "Microsoft.Extensions.FileProviders.Abstractions/8.0.0": {
       "type": "package",
@@ -3422,6 +3467,11 @@
       "sha512": ""
     },
     "DAL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SharedModels/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

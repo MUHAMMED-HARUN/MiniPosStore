@@ -1,7 +1,7 @@
 ﻿using BAL.BALDTO;
-using DAL.EF.DTO;
-using DAL.EF.Filters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,6 @@ namespace BAL.BALFilters
 {
     public class clsImportOrderFilterBAL:clsImportOrderFilter
     {
-        public List<BAL.BALDTO.ImportOrderBALDTO> importOrders { get; set; } = new List<ImportOrderBALDTO>();
+        public List<BAL.BALDTO.ImportOrderDTO> importOrders { get; set; } = new List<ImportOrderDTO>();
     }
 }

@@ -1,10 +1,12 @@
-using BAL.BALDTO;
+ 
 using BAL.Interfaces;
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
+using SharedModels.EF.DTO;
+using Microsoft.Data.Sqlite;
 
 namespace MimiPosStore.Controllers
 {
@@ -24,7 +26,7 @@ namespace MimiPosStore.Controllers
         // GET: Suppliers
         public async Task<IActionResult> Index()
         {
-            var suppliers = await _supplierService.GetAllBALDTOAsync();
+            var suppliers = await _supplierService.GetAllAsync();
             return View(suppliers);
         }
 
@@ -97,6 +99,9 @@ namespace MimiPosStore.Controllers
             {
                 return NotFound();
             }
+    
+            ModelState.Remove("ImportOrders");
+            ModelState.Remove("Person");
 
             if (ModelState.IsValid)
             {
@@ -136,14 +141,21 @@ namespace MimiPosStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var result = await _supplierService.DeleteAsync(id);
+            try
+            {
+
+            var  result = await _supplierService.DeleteAsync(id);
             if (result)
             {
                 TempData["SuccessMessage"] = "تم حذف المورد بنجاح";
             }
-            else
+            }
+            catch(Exception e)
             {
+
+          
                 TempData["ErrorMessage"] = "حدث خطأ أثناء حذف المورد";
+            
             }
             return RedirectToAction(nameof(Index));
         }
@@ -156,7 +168,7 @@ namespace MimiPosStore.Controllers
                 return NotFound();
             }
 
-            var supplier = await _supplierService.GetByIdBALDTOAsync(id.Value);
+            var supplier = await _supplierService.GetByIdAsync(id.Value);
             if (supplier == null)
             {
                 return NotFound();
@@ -181,14 +193,14 @@ namespace MimiPosStore.Controllers
                 return View();
             }
 
-            SupplierBALDTO supplier = null;
+            clsSupplier supplier = null;
 
             switch (searchType)
             {
                 case "SupplierID":
                     if (int.TryParse(searchValue, out int supplierId))
                     {
-                        supplier = await _supplierService.GetByIdBALDTOAsync(supplierId);
+                        supplier = await _supplierService.GetByIdAsync(supplierId);
                     }
                     else
                     {
@@ -203,7 +215,7 @@ namespace MimiPosStore.Controllers
                         var existingSupplier = await _supplierService.GetByPersonIdAsync(personId);
                         if (existingSupplier != null)
                         {
-                            supplier = await _supplierService.GetByIdBALDTOAsync(existingSupplier.ID);
+                            supplier = await _supplierService.GetByIdAsync(existingSupplier.ID);
                         }
                     }
                     else
@@ -220,7 +232,7 @@ namespace MimiPosStore.Controllers
                         var existingSupplier = await _supplierService.GetByPersonIdAsync(person.ID);
                         if (existingSupplier != null)
                         {
-                            supplier = await _supplierService.GetByIdBALDTOAsync(existingSupplier.ID);
+                            supplier = await _supplierService.GetByIdAsync(existingSupplier.ID);
                         }
                     }
                     break;

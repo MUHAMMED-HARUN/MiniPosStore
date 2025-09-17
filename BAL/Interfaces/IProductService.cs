@@ -1,18 +1,19 @@
-using DAL.EF.Models;
-using BAL.BALDTO;
+using SharedModels.EF.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.EF.Filters;
+using SharedModels.EF.Filters;
+using SharedModels.EF.DTO;
 
 namespace BAL.Interfaces
 {
     public interface IProductService
     {
         Task<List<clsProduct>> GetAllProductsAsync();
-        Task<List<ProductBALDTO>> GetAllProductsAsync(clsProductFilter Filter);
+        Task<List<ProductDTO>> GetAllProductsAsync(clsProductFilter Filter);
         Task<clsProduct> GetProductByIdAsync(int id);
         Task<clsProduct> CreateProductAsync(clsProduct product, string currentUserId, string uploadPath);
         Task<clsProduct> UpdateProductAsync(clsProduct product, string currentUserId, string uploadPath);
@@ -26,12 +27,12 @@ namespace BAL.Interfaces
         Task<clsUnitOfMeasure> GetUOMByIdAsync(int id);
         
         // BALDTO Methods
-        Task<List<ProductBALDTO>> GetAllProductsBALDTOAsync();
-        Task<ProductBALDTO> GetProductByIdBALDTOAsync(int id);
-        Task<ProductBALDTO> GetByIdBALDTOAsync(int id);
-        Task<bool> CreateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath);
-        Task<bool> UpdateProductBALDTOAsync(ProductBALDTO productBALDTO, string currentUserId, string uploadPath);
-        Task<List<ProductBALDTO>> SearchProductsBALDTOAsync(string searchTerm);
-        Task<ProductBALDTO> SearchProductByNameBALDTOAsync(string searchTerm);
+        Task<List<ProductDTO>> GetAllProductsBALDTOAsync();
+        Task<ProductDTO> GetProductByIdBALDTOAsync(int id);
+        Task<ProductDTO> GetByIdBALDTOAsync(int id);
+        Task<bool> CreateProductDTOAsync(ProductDTO ProductDTO, string currentUserId, string uploadPath);
+        Task<bool> UpdateProductDTOAsync(ProductDTO ProductDTO, string currentUserId, string uploadPath);
+        Task<List<ProductDTO>> SearchProductsBALDTOAsync(string searchTerm);
+        Task<ProductDTO> SearchProductByNameBALDTOAsync(string searchTerm);
     }
 }

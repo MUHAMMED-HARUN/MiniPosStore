@@ -1,5 +1,5 @@
-@model BAL.BALDTO.ImportOrderBALDTO
-@using BAL.BALDTO;
+@model SharedModels.EF.DTO.ImportOrderDTO
+ 
 @{
     ViewData["Title"] = "تفاصيل أمر الاستيراد";
 }
@@ -29,18 +29,18 @@
                     <dd class="col-sm-8">@Model.SupplierAddress</dd>
 
                     <dt class="col-sm-4">تاريخ الاستيراد:</dt>
-                    <dd class="col-sm-8">@Model.FormattedImportDate</dd>
+                    <dd class="col-sm-8">@Model.ImportDate</dd>
 
                     <dt class="col-sm-4">المبلغ الإجمالي:</dt>
-                    <dd class="col-sm-8">@Model.FormattedTotalAmount</dd>
+                    <dd class="col-sm-8">@Model.</dd>
 
                     <dt class="col-sm-4">المبلغ المدفوع:</dt>
-                    <dd class="col-sm-8">@Model.FormattedPaidAmount</dd>
+                    <dd class="col-sm-8">@Model.PaidAmount</dd>
 
                     <dt class="col-sm-4">المبلغ المتبقي:</dt>
                     <dd class="col-sm-8">
-                        <span class="@(Model.IsNotPaid ? "text-danger" : Model.IsPartiallyPaid ? "text-warning" : "text-success")">
-                            @Model.FormattedRemainingAmount
+                        <span class="@(Model.PaymentStatus == (byte)BAL.clsGlobal.enPaymentStatus.Completed ? "text-danger" : Model.PaymentStatus == (byte)BAL.clsGlobal.enPaymentStatus.PendingForPayment ? "text-warning" : "text-success")">
+                            @(Model.TotalAmount - Model.PaidAmount)
                         </span>
                     </dd>
 
@@ -135,21 +135,21 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="text-center">
-                            <h4 class="text-primary">@Model.FormattedTotalAmount</h4>
+                            <h4 class="text-primary">@Model.TotalAmount</h4>
                             <small class="text-muted">المبلغ الإجمالي</small>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="text-center">
-                            <h4 class="text-success">@Model.FormattedPaidAmount</h4>
+                            <h4 class="text-success">@Model.PaidAmount</h4>
                             <small class="text-muted">المبلغ المدفوع</small>
                         </div>
                     </div>
                 </div>
                 <hr>
                 <div class="text-center">
-                    <h4 class="@(Model.IsNotPaid ? "text-danger" : Model.IsPartiallyPaid ? "text-warning" : "text-success")">
-                        @Model.FormattedRemainingAmount
+                    <h4 class="@(Model.PaidAmount==0 ? "text-danger" : Model.PaidAmount<Model.TotalAmount ? "text-warning" : "text-success")">
+                        @(Model.TotalAmount - Model.PaidAmount)
                     </h4>
                     <small class="text-muted">المبلغ المتبقي</small>
                 </div>
@@ -177,7 +177,7 @@
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle fa-2x"></i>
                         <h5>معلق للدفع</h5>
-                        <p class="mb-0">المتبقي: @Model.FormattedRemainingAmount</p>
+                        <p class="mb-0">المتبقي: @(Model.TotalAmount - Model.PaidAmount)</p>
                     </div>
                 }
                 else
@@ -185,7 +185,7 @@
                     <div class="alert alert-danger">
                         <i class="fas fa-times-circle fa-2x"></i>
                         <h5>معلق </h5>
-                        <p class="mb-0">المطلوب: @Model.FormattedTotalAmount</p>
+                        <p class="mb-0">المطلوب: @Model.TotalAmount</p>
                     </div>
                 }
             </div>

@@ -1,5 +1,5 @@
-@model BAL.BALDTO.OrderBALDTO
-@using BAL.BALDTO;
+@model SharedModels.EF.DTO.OrderDTO
+ 
 @{
     ViewData["Title"] = "تفاصيل الطلب";
 }
@@ -331,7 +331,7 @@
                         <div class="col-md-3">
                             <strong>تاريخ العملية:</strong>
                             <br />
-                            <span class="text-muted">@Model.ActionDate.ToString("dd/MM/yyyy HH:mm")</span>
+                            <span class="text-muted">@Model.ActionDate</span>
                         </div>
                         <div class="col-md-3">
                             <strong>نوع العملية:</strong>

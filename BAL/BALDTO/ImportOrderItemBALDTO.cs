@@ -1,8 +1,8 @@
-using DAL.EF.DTO;
+using SharedModels.EF.DTO;
 
 namespace BAL.BALDTO
 {
-    public class ImportOrderItemBALDTO : ImportOrderItemDTO
+    public class ImportOrderItemDTO : ImportOrderItemDTO
     {
         // خصائص إضافية خاصة بـ BAL
         public string FormattedSellingPrice => $"{SellingPrice:N2} {CurrencyType}";

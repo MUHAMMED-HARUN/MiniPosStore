@@ -1,9 +1,9 @@
 using BAL;
-using BAL.BALDTO;
+ 
 using BAL.Interfaces;
 using BAL.Mappers;
-using DAL.EF.DTO;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -14,6 +14,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
 
 namespace MimiPosStore.Controllers
 {
@@ -39,7 +41,7 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: ImportOrders
-        public async Task<IActionResult> Index(BAL.BALFilters.clsImportOrderFilterBAL filter)
+        public async Task<IActionResult> Index(clsImportOrderFilter filter)
         {
             try
             {
@@ -56,7 +58,7 @@ namespace MimiPosStore.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل قائمة أوامر الاستيراد: " + ex.Message;
-                return View(new BAL.BALFilters.clsImportOrderFilterBAL { importOrders = new List<ImportOrderBALDTO>() });
+                return View(new clsImportOrderFilter { importOrders = new List<ImportOrderDTO>() });
             }
         }
 
@@ -64,7 +66,7 @@ namespace MimiPosStore.Controllers
         public async Task<IActionResult> Create()
         {
             await PopulateDropDowns();
-            var importOrder = new ImportOrderBALDTO 
+            var importOrder = new ImportOrderDTO 
             { 
                 ImportDate = DateTime.Now,
                 PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Pending), // غير مدفوع
@@ -76,7 +78,7 @@ namespace MimiPosStore.Controllers
         // POST: ImportOrders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ImportOrderBALDTO importOrderBALDTO)
+        public async Task<IActionResult> Create(ImportOrderDTO ImportOrderDTO)
         {
 
             List<string> Column = new List<string>();
@@ -93,9 +95,9 @@ namespace MimiPosStore.Controllers
             {
                 try
                 {
-                    importOrderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Pending);
+                    ImportOrderDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Pending);
 
-                    var result = await _importOrderService.AddBALDTOAsync(importOrderBALDTO);
+                    var result = await _importOrderService.AddBALDTOAsync(ImportOrderDTO);
                     if (result)
                     {
                         TempData["SuccessMessage"] = "تم إضافة أمر الاستيراد بنجاح";
@@ -113,7 +115,7 @@ namespace MimiPosStore.Controllers
             }
             
             await PopulateDropDowns();
-            return View(importOrderBALDTO);
+            return View(ImportOrderDTO);
         }
 
         // GET: ImportOrders/Edit/5
@@ -126,15 +128,22 @@ namespace MimiPosStore.Controllers
             }
 
             await PopulateDropDowns();
+            
+            // Ensure ImportOrderItems is not null
+            if (importOrder.ImportOrderItems == null)
+            {
+                importOrder.ImportOrderItems = new List<ImportOrderItemDTO>();
+            }
+
             return View(importOrder);
         }
 
         // POST: ImportOrders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ImportOrderBALDTO importOrderBALDTO, string ItemIds = null)
+        public async Task<IActionResult> Edit(int id, ImportOrderDTO ImportOrderDTO, string ItemIds = null)
         {
-            if (id != importOrderBALDTO.ImportOrderID)
+            if (id != ImportOrderDTO.ImportOrderID)
             {
                 return NotFound();
             }
@@ -153,7 +162,7 @@ namespace MimiPosStore.Controllers
             {
                 try
                 {
-                    var result = await _importOrderService.UpdateBALDTOAsync(importOrderBALDTO);
+                    var result = await _importOrderService.UpdateBALDTOAsync(ImportOrderDTO);
                     if (result)
                     {
                         // إذا كانت هناك قائمة ItemIds، استخدمها بدلاً من العناصر الموجودة
@@ -212,7 +221,7 @@ namespace MimiPosStore.Controllers
             }
             
             await PopulateDropDowns();
-            return View(importOrderBALDTO);
+            return View(ImportOrderDTO);
         }
 
         // GET: ImportOrders/Details/5
@@ -294,7 +303,7 @@ namespace MimiPosStore.Controllers
         // POST: ImportOrders/AddItem
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddItem(ImportOrderItemBALDTO importOrderItemBALDTO)
+        public async Task<IActionResult> AddItem(ImportOrderItemDTO ImportOrderItemDTO)
         {
             ModelState.Remove("UOMName");
             ModelState.Remove("UOMSymbol");
@@ -307,7 +316,7 @@ namespace MimiPosStore.Controllers
             {
                 try
                 {
-                    var result = await _importOrderItemService.AddBALDTOAsync(importOrderItemBALDTO);
+                    var result = await _importOrderItemService.AddBALDTOAsync(ImportOrderItemDTO);
                     if (result)
                     {
                         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -346,21 +355,22 @@ namespace MimiPosStore.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Edit), new { id = importOrderItemBALDTO.ImportOrderID });
+            return RedirectToAction(nameof(Edit), new { id = ImportOrderItemDTO.ImportOrderID });
         }
 
         // POST: ImportOrders/UpdateItem
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateItem(ImportOrderItemBALDTO importOrderItemBALDTO)
+        public async Task<IActionResult> UpdateItem(clsImportOrderItem ImportOrderItem)
         {
-            ModelState.Remove("ProductName");
-            
+            ModelState.Remove("Product");
+            ModelState.Remove("ImportOrder");
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _importOrderItemService.UpdateBALDTOAsync(importOrderItemBALDTO);
+                    var result = await _importOrderItemService.UpdateBALDTOAsync(ImportOrderItem);
                     if (result)
                     {
                         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -399,7 +409,7 @@ namespace MimiPosStore.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Edit), new { id = importOrderItemBALDTO.ImportOrderID });
+            return RedirectToAction(nameof(Edit), new { id = ImportOrderItem.ID });
         }
 
         // POST: ImportOrders/DeleteItem
@@ -499,6 +509,27 @@ namespace MimiPosStore.Controllers
             }
         }
 
+        // GET: ImportOrders/GetEditImportOrderItemPartial
+        [HttpGet]
+        public async Task<IActionResult> GetEditImportOrderItemPartial(int itemId)
+        {
+            try
+            {
+                var importOrderItem = await _importOrderItemService.GetByIdAsync(itemId);
+                if (importOrderItem != null)
+                {
+                    // Populate ViewBag with necessary data for the partial view
+                    await PopulateDropDowns();
+                    return PartialView("_EditImportOrderItem", importOrderItem);
+                }
+                return Json(new { success = false, message = "العنصر غير موجود" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         // GET: ImportOrders/UpdatePaymentStatus
         [HttpGet]
         public async Task<IActionResult> UpdatePaymentStatus(int id, byte paymentStatus)
@@ -584,8 +615,9 @@ namespace MimiPosStore.Controllers
             try
             {
                 // تحميل قائمة الموردين
-                var suppliers = await _supplierService.GetAllBALDTOAsync();
-                ViewBag.SupplierList = new SelectList(suppliers, "SupplierID", "ShopName");
+                var suppliers = await _supplierService.GetAllAsync();
+        
+                ViewBag.SupplierList = new SelectList(suppliers, "ID", "StoreName");
 
                 // تحميل قائمة المنتجات
                 var products = await _productService.GetAllProductsBALDTOAsync();
@@ -597,8 +629,8 @@ namespace MimiPosStore.Controllers
             catch (Exception ex)
             {
                 // في حالة حدوث خطأ، إعداد قوائم فارغة
-                ViewBag.SupplierList = new SelectList(new List<SupplierBALDTO>(), "SupplierID", "ShopName");
-                ViewBag.ProductList = new SelectList(new List<ProductBALDTO>(), "ID", "Name");
+                ViewBag.SupplierList = new SelectList(new List<SupplierDTO>(), "SupplierID", "ShopName");
+                ViewBag.ProductList = new SelectList(new List<ProductDTO>(), "ID", "Name");
                 ViewBag.PaymentStatusList = new SelectList(new[]
                 {
                     new { Key = (byte)0, Value = "غير مدفوع" },

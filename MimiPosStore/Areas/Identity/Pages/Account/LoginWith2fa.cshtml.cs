@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 
 namespace MimiPosStore.Areas.Identity.Pages.Account
 {

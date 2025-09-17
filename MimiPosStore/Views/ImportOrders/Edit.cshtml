@@ -1,5 +1,6 @@
-@model BAL.BALDTO.ImportOrderBALDTO
-@using BAL.BALDTO;
+@using SharedModels.EF.DTO
+@model SharedModels.EF.DTO.ImportOrderDTO
+ 
 @{
     ViewData["Title"] = "تعديل أمر الاستيراد";
 }
@@ -22,7 +23,7 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label asp-for="SupplierID" class="control-label">المورد</label>
-                        <select asp-for="SupplierID" class="form-control" asp-items="ViewBag.SupplierList">
+                        <select asp-for="SupplierID" class="form-control"  asp-items="ViewBag.SupplierList" >
                             <option value="">-- اختر المورد --</option>
                         </select>
                         <span asp-validation-for="SupplierID" class="text-danger"></span>
@@ -117,11 +118,11 @@
                 </h5>
             </div>
             <div class="card-body">
-                <p><strong>المبلغ الإجمالي:</strong> @Model.FormattedTotalAmount</p>
-                <p><strong>المبلغ المدفوع:</strong> @Model.FormattedPaidAmount</p>
+                <p><strong>المبلغ الإجمالي:</strong> @Model.TotalAmount</p>
+                <p><strong>المبلغ المدفوع:</strong> @Model.PaidAmount</p>
                 <p><strong>المبلغ المتبقي:</strong> 
-                    <span class="@(Model.IsNotPaid ? "text-danger" : Model.IsPartiallyPaid ? "text-warning" : "text-success")">
-                        @Model.FormattedRemainingAmount
+                    <span class="@(Model.PaidAmount==0 ? "text-danger" : Model.PaidAmount<Model.TotalAmount ? "text-warning" : "text-success")">
+                        @(Model.TotalAmount - Model.PaidAmount)
                     </span>
                 </p>
                 <p><strong>عدد العناصر:</strong> @Model.ItemsCount</p>
@@ -140,7 +141,7 @@
             </div>
             <form asp-action="AddItem" method="post">
                 <div class="modal-body">
-                    @await Html.PartialAsync("_AddImportOrderItem", new ImportOrderItemBALDTO { ImportOrderID = Model.ImportOrderID })
+                    @await Html.PartialAsync("_AddImportOrderItem", new ImportOrderItemDTO { ImportOrderID = Model.ImportOrderID })
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
@@ -191,13 +192,11 @@
             // تفعيل تعديل العناصر
             $(document).on('click', '.edit-item-btn', function () {
                 var itemId = $(this).data('item-id');
-                $.get('/ImportOrders/GetImportOrderItemForEdit', { itemId: itemId }, function (data) {
-                    if (data.success) {
-                        $('#editItemContent').html(data.html);
-                        $('#editItemModal').modal('show');
-                    } else {
-                        alert('خطأ في تحميل بيانات العنصر');
-                    }
+                $.get('/ImportOrders/GetEditImportOrderItemPartial', { itemId: itemId }, function (html) {
+                    $('#editItemContent').html(html);
+                    $('#editItemModal').modal('show');
+                }).fail(function() {
+                    alert('خطأ في تحميل بيانات العنصر');
                 });
             });
 
@@ -206,8 +205,8 @@
                 if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
                     var itemId = $(this).data('item-id');
                     var importOrderId = @Model.ImportOrderID;
-                    
-                    $.post('/ImportOrders/DeleteItem', { itemId: itemId, importOrderId: importOrderId }, function (data) {
+                            var token = $('input[name="__RequestVerificationToken"]').val();
+                    $.post('/ImportOrders/DeleteItem', { itemId: itemId, importOrderId: importOrderId ,__RequestVerificationToken: token}, function (data) {
                         if (data.success) {
                             location.reload();
                         } else {

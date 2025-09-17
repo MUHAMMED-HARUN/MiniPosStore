@@ -1,9 +1,9 @@
-using BAL.BALDTO;
+
 using BAL.Interfaces;
 using BAL.Mappers;
-using DAL.EF.DTO;
-using DAL.EF.Filters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using System;
 using System.Collections.Generic;
@@ -92,21 +92,27 @@ namespace BAL.Services
 		}
 
 		// BALDTO Methods
-		public async Task<OrderBALDTO> GetByIdBALDTOAsync(int OrderID)
+		public async Task<OrderDTO> GetByIdBALDTOAsync(int OrderID)
 		{
-			var order = await _orderRepo.GetByIdAsync(OrderID);
-			return order?.ToOrderBALDTO();
+			clsOrderFilter filter = new clsOrderFilter();
+			filter.OrderID = OrderID;
+			var order = await _orderRepo.GetAllDTOAsync(filter);
+
+			if (order.FirstOrDefault() != null)
+				order.FirstOrDefault().ID = order.FirstOrDefault().OrderID;
+
+			return order.FirstOrDefault();
 		}
 
-		public async Task<List<OrderBALDTO>> GetAllBALDTOAsync()
+		public async Task<List<OrderDTO>> GetAllBALDTOAsync()
 		{
 			var orders = await _orderRepo.GetAllAsync();
-			return orders.ToOrderBALDTOList();
+			return orders.ToOrderDTOList();
 		}
-      	public async   Task<List<OrderBALDTO>> GetAllOrdersDTOAsync(clsOrderFilter Filter)
+      	public async   Task<List<OrderDTO>> GetAllOrdersDTOAsync(clsOrderFilter Filter)
 		{
 			List<OrderDTO> dalDTO =await _orderRepo.GetAllDTOAsync(Filter);
-			List<OrderBALDTO> BalOrderDTO = dalDTO.Select(o => new OrderBALDTO
+			List<OrderDTO> BalOrderDTO = dalDTO.Select(o => new OrderDTO
 			{
 				ID=o.OrderID,
 				CustomerID=o.CustomerID,
@@ -124,50 +130,50 @@ namespace BAL.Services
 			return BalOrderDTO;
 		}
 
-        public async Task<bool> CreateBALDTOAsync(OrderBALDTO orderBALDTO)
+        public async Task<bool> CreateBALDTOAsync(OrderDTO OrderDTO)
 		{
-			orderBALDTO.ActionByUser=_currentUserServ.GetCurrentUserId();
-            var order = orderBALDTO.ToOrderModel();
+			OrderDTO.ActionByUser=_currentUserServ.GetCurrentUserId();
+            var order = OrderDTO.ToOrderModel();
 			
-			orderBALDTO.ID=	await _orderRepo.CreateAsync(order);
-			return orderBALDTO.ID > 0;
+			OrderDTO.ID=	await _orderRepo.CreateAsync(order);
+			return OrderDTO.ID > 0;
         }
 
 
-        public async Task<bool> UpdateBALDTOAsync(OrderBALDTO orderBALDTO)
+        public async Task<bool> UpdateBALDTOAsync(OrderDTO OrderDTO)
 		{
-			if (IsPaymentCompletedDTO(orderBALDTO))
-				orderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Completed);
+			if (IsPaymentCompletedDTO(OrderDTO))
+				OrderDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.Completed);
 			else
-				orderBALDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.PendingForPayment);
+				OrderDTO.PaymentStatus = ((byte)clsGlobal.enPaymentStatus.PendingForPayment);
 
 
-			orderBALDTO.ActionByUser = _currentUserServ.GetCurrentUserId();
-            var order = orderBALDTO.ToOrderModel();
+			OrderDTO.ActionByUser = _currentUserServ.GetCurrentUserId();
+            var order = OrderDTO.ToOrderModel();
 			return await _orderRepo.UpdateAsync(order);
 		}
 
 		// OrderItems BALDTO Methods
-		public async Task<OrderItemsBALDTO> GetOrderItemByIdBALDTOAsync(int OrderItemID)
+		public async Task<OrderItemsDTO> GetOrderItemByIdBALDTOAsync(int OrderItemID)
 		{
 			var orderItem = await _orderRepo.GetOrderItemByIdDTOAsync(OrderItemID);
 
-			return BAL.Mappers.BALMappers.FromDALToOrderItemsBALDTO( orderItem);
+			return BAL.Mappers.BALMappers.FromDALToOrderItemsDTO( orderItem);
 		}
 
-		public async Task<List<OrderItemsBALDTO>> GetOrderItemsByOrderIdBALDTOAsync(int OrderID)
+		public async Task<List<OrderItemsDTO>> GetOrderItemsByOrderIdBALDTOAsync(int OrderID)
 		{
 			var orderItems = await _orderRepo.GetItemsByOrderID(OrderID);
-			return orderItems.ToOrderItemsBALDTOList();
+			return orderItems.ToOrderItemsDTOList();
 		}
 
-		public async Task<bool> AddItemBALDTOAsync(OrderItemsBALDTO orderItemBALDTO)
+		public async Task<bool> AddItemBALDTOAsync(OrderItemsDTO orderItemBALDTO)
 		{
 			var orderItem = orderItemBALDTO.ToOrderItemModel();
 			return await _orderRepo.AddItem(orderItem);
 		}
 
-		public async Task<bool> UpdateItemBALDTOAsync(OrderItemsBALDTO orderItemBALDTO)
+		public async Task<bool> UpdateItemBALDTOAsync(OrderItemsDTO orderItemBALDTO)
 		{
 			var orderItem = orderItemBALDTO.ToOrderItemModel();
 			return await _orderRepo.UpdateItem(orderItem);
@@ -193,7 +199,7 @@ namespace BAL.Services
             }
         }
 
-        public bool IsPaymentCompletedDTO(OrderBALDTO order)
+        public bool IsPaymentCompletedDTO(OrderDTO order)
         {
             return order.PaidAmount == order.TotalAmount;
         }

@@ -1,7 +1,7 @@
 using BAL.Interfaces;
 using BAL.Services;
 using DAL.EF.AppDBContext;
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using DAL.IRepoServ;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MimiPosStore
 {
+    public class Solution
+    {
+
+    }
     public class Program
     {
 
@@ -56,16 +60,16 @@ namespace MimiPosStore
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
-            string dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "miniPosStoreDB";
-            string dbName = Environment.GetEnvironmentVariable("DB_Name") ?? "MiniPosStore";
-            string dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD") ?? "sa123456";
+            //string dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "miniPosStoreDB";
+            //string dbName = Environment.GetEnvironmentVariable("DB_Name") ?? "MiniPosStore";
+            //string dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD") ?? "sa123456";
 
-            string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=sa;Password={dbPassword};TrustServerCertificate=True;";
-            builder.Services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlServer(connectionString));
+            //string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=sa;Password={dbPassword};TrustServerCertificate=True;";
+            //builder.Services.AddDbContext<AppDBContext>(options =>
+            //    options.UseSqlServer(connectionString));
 
-            //builder.Services.AddDbContext<AppDBContext>(option =>
-            //    option.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
+            builder.Services.AddDbContext<AppDBContext>(option =>
+                option.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
 
             builder.Services.AddIdentity<clsUser, IdentityRole>(options =>
             {
@@ -75,13 +79,22 @@ namespace MimiPosStore
             .AddEntityFrameworkStores<AppDBContext>()
             .AddDefaultTokenProviders();
 
+            var result = new List< clsCustomer>();
+         result.Where(i => i.PersonID == 1)                         // 1. فلترة حسب التاريخ
+          .GroupBy(i => i.PersonID)                        // 2. تجميع حسب رقم المنتج
+          .Select(g => new                                  // 3. اختيار شكل النتيجة
+          {
+              ProductID = g.Key,
+              Count = g.Count()
+          })
+          .OrderBy(x => x.ProductID); 
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
-
+            
             builder.Services.AddSingleton<IEmailSender, FakeEmailSender>();
 
 

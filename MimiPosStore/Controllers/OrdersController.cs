@@ -1,9 +1,9 @@
 using BAL;
-using BAL.BALDTO;
+ 
 using BAL.Interfaces;
 using BAL.Mappers;
-using DAL.EF.DTO;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,7 +35,7 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: Orders
-        public async Task<IActionResult> Index(BAL.BALFilters.clsOrderFilterBAL filter)
+        public async Task<IActionResult> Index(SharedModels.EF.Filters.clsOrderFilter filter)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace MimiPosStore.Controllers
             catch (ArgumentException ex)
             {
                 TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل قائمة الطلبات: " + ex.Message;
-                return View(new BAL.BALFilters.clsOrderFilterBAL { orders = new List<OrderBALDTO>() });
+                return View(new SharedModels.EF.Filters.clsOrderFilter { orders = new List<OrderDTO>() });
             }
         }
 
@@ -64,7 +64,7 @@ namespace MimiPosStore.Controllers
             
             if (order == null)
             {
-                order = new OrderBALDTO();
+                order = new OrderDTO();
                 
                 order.CustomerID = 1;
                 order.OrderDate = DateTime.Now;
@@ -73,10 +73,10 @@ namespace MimiPosStore.Controllers
                 order.PaymentStatus =((int)clsGlobal.enPaymentStatus.Pending);
                 order.ActionDate = DateTime.Now;
                 bool Resut = await _orderService.CreateBALDTOAsync(order);
-                order.OrderID = order.ID;
+           
                 return View(order);
             }
-            order.OrderID = order.ID;
+            
 
             return View(order);
         }
@@ -85,7 +85,7 @@ namespace MimiPosStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(OrderBALDTO orderBALDTO, string? ItemIds = null)
+        public async Task<IActionResult> Save(OrderDTO OrderDTO, string? ItemIds = null)
         {
             ModelState.Remove("PhoneNumber");
             ModelState.Remove("LastName");
@@ -100,15 +100,15 @@ namespace MimiPosStore.Controllers
             try
             {
 
-                    orderBALDTO.ID = orderBALDTO.OrderID;
-                if (orderBALDTO.OrderID == 0)
+                 
+                if (OrderDTO.ID == 0)
                 {
-                    await _orderService.CreateBALDTOAsync(orderBALDTO);
+                    await _orderService.CreateBALDTOAsync(OrderDTO);
                     return Json(new { success = true, message = "تم إضافة الطلب بنجاح" });
                 }
                 else
                 {
-                    bool result = await _orderService.UpdateBALDTOAsync(orderBALDTO);
+                    bool result = await _orderService.UpdateBALDTOAsync(OrderDTO);
                     if (!string.IsNullOrEmpty(ItemIds))
                     {
                         var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
@@ -184,9 +184,9 @@ namespace MimiPosStore.Controllers
                 }
 
                 var orders = await _orderService.SearchOrdersAsync(searchTerm);
-                var orderBALDTOs = orders.ToOrderBALDTOList();
+                var OrderDTOs = orders.ToOrderDTOList();
                 ViewBag.SearchTerm = searchTerm;
-                return View("Index", orderBALDTOs);
+                return View("Index", OrderDTOs);
             }
             catch (Exception ex)
             {
@@ -198,7 +198,7 @@ namespace MimiPosStore.Controllers
         // POST: Orders/AddItem
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddItem(OrderItemsBALDTO orderItemBALDTO)
+        public async Task<IActionResult> AddItem(OrderItemsDTO orderItemBALDTO)
         {
             ModelState.Remove("ProductName");
             ModelState.Remove("ID");
@@ -251,7 +251,7 @@ namespace MimiPosStore.Controllers
 
         // POST: Orders/UpdateItem
         [HttpPost]
-        public async Task<IActionResult> UpdateItem(OrderItemsBALDTO orderItemBALDTO)
+        public async Task<IActionResult> UpdateItem(OrderItemsDTO orderItemBALDTO)
         {
             ModelState.Remove("ProductName");
             
@@ -483,8 +483,8 @@ namespace MimiPosStore.Controllers
             catch (Exception ex)
             {
                 // في حالة حدوث خطأ، إعداد قوائم فارغة
-                ViewBag.CustomerList = new SelectList(new List<CustomerBALDTO>(), "CustomerID", "FirstName");
-                ViewBag.ProductList = new SelectList(new List<ProductBALDTO>(), "ID", "Name");
+                ViewBag.CustomerList = new SelectList(new List<CustomerDTO>(), "CustomerID", "FirstName");
+                ViewBag.ProductList = new SelectList(new List<ProductDTO>(), "ID", "Name");
                 ViewBag.PaymentStatusList = new SelectList(new[]
                 {
                     new { Key = (byte)0, Value = "غير مدفوع" },

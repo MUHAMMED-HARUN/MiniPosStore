@@ -22,494 +22,6 @@ namespace DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DAL.EF.Models.clsCustomer", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("PersonID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PersonID")
-                        .IsUnique();
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsImportOrder", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("ActionByUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ActionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("ActionType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime>("ImportDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("PaidAmount")
-                        .HasColumnType("real");
-
-                    b.Property<byte>("PaymentStatus")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int>("SupplierID")
-                        .HasColumnType("int");
-
-                    b.Property<float>("TotalAmount")
-                        .HasColumnType("real");
-
-                    b.Property<int?>("clsProductID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ActionByUser");
-
-                    b.HasIndex("SupplierID");
-
-                    b.HasIndex("clsProductID");
-
-                    b.ToTable("ImportOrders");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsImportOrderItem", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ImportOrderID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Quantity")
-                        .HasColumnType("real");
-
-                    b.Property<float>("SellingPrice")
-                        .HasColumnType("real");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ImportOrderID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("ImportOrderItems");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsLogRegister", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("ActionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ActionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActoinByUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("NewData")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OldData")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TableName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Version")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ActoinByUser");
-
-                    b.ToTable("LogRegisters");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsOrder", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("ActionByUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ActionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("ActionType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("PaidAmount")
-                        .HasColumnType("real");
-
-                    b.Property<byte>("PaymentStatus")
-                        .HasColumnType("tinyint");
-
-                    b.Property<float>("TotalAmount")
-                        .HasColumnType("real");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ActionByUser");
-
-                    b.HasIndex("CustomerID");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsOrderItem", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("OrderID")
-                        .HasColumnType("int");
-
-                    b.Property<float?>("PriceAdjustment")
-                        .HasColumnType("real");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Quantity")
-                        .HasColumnType("real");
-
-                    b.Property<float>("SellingPrice")
-                        .HasColumnType("real");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OrderID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsPerson", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("People");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            FirstName = "TestFirstName",
-                            LastName = "TestLastName",
-                            PhoneNumber = "12345678901"
-                        });
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsProduct", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("ActionByUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ActionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("ActionType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<float>("AvailableQuantity")
-                        .HasColumnType("real");
-
-                    b.Property<string>("CurrencyType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("RetailPrice")
-                        .HasColumnType("real");
-
-                    b.Property<int>("UOMID")
-                        .HasColumnType("int");
-
-                    b.Property<float>("WholesalePrice")
-                        .HasColumnType("real");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ActionByUser");
-
-                    b.HasIndex("UOMID");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsSupplier", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("PersonID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StoreAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StoreName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PersonID");
-
-                    b.ToTable("Suppliers");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsUnitOfMeasure", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Seymbol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("UnitOfMeasures");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            Name = "قطعة",
-                            Seymbol = "قطعة"
-                        },
-                        new
-                        {
-                            ID = 2,
-                            Name = "كيلوغرام",
-                            Seymbol = "كجم"
-                        },
-                        new
-                        {
-                            ID = 3,
-                            Name = "جرام",
-                            Seymbol = "جم"
-                        },
-                        new
-                        {
-                            ID = 4,
-                            Name = "لتر",
-                            Seymbol = "لتر"
-                        },
-                        new
-                        {
-                            ID = 5,
-                            Name = "متر",
-                            Seymbol = "م"
-                        },
-                        new
-                        {
-                            ID = 6,
-                            Name = "صندوق",
-                            Seymbol = "صندوق"
-                        },
-                        new
-                        {
-                            ID = 7,
-                            Name = "علبة",
-                            Seymbol = "علبة"
-                        },
-                        new
-                        {
-                            ID = 8,
-                            Name = "زجاجة",
-                            Seymbol = "زجاجة"
-                        });
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.clsUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Permissions")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("PersonID")
-                        .IsUnique();
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "764adc46-37cc-47e5-a32e-ff6e2fd1082d",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "d335a001-51ac-48e0-90a0-a8c37c960c74",
-                            Email = "admin@example.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFKVgp4eEIf+qnPbFbQOtYMDTjbovU6Ab+PfCdEBEHkT7zrcONezZszKeSBeY1WSCA==",
-                            Permissions = 0,
-                            PersonID = 1,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "01166ffe-f684-4b70-b194-e03febd0efa5",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -539,7 +51,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fe9db81f-cb23-488f-8392-685b1d4edde7",
+                            Id = "4fb56ba1-7f39-4d6a-bd47-53cb2cf5a10e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -634,8 +146,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "764adc46-37cc-47e5-a32e-ff6e2fd1082d",
-                            RoleId = "fe9db81f-cb23-488f-8392-685b1d4edde7"
+                            UserId = "4641cf40-7c64-45a9-ab17-0441b37991f3",
+                            RoleId = "4fb56ba1-7f39-4d6a-bd47-53cb2cf5a10e"
                         });
                 });
 
@@ -658,147 +170,492 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsCustomer", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsCustomer", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsPerson", "Person")
-                        .WithOne("Customer")
-                        .HasForeignKey("DAL.EF.Models.clsCustomer", "PersonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Person");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("PersonID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PersonID")
+                        .IsUnique();
+
+                    b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsImportOrder", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsImportOrder", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsUser", "User")
-                        .WithMany("ImportOrders")
-                        .HasForeignKey("ActionByUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("DAL.EF.Models.clsSupplier", "Supplier")
-                        .WithMany("ImportOrders")
-                        .HasForeignKey("SupplierID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.HasOne("DAL.EF.Models.clsProduct", null)
-                        .WithMany("ImportedProducts")
-                        .HasForeignKey("clsProductID");
+                    b.Property<string>("ActionByUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Navigation("Supplier");
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
 
-                    b.Navigation("User");
+                    b.Property<byte>("ActionType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("ImportDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("PaidAmount")
+                        .HasColumnType("real");
+
+                    b.Property<byte>("PaymentStatus")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("SupplierID")
+                        .HasColumnType("int");
+
+                    b.Property<float>("TotalAmount")
+                        .HasColumnType("real");
+
+                    b.Property<int?>("clsProductID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ActionByUser");
+
+                    b.HasIndex("SupplierID");
+
+                    b.HasIndex("clsProductID");
+
+                    b.ToTable("ImportOrders");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsImportOrderItem", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsImportOrderItem", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsImportOrder", "ImportOrder")
-                        .WithMany("ImportOrderItems")
-                        .HasForeignKey("ImportOrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("DAL.EF.Models.clsProduct", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Navigation("ImportOrder");
+                    b.Property<int>("ImportOrderID")
+                        .HasColumnType("int");
 
-                    b.Navigation("Product");
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.Property<float>("SellingPrice")
+                        .HasColumnType("real");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ImportOrderID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("ImportOrderItems");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsLogRegister", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsLogRegister", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsUser", "User")
-                        .WithMany("LogRegister")
-                        .HasForeignKey("ActoinByUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("User");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ActionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ActoinByUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NewData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TableName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ActoinByUser");
+
+                    b.ToTable("LogRegisters");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsOrder", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsOrder", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsUser", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("ActionByUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("DAL.EF.Models.clsCustomer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Navigation("Customer");
+                    b.Property<string>("ActionByUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Navigation("User");
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("ActionType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("PaidAmount")
+                        .HasColumnType("real");
+
+                    b.Property<byte>("PaymentStatus")
+                        .HasColumnType("tinyint");
+
+                    b.Property<float>("TotalAmount")
+                        .HasColumnType("real");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ActionByUser");
+
+                    b.HasIndex("CustomerID");
+
+                    b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsOrderItem", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsOrderItem", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsOrder", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("DAL.EF.Models.clsProduct", "Product")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Navigation("Order");
+                    b.Property<int>("OrderID")
+                        .HasColumnType("int");
 
-                    b.Navigation("Product");
+                    b.Property<float?>("PriceAdjustment")
+                        .HasColumnType("real");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.Property<float>("SellingPrice")
+                        .HasColumnType("real");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OrderID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsProduct", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsPerson", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsUser", "User")
-                        .WithMany("Products")
-                        .HasForeignKey("ActionByUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("DAL.EF.Models.clsUnitOfMeasure", "UnitOfMeasure")
-                        .WithMany()
-                        .HasForeignKey("UOMID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Navigation("UnitOfMeasure");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Navigation("User");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("People");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            FirstName = "TestFirstName",
+                            LastName = "TestLastName",
+                            PhoneNumber = "12345678901"
+                        });
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsSupplier", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsProduct", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsPerson", "Person")
-                        .WithMany("Suppliers")
-                        .HasForeignKey("PersonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Person");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("ActionByUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("ActionType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<float>("AvailableQuantity")
+                        .HasColumnType("real");
+
+                    b.Property<string>("CurrencyType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("RetailPrice")
+                        .HasColumnType("real");
+
+                    b.Property<int>("UOMID")
+                        .HasColumnType("int");
+
+                    b.Property<float>("WholesalePrice")
+                        .HasColumnType("real");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ActionByUser");
+
+                    b.HasIndex("UOMID");
+
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsUser", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsSupplier", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsPerson", "Person")
-                        .WithOne("User")
-                        .HasForeignKey("DAL.EF.Models.clsUser", "PersonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Navigation("Person");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("PersonID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StoreAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StoreName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PersonID");
+
+                    b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsUnitOfMeasure", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Seymbol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UnitOfMeasures");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Name = "قطعة",
+                            Seymbol = "قطعة"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Name = "كيلوغرام",
+                            Seymbol = "كجم"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Name = "جرام",
+                            Seymbol = "جم"
+                        },
+                        new
+                        {
+                            ID = 4,
+                            Name = "لتر",
+                            Seymbol = "لتر"
+                        },
+                        new
+                        {
+                            ID = 5,
+                            Name = "متر",
+                            Seymbol = "م"
+                        },
+                        new
+                        {
+                            ID = 6,
+                            Name = "صندوق",
+                            Seymbol = "صندوق"
+                        },
+                        new
+                        {
+                            ID = 7,
+                            Name = "علبة",
+                            Seymbol = "علبة"
+                        },
+                        new
+                        {
+                            ID = 8,
+                            Name = "زجاجة",
+                            Seymbol = "زجاجة"
+                        });
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Permissions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PersonID")
+                        .IsUnique();
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4641cf40-7c64-45a9-ab17-0441b37991f3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "be27903d-385d-415a-a9ae-0836b696430a",
+                            Email = "admin@example.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAIAAYagAAAAELTUIfhcvFzstXePs8mcR8LycEyrDnryZYlnIImWms0h5urPrYAxRNZbIIe2cLBQmA==",
+                            Permissions = 0,
+                            PersonID = 1,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "e2c8b1f9-d67c-4cd9-8348-10ac173fd8f7",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -812,7 +669,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsUser", null)
+                    b.HasOne("SharedModels.EF.Models.clsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -821,7 +678,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsUser", null)
+                    b.HasOne("SharedModels.EF.Models.clsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -836,7 +693,7 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.EF.Models.clsUser", null)
+                    b.HasOne("SharedModels.EF.Models.clsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -845,29 +702,172 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("DAL.EF.Models.clsUser", null)
+                    b.HasOne("SharedModels.EF.Models.clsUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsCustomer", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsCustomer", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsPerson", "Person")
+                        .WithOne("Customer")
+                        .HasForeignKey("SharedModels.EF.Models.clsCustomer", "PersonID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsImportOrder", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsUser", "User")
+                        .WithMany("ImportOrders")
+                        .HasForeignKey("ActionByUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsSupplier", "Supplier")
+                        .WithMany("ImportOrders")
+                        .HasForeignKey("SupplierID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsProduct", null)
+                        .WithMany("ImportedProducts")
+                        .HasForeignKey("clsProductID");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsImportOrderItem", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsImportOrder", "ImportOrder")
+                        .WithMany("ImportOrderItems")
+                        .HasForeignKey("ImportOrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsProduct", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ImportOrder");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsLogRegister", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsUser", "User")
+                        .WithMany("LogRegister")
+                        .HasForeignKey("ActoinByUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsOrder", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsUser", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("ActionByUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsCustomer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsOrderItem", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsOrder", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsProduct", "Product")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsProduct", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsUser", "User")
+                        .WithMany("Products")
+                        .HasForeignKey("ActionByUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsUnitOfMeasure", "UnitOfMeasure")
+                        .WithMany()
+                        .HasForeignKey("UOMID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UnitOfMeasure");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsSupplier", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsPerson", "Person")
+                        .WithMany("Suppliers")
+                        .HasForeignKey("PersonID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsUser", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsPerson", "Person")
+                        .WithOne("User")
+                        .HasForeignKey("SharedModels.EF.Models.clsUser", "PersonID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsCustomer", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsImportOrder", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsImportOrder", b =>
                 {
                     b.Navigation("ImportOrderItems");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsOrder", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsOrder", b =>
                 {
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsPerson", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsPerson", b =>
                 {
                     b.Navigation("Customer");
 
@@ -876,19 +876,19 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsProduct", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsProduct", b =>
                 {
                     b.Navigation("ImportedProducts");
 
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsSupplier", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsSupplier", b =>
                 {
                     b.Navigation("ImportOrders");
                 });
 
-            modelBuilder.Entity("DAL.EF.Models.clsUser", b =>
+            modelBuilder.Entity("SharedModels.EF.Models.clsUser", b =>
                 {
                     b.Navigation("ImportOrders");
 

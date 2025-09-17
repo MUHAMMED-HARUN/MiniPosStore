@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj": {}
+    "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\DAL.csproj": {}
   },
   "projects": {
-    "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj": {
+    "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj",
+        "projectUniqueName": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj",
+        "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\DAL.csproj",
         "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
-        "outputPath": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\obj\\",
+        "outputPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Visual Studio\\Shared\\NuGetPackages"
@@ -31,7 +31,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\SharedModels\\SharedModels.csproj": {
+                "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\SharedModels\\SharedModels.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -81,6 +85,93 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.7, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\SharedModels\\SharedModels.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\SharedModels\\SharedModels.csproj",
+        "projectName": "SharedModels",
+        "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\SharedModels\\SharedModels.csproj",
+        "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
+        "outputPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\SharedModels\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\muham\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.17, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.18, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.18, )"
+            },
+            "Microsoft.Extensions.Features": {
+              "target": "Package",
+              "version": "[8.0.18, )"
+            },
+            "Microsoft.Extensions.Identity.Core": {
+              "target": "Package",
+              "version": "[8.0.18, )"
             }
           },
           "imports": [

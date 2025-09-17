@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BAL.Interfaces;
-using BAL.BALDTO;
-using BAL.BALFilters;
-using DAL.EF.Models;
+ 
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using DAL.EF.Filters;
+using SharedModels.EF.DTO;
+
 
 namespace MimiPosStore.Controllers
 {
@@ -23,7 +24,7 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index(clsCustomerFilterBAL filter)
+        public async Task<IActionResult> Index(clsCustomerFilter filter)
         {
             try
             {
@@ -36,7 +37,7 @@ namespace MimiPosStore.Controllers
             catch (ArgumentException ex)
             {
                 TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل قائمة العملاء: " + ex.Message;
-                return View(new clsCustomerFilterBAL { customers = new List<CustomerBALDTO>() });
+                return View(new clsCustomerFilter { customers = new List<CustomerDTO>() });
             }
         }
 
@@ -193,7 +194,7 @@ namespace MimiPosStore.Controllers
                 return View();
             }
 
-            CustomerBALDTO customer = null;
+            CustomerDTO customer = null;
 
             switch (searchType)
             {

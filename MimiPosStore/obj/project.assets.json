@@ -670,6 +670,23 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Http.Features/5.0.17": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "5.0.1",
+          "System.IO.Pipelines": "5.0.2"
+        },
+        "compile": {
+          "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore/8.0.18": {
         "type": "package",
         "dependencies": {
@@ -1614,6 +1631,19 @@
         },
         "build": {
           "buildTransitive/net6.0/_._": {}
+        }
+      },
+      "Microsoft.Extensions.Features/8.0.18": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Microsoft.Extensions.Features.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Features.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.Extensions.FileProviders.Abstractions/8.0.0": {
@@ -3055,7 +3085,8 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "DAL": "1.0.0",
-          "Microsoft.Extensions.Identity.Stores": "8.0.18"
+          "Microsoft.Extensions.Identity.Stores": "8.0.18",
+          "SharedModels": "1.0.0"
         },
         "compile": {
           "bin/placeholder/BAL.dll": {}
@@ -3072,13 +3103,31 @@
           "Microsoft.AspNetCore.Identity.UI": "8.0.18",
           "Microsoft.EntityFrameworkCore": "8.0.18",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.18",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "8.0.7"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "8.0.7",
+          "SharedModels": "1.0.0"
         },
         "compile": {
           "bin/placeholder/DAL.dll": {}
         },
         "runtime": {
           "bin/placeholder/DAL.dll": {}
+        }
+      },
+      "SharedModels/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.18",
+          "Microsoft.EntityFrameworkCore": "8.0.18",
+          "Microsoft.Extensions.Features": "8.0.18",
+          "Microsoft.Extensions.Identity.Core": "8.0.18"
+        },
+        "compile": {
+          "bin/placeholder/SharedModels.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SharedModels.dll": {}
         }
       }
     }
@@ -3904,6 +3953,25 @@
         "lib/netstandard2.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.xml",
         "microsoft.aspnetcore.cryptography.keyderivation.8.0.18.nupkg.sha512",
         "microsoft.aspnetcore.cryptography.keyderivation.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Http.Features/5.0.17": {
+      "sha512": "3jG2xS+dx8DDCGV/F+STdPTg89lX3ao3dF/VEPvJaz3wzBIjuadipTtYNEXDIVuOPZwb6jdmhrX9jkzOIBm5cw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.http.features/5.0.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/net461/Microsoft.AspNetCore.Http.Features.xml",
+        "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/net5.0/Microsoft.AspNetCore.Http.Features.xml",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.xml",
+        "microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
+        "microsoft.aspnetcore.http.features.nuspec"
       ]
     },
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore/8.0.18": {
@@ -5722,6 +5790,25 @@
         "microsoft.extensions.dependencymodel.8.0.2.nupkg.sha512",
         "microsoft.extensions.dependencymodel.nuspec",
         "useSharedDesignerContext.txt"
+      ]
+    },
+    "Microsoft.Extensions.Features/8.0.18": {
+      "sha512": "TflSnyz8Cc16IWNif+/sbZ5GsCcoD2od8oe6tajW75DbUtYGOsDv3tNRBV+8nRsOz/ETBuMPFAgXbllNdHFQxQ==",
+      "type": "package",
+      "path": "microsoft.extensions.features/8.0.18",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net462/Microsoft.Extensions.Features.dll",
+        "lib/net462/Microsoft.Extensions.Features.xml",
+        "lib/net8.0/Microsoft.Extensions.Features.dll",
+        "lib/net8.0/Microsoft.Extensions.Features.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Features.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Features.xml",
+        "microsoft.extensions.features.8.0.18.nupkg.sha512",
+        "microsoft.extensions.features.nuspec"
       ]
     },
     "Microsoft.Extensions.FileProviders.Abstractions/8.0.0": {
@@ -8438,6 +8525,11 @@
       "type": "project",
       "path": "../DAL/DAL.csproj",
       "msbuildProject": "../DAL/DAL.csproj"
+    },
+    "SharedModels/1.0.0": {
+      "type": "project",
+      "path": "../SharedModels/SharedModels.csproj",
+      "msbuildProject": "../SharedModels/SharedModels.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -8461,11 +8553,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project\\Gitcommit\\MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
+      "projectUniqueName": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
       "projectName": "MimiPosStore",
-      "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
+      "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
       "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
-      "outputPath": "D:\\Project\\Gitcommit\\MiniPosStore\\MimiPosStore\\obj\\",
+      "outputPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\MimiPosStore\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Visual Studio\\Shared\\NuGetPackages"
@@ -8486,11 +8578,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Project\\Gitcommit\\MiniPosStore\\BAL\\BAL.csproj": {
-              "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\BAL\\BAL.csproj"
+            "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\BAL\\BAL.csproj": {
+              "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\BAL\\BAL.csproj"
             },
-            "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj": {
-              "projectPath": "D:\\Project\\Gitcommit\\MiniPosStore\\DAL\\DAL.csproj"
+            "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\DAL.csproj": {
+              "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\DAL.csproj"
             }
           }
         }

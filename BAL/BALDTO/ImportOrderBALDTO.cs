@@ -1,8 +1,8 @@
-using DAL.EF.DTO;
+using SharedModels.EF.DTO;
 
 namespace BAL.BALDTO
 {
-    public class ImportOrderBALDTO : ImportOrderDTO
+    public class ImportOrderDTO : ImportOrderDTO
     {
         // يمكن إضافة خصائص إضافية خاصة بـ BAL هنا إذا لزم الأمر
         public string FormattedTotalAmount => $"{TotalAmount:N2} {clsGlobal.GetCurrencyTypeString(GetCurrencySymbol())}";

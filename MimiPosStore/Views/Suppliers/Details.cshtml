@@ -1,5 +1,5 @@
-@model BAL.BALDTO.SupplierBALDTO
-@using BAL.BALDTO;
+@model SharedModels.EF.Models.clsSupplier
+
 @{
     ViewData["Title"] = "تفاصيل المورد";
 }
@@ -10,33 +10,33 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-4">معرف المورد:</dt>
-        <dd class="col-sm-8">@Model.SupplierID</dd>
+        <dd class="col-sm-8">@Model.ID</dd>
 
         <dt class="col-sm-4">معرف الشخص:</dt>
         <dd class="col-sm-8">@Model.PersonID</dd>
 
         <dt class="col-sm-4">الاسم الأول:</dt>
-        <dd class="col-sm-8">@Model.FirstName</dd>
+        <dd class="col-sm-8">@Model.Person.FirstName</dd>
 
         <dt class="col-sm-4">الاسم الأخير:</dt>
-        <dd class="col-sm-8">@Model.LastName</dd>
+        <dd class="col-sm-8">@Model.Person.LastName</dd>
 
         <dt class="col-sm-4">الاسم الكامل:</dt>
-        <dd class="col-sm-8">@(Model.FirstName + " " + Model.LastName)</dd>
+        <dd class="col-sm-8">@(Model.Person.FirstName + " " + Model.Person.LastName)</dd>
 
         <dt class="col-sm-4">رقم الهاتف:</dt>
-        <dd class="col-sm-8">@Model.PhoneNumber</dd>
+        <dd class="col-sm-8">@Model.Person.PhoneNumber</dd>
 
         <dt class="col-sm-4">اسم المتجر:</dt>
-        <dd class="col-sm-8">@Model.ShopName</dd>
+        <dd class="col-sm-8">@Model.StoreName</dd>
 
         <dt class="col-sm-4">عنوان المتجر:</dt>
-        <dd class="col-sm-8">@Model.Address</dd>
+        <dd class="col-sm-8">@Model.StoreAddress</dd>
     </dl>
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.SupplierID" class="btn btn-warning">
+    <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-warning">
         <i class="fas fa-edit"></i> تعديل
     </a>
     <a asp-action="Index" class="btn btn-secondary">

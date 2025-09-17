@@ -24,7 +24,17 @@ namespace DAL
         {
             var properties = typeof(T).GetProperties();
 
-            var paramList = properties.Select(p => p.Name);
+            var paramList = properties
+     .Where(p =>
+     {
+         var type = Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType;
+
+         return type.IsPrimitive               // int, bool, char, float, ...
+             || type.IsEnum                    // enum
+             || type == typeof(string)         // string
+             || type == typeof(DateTime)       // DateTime
+             || type == typeof(decimal);       // decimal
+     }).Select(p => p.Name);
             var Param = paramList.Select(p => "@" + p);
 
             return string.Join(",", Param);
@@ -34,9 +44,21 @@ namespace DAL
             List<SqlParameter> pramList = new List<SqlParameter>();
 
             var propList = typeof(T).GetProperties();
+            var propl = propList.Where(p =>
+            {
+                var type = Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType;
+
+                return type.IsPrimitive               // int, bool, char, float, ...
+                    || type.IsEnum                    // enum
+                    || type == typeof(string)         // string
+                    || type == typeof(DateTime)       // DateTime
+                    || type == typeof(decimal);       // decimal
+            }).Select(p => p.Name).ToHashSet();
 
             foreach (var prop in propList)
             {
+                if (!propl.Contains(prop.Name))
+                    continue;
                 var value = prop.GetValue(obj) ?? DBNull.Value;
                 SqlParameter parameter = new SqlParameter($"@{prop.Name}", value);
                 pramList.Add(parameter);

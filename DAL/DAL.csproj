@@ -7,9 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EF\DTO\**" />
+    <Compile Remove="EF\Filters\**" />
+    <Compile Remove="EF\Models\**" />
+    <Compile Remove="Mapper\**" />
     <Compile Remove="Migrations54678\**" />
+    <EmbeddedResource Remove="EF\DTO\**" />
+    <EmbeddedResource Remove="EF\Filters\**" />
+    <EmbeddedResource Remove="EF\Models\**" />
+    <EmbeddedResource Remove="Mapper\**" />
     <EmbeddedResource Remove="Migrations54678\**" />
+    <None Remove="EF\DTO\**" />
+    <None Remove="EF\Filters\**" />
+    <None Remove="EF\Models\**" />
+    <None Remove="Mapper\**" />
     <None Remove="Migrations54678\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Mapper\DALMapper.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +42,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharedModels\SharedModels.csproj" />
   </ItemGroup>
 
 </Project>

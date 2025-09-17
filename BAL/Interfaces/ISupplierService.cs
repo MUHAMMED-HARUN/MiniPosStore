@@ -1,6 +1,6 @@
 using BAL;
-using BAL.BALDTO;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +22,8 @@ namespace BAL.Interfaces
         Task<clsSupplier> GetByPersonIdAsync(int personID);
         
         // BALDTO Methods
-        Task<SupplierBALDTO> GetByIdBALDTOAsync(int supplierID);
-        Task<List<SupplierBALDTO>> GetAllBALDTOAsync();
-        Task<bool> AddBALDTOAsync(SupplierBALDTO supplierBALDTO);
-        Task<bool> UpdateBALDTOAsync(SupplierBALDTO supplierBALDTO);
-        
+
+     
         Task<bool> Save();
     }
 }

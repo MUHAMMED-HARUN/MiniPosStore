@@ -1,10 +1,10 @@
-using BAL.BALDTO;
-using BAL.BALFilters;
+
+using SharedModels.EF.Filters;
 using BAL.Interfaces;
 using BAL.Mappers;
-using DAL.EF.DTO;
-using DAL.EF.Filters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using System;
 using System.Collections.Generic;
@@ -59,40 +59,34 @@ namespace BAL.Services
         }
 
         // BALDTO Methods
-        public async Task<CustomerBALDTO> GetByIdBALDTOAsync(int customerID)
+        public async Task<CustomerDTO> GetByIdBALDTOAsync(int customerID)
         {
             var customer = await _customerRepo.GetByIdAsync(customerID);
-            return customer?.ToCustomerBALDTO();
+            return customer?.ToCustomerDTO();
         }
 
-        public async Task<List<CustomerBALDTO>> GetAllBALDTOAsync()
+        public async Task<List<CustomerDTO>> GetAllBALDTOAsync()
         {
-            var customers = await _customerRepo.GetAllAsync();
-            return customers.ToCustomerBALDTOList();
+            clsCustomerFilter filter = new clsCustomerFilter();
+
+            var customers = await _customerRepo.GetAllDTOAsync(filter);
+            return customers;
         }
-      public  async Task<List<CustomerBALDTO>> GetAllBALDTOAsync(clsCustomerFilterBAL filter)
+      public  async Task<List<CustomerDTO>> GetAllBALDTOAsync(clsCustomerFilter filter)
         {
                 var Customer =await _customerRepo.GetAllDTOAsync(filter);
-            return Customer.Select(c => new CustomerBALDTO
-            {
-                CustomerID = c.CustomerID,
-                PersonID = c.PersonID,
-                FirstName = c.FirstName,
-                LastName = c.LastName,
-                PhoneNumber = c.PhoneNumber,
-                RemainingAmount = c.RemainingAmount,
-            }).ToList();
+            return Customer;
    
         }
-        public async Task<bool> AddBALDTOAsync(CustomerBALDTO customerBALDTO)
+        public async Task<bool> AddBALDTOAsync(CustomerDTO CustomerDTO)
         {
-            var customer = customerBALDTO.ToCustomerModel();
+            var customer = CustomerDTO.ToCustomerModel();
             return await _customerRepo.AddAsync(customer);
         }
 
-        public async Task<bool> UpdateBALDTOAsync(CustomerBALDTO customerBALDTO)
+        public async Task<bool> UpdateBALDTOAsync(CustomerDTO CustomerDTO)
         {
-            var customer = customerBALDTO.ToCustomerModel();
+            var customer = CustomerDTO.ToCustomerModel();
             return await _customerRepo.UpdateAsync(customer);
         }
 

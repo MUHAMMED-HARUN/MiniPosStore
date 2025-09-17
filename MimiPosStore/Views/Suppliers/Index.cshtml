@@ -1,5 +1,5 @@
-@model IEnumerable<BAL.BALDTO.SupplierBALDTO>
-@using BAL.BALDTO;
+@model IEnumerable<SharedModels.EF.Models.clsSupplier>
+ 
 @{
     ViewData["Title"] = "قائمة الموردين";
 }
@@ -54,22 +54,22 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.SupplierID</td>
+                <td>@item.ID</td>
                 <td>@item.PersonID</td>
-                <td>@item.FirstName</td>
-                <td>@item.LastName</td>
-                <td>@(item.FirstName + " " + item.LastName)</td>
-                <td>@item.PhoneNumber</td>
-                <td>@item.ShopName</td>
-                <td>@item.Address</td>
+                <td>@item.Person.FirstName</td>
+                <td>@item.Person.LastName</td>
+                <td>@(item.Person.FirstName + " " + item.Person.LastName)</td>
+                <td>@item.Person.PhoneNumber</td>
+                <td>@item.StoreName</td>
+                <td>@item.StoreAddress</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.SupplierID" class="btn btn-info btn-sm">
+                    <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-info btn-sm">
                         <i class="fas fa-eye"></i> تفاصيل
                     </a>
-                    <a asp-action="Edit" asp-route-id="@item.SupplierID" class="btn btn-warning btn-sm">
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i> تعديل
                     </a>
-                    <a asp-action="Delete" asp-route-id="@item.SupplierID" class="btn btn-danger btn-sm">
+                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger btn-sm">
                         <i class="fas fa-trash"></i> حذف
                     </a>
                 </td>

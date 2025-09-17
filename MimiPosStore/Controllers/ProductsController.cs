@@ -1,7 +1,7 @@
 using BAL;
-using BAL.BALDTO;
+ 
 using BAL.Interfaces;
-using DAL.EF.Models;
+using SharedModels.EF.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using SharedModels.EF.DTO;
 
 namespace MimiPosStore.Controllers
 {
@@ -29,7 +30,7 @@ namespace MimiPosStore.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(BAL.BALFilters.clsProductFilterBAL filter)
+        public async Task<IActionResult> Index(SharedModels.EF.Filters.clsProductFilter filter)
         {
             // Populate dropdowns for filters
             ViewBag.UOMList = new SelectList(await _productService.GetAllUOMAsync(), "Name", "Name");
@@ -38,7 +39,7 @@ namespace MimiPosStore.Controllers
             var products = await _productService.GetAllProductsAsync(filter);
 
             // Wrap results in BAL filter model for the view convenience
-        filter.ProductDTOList = products;
+        filter.products = products;
             return View(filter);
         }
 
@@ -54,7 +55,7 @@ namespace MimiPosStore.Controllers
             if (product == null)
             {
 
-                return View(new ProductBALDTO());
+                return View(new ProductDTO());
             }
 
             return View(product);
@@ -63,7 +64,7 @@ namespace MimiPosStore.Controllers
         // POST: Products/Save
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(ProductBALDTO productBALDTO)
+        public async Task<IActionResult> Save(ProductDTO ProductDTO)
         {
             ModelState.Remove("ImagePath");
             ModelState.Remove("ProductImage");
@@ -81,27 +82,27 @@ namespace MimiPosStore.Controllers
                     string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "product", "imgs");
 
                     // معالجة الصورة
-                    if (productBALDTO.ID == 0)
+                    if (ProductDTO.ID == 0)
                     {
                         // إضافة منتج جديد
-                        if (productBALDTO.ProductImage != null)
+                        if (ProductDTO.ProductImage != null)
                         {
-                            productBALDTO.ImagePath = BAL.clsUtil.SaveImage(productBALDTO.ProductImage, uploadPath);
+                            ProductDTO.ImagePath = BAL.clsUtil.SaveImage(ProductDTO.ProductImage, uploadPath);
                         }
-                        await _productService.CreateProductBALDTOAsync(productBALDTO, currentUserId, uploadPath);
+                        await _productService.CreateProductDTOAsync(ProductDTO, currentUserId, uploadPath);
                         TempData["SuccessMessage"] = "تم إضافة المنتج بنجاح";
                     }
                     else
                     {
                         // تحديث منتج موجود
                         // الحصول على المنتج الحالي للحصول على مسار الصورة الحالي
-                        var currentProduct = await _productService.GetProductByIdBALDTOAsync(productBALDTO.ID);
-                        productBALDTO.ImagePath = currentProduct.ImagePath;
+                        var currentProduct = await _productService.GetProductByIdBALDTOAsync(ProductDTO.ID);
+                        ProductDTO.ImagePath = currentProduct.ImagePath;
                         
                         // معالجة الصورة الجديدة إذا تم رفعها
-                        if (productBALDTO.ProductImage != null)
+                        if (ProductDTO.ProductImage != null)
                         {
-                            productBALDTO.ImagePath = BAL.clsUtil.SaveImage(productBALDTO.ProductImage, uploadPath);
+                            ProductDTO.ImagePath = BAL.clsUtil.SaveImage(ProductDTO.ProductImage, uploadPath);
                             // حذف الصورة القديمة
                             if (!string.IsNullOrEmpty(currentProduct.ImagePath))
                             {
@@ -109,7 +110,7 @@ namespace MimiPosStore.Controllers
                             }
                         }
                         
-                        await _productService.UpdateProductBALDTOAsync(productBALDTO, currentUserId, uploadPath);
+                        await _productService.UpdateProductDTOAsync(ProductDTO, currentUserId, uploadPath);
                         TempData["SuccessMessage"] = "تم تحديث المنتج بنجاح";
                     }
 
@@ -122,7 +123,7 @@ namespace MimiPosStore.Controllers
             }
             ViewBag.CurrencyList = new SelectList(clsGlobal.GetCurrencyTypeList(), "Key", "Value");
             await PopulateUOMDropDown();
-            return View(productBALDTO);
+            return View(ProductDTO);
         }
 
         // GET: Products/Delete/5
@@ -177,7 +178,7 @@ namespace MimiPosStore.Controllers
         [HttpGet]
         public async Task<JsonResult> SearchProductByNmae(string term)
         {
-            ProductBALDTO product= await _productService.SearchProductByNameBALDTOAsync(term);
+            ProductDTO product= await _productService.SearchProductByNameBALDTOAsync(term);
 
             return Json(product);
         }

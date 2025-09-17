@@ -1,5 +1,5 @@
-@model BAL.BALFilters.clsImportOrderFilterBAL
-@using BAL.BALDTO;
+@model SharedModels.EF.Filters.clsImportOrderFilter
+ 
 @{
     ViewData["Title"] = "قائمة أوامر الاستيراد";
 }
@@ -119,11 +119,11 @@
                 <td>@item.ImportOrderID</td>
                 <td>@item.SupplierName</td>
                 <td>@item.SupplierPhone</td>
-                <td>@item.FormattedImportDate</td>
-                <td>@item.FormattedTotalAmount</td>
-                <td>@item.FormattedPaidAmount</td>
-                <td class="@(item.IsNotPaid ? "text-danger" : item.IsPartiallyPaid ? "text-warning" : "text-success")">
-                    @item.FormattedRemainingAmount
+                <td>@item.ImportDate</td>
+                <td>@item.TotalAmount</td>
+                <td>@item.PaidAmount</td>
+                <td class="@(item.PaidAmount==0 ? "text-danger" : item.PaidAmount<item.TotalAmount ? "text-warning" : "text-success")">
+                    @(item.TotalAmount - item.PaidAmount)
                 </td>
                 <td>
                     <span class="badge bg-warning">@BAL.clsGlobal.GetPaymentStatusList()[@item.PaymentStatus]</span>

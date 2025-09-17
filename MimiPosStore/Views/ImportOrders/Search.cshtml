@@ -1,5 +1,5 @@
-@model IEnumerable<BAL.BALDTO.ImportOrderBALDTO>
-@using BAL.BALDTO;
+@model IEnumerable<SharedModels.EF.DTO.ImportOrderDTO>
+ 
 @{
     ViewData["Title"] = "البحث في أوامر الاستيراد";
 }
@@ -91,21 +91,18 @@
                                         <td>@item.ImportOrderID</td>
                                         <td>@item.SupplierName</td>
                                         <td>@item.SupplierPhone</td>
-                                        <td>@item.FormattedImportDate</td>
-                                        <td>@item.FormattedTotalAmount</td>
-                                        <td>@item.FormattedPaidAmount</td>
-                                        <td class="@(item.IsNotPaid ? "text-danger" : item.IsPartiallyPaid ? "text-warning" : "text-success")">
-                                            @item.FormattedRemainingAmount
+                                        <td>@item.ImportDate</td>
+                                        <td>@item.TotalAmount</td>
+                                        <td>@item.PaidAmount</td>
+                                        <td class="@(item.PaidAmount==0 ? "text-danger" : item.PaidAmount<item.TotalAmount ? "text-warning" : "text-success")">
+                                            @(item.TotalAmount - item.PaidAmount)
                                         </td>
                                         <td>
-                                            @if (item.IsFullyPaid)
+                                            @if (item.PaymentStatus==(byte)BAL.clsGlobal.enPaymentStatus.Completed)
                                             {
                                                 <span class="badge bg-success">@item.PaymentStatusText</span>
                                             }
-                                            else if (item.IsPartiallyPaid)
-                                            {
-                                                <span class="badge bg-warning">@item.PaymentStatusText</span>
-                                            }
+                                   
                                             else
                                             {
                                                 <span class="badge bg-danger">@item.PaymentStatusText</span>
@@ -125,7 +122,7 @@
                                                 <a asp-action="Edit" asp-route-id="@item.ImportOrderID" class="btn btn-warning btn-sm">
                                                     <i class="fas fa-plus-circle"></i> إضافة عناصر
                                                 </a>
-                                                @if (!item.IsFullyPaid)
+                                                @if (item.PaymentStatus!=(byte)BAL.clsGlobal.enPaymentStatus.Completed)
                                                 {
                                                     <a asp-action="AddPayment" asp-route-id="@item.ImportOrderID" class="btn btn-success btn-sm">
                                                         <i class="fas fa-money-bill"></i> دفع

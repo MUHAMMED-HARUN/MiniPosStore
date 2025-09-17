@@ -1,7 +1,7 @@
 using DAL.EF.AppDBContext;
-using DAL.EF.DTO;
-using DAL.EF.Filters;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
 using DAL.IRepo;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +48,9 @@ namespace DAL.IRepoServ
                 connection.Parameters.AddRange(arr);
 
                 List<ProductDTO> products = new List<ProductDTO>();
+                try
+                {
+
                 using (var reader = connection.ExecuteReader())
                 {
                     while (reader.Read())
@@ -56,6 +59,11 @@ namespace DAL.IRepoServ
                         clsDALUtil.MapToClass<ProductDTO>(reader, ref product);
                         products.Add(product);
                     }
+                }
+                }
+                catch (SqlException e)
+                {
+
                 }
                 return products;
             }

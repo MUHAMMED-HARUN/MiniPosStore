@@ -1,8 +1,8 @@
 using BAL.Interfaces;
-using BAL.BALDTO;
-using BAL.Mappers;
+
 using DAL.IRepo;
-using DAL.EF.Models;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,29 +55,11 @@ namespace BAL.Services
         }
 
         // BALDTO Methods
-        public async Task<SupplierBALDTO> GetByIdBALDTOAsync(int supplierID)
-        {
-            var supplier = await _supplierRepo.GetByIdAsync(supplierID);
-            return supplier?.ToSupplierBALDTO();
-        }
 
-        public async Task<List<SupplierBALDTO>> GetAllBALDTOAsync()
-        {
-            var suppliers = await _supplierRepo.GetAllAsync();
-            return suppliers.ToSupplierBALDTOList();
-        }
 
-        public async Task<bool> AddBALDTOAsync(SupplierBALDTO supplierBALDTO)
-        {
-            var supplier = supplierBALDTO.ToSupplierModel();
-            return await _supplierRepo.AddAsync(supplier);
-        }
 
-        public async Task<bool> UpdateBALDTOAsync(SupplierBALDTO supplierBALDTO)
-        {
-            var supplier = supplierBALDTO.ToSupplierModel();
-            return await _supplierRepo.UpdateAsync(supplier);
-        }
+
+
 
         public async Task<bool> Save()
         {
