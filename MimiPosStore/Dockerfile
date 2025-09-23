@@ -14,6 +14,7 @@ WORKDIR /src
 COPY ["MimiPosStore/MimiPosStore.csproj", "MimiPosStore/"]
 COPY ["BAL/BAL.csproj", "BAL/"]
 COPY ["DAL/DAL.csproj", "DAL/"]
+COPY ["SharedModels/SharedModels.csproj", "SharedModels/"]
 
 # Restore dependencies
 RUN dotnet restore "MimiPosStore/MimiPosStore.csproj"
