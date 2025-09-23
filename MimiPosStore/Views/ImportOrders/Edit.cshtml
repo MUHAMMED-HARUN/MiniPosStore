@@ -192,11 +192,13 @@
             // تفعيل تعديل العناصر
             $(document).on('click', '.edit-item-btn', function () {
                 var itemId = $(this).data('item-id');
-                $.get('/ImportOrders/GetEditImportOrderItemPartial', { itemId: itemId }, function (html) {
-                    $('#editItemContent').html(html);
-                    $('#editItemModal').modal('show');
-                }).fail(function() {
-                    alert('خطأ في تحميل بيانات العنصر');
+                $.get('/ImportOrders/GetImportOrderItemForEdit', { itemId: itemId }, function (data) {
+                    if (data.success) {
+                        $('#editItemContent').html(data.html);
+                        $('#editItemModal').modal('show');
+                    } else {
+                        alert('خطأ في تحميل بيانات العنصر');
+                    }
                 });
             });
 
@@ -205,8 +207,8 @@
                 if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
                     var itemId = $(this).data('item-id');
                     var importOrderId = @Model.ImportOrderID;
-                            var token = $('input[name="__RequestVerificationToken"]').val();
-                    $.post('/ImportOrders/DeleteItem', { itemId: itemId, importOrderId: importOrderId ,__RequestVerificationToken: token}, function (data) {
+                    
+                    $.post('/ImportOrders/DeleteItem', { itemId: itemId, importOrderId: importOrderId }, function (data) {
                         if (data.success) {
                             location.reload();
                         } else {

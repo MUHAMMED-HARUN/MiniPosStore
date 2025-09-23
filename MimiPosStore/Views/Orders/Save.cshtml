@@ -21,7 +21,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input hidden readonly asp-for="ID" />
-
+            @(Model.OrderID=Model.ID)
+            <input hidden readonly asp-for="OrderID" />
 
             <div class="row">
                 <div class="col-md-6">
@@ -84,7 +85,7 @@
             </div>
             <div class="card-body">
                 <div id="customerInfo">
-                    @if (Model.OrderID > 0 && !string.IsNullOrEmpty(Model.FirstName))
+                    @if (Model.ID > 0 && !string.IsNullOrEmpty(Model.FirstName))
                     {
                         <p><strong>الاسم:</strong> @(Model.FirstName + " " + Model.LastName)</p>
                         <p><strong>الهاتف:</strong> @Model.PhoneNumber</p>
@@ -99,7 +100,7 @@
     </div>
 </div>
 
-@if (Model.OrderID > 0)
+@if (Model.ID > 0)
 {
     <div class="row mt-4">
         <div class="col-12">
@@ -142,7 +143,7 @@
     </div>
 }
 
-@if (Model.OrderID > 0)
+@if (Model.ID > 0)
 {
     @await Html.PartialAsync("_AddOrderItem", new OrderItemsDTO { OrderID = Model.ID })
     @await Html.PartialAsync("_EditOrderItem", new OrderItemsDTO { OrderID = Model.ID })

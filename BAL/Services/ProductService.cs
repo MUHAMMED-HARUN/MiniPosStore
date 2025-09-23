@@ -1,11 +1,12 @@
 
 using BAL.Interfaces;
 using BAL.Mappers;
+using DAL.IRepo;
+using Microsoft.AspNetCore.Http;
 using SharedModels.EF.DTO;
 using SharedModels.EF.Filters;
 using SharedModels.EF.Models;
-using DAL.IRepo;
-using Microsoft.AspNetCore.Http;
+using SharedModels.EF.SP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -168,6 +169,11 @@ namespace BAL.Services
             
             // إذا لم يتم رفع صورة جديدة، احتفظ بالصورة الحالية
             return currentImagePath;
+        }
+
+        public async Task<double> GetNetProfit(clsNetProfit_SP profit_SP)
+        {
+         return  await _productRepo.GetNetProfitAsync(profit_SP);
         }
     }
 }

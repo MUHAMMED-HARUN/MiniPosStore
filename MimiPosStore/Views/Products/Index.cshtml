@@ -6,70 +6,201 @@
 
 <h1>قائمة المنتجات</h1>
 
+<!-- إحصائيات سريعة -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">@Model.products.Count</h4>
+                        <p class="card-text">إجمالي المنتجات</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-boxes fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">@Model.products.Count(p => p.AvailableQuantity > 0)</h4>
+                        <p class="card-text">متوفر في المخزن</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">@Model.products.Count(p => p.AvailableQuantity == 0)</h4>
+                        <p class="card-text">نفد من المخزن</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">@Model.products.Count(p => p.AvailableQuantity > 0 && p.AvailableQuantity <= 10)</h4>
+                        <p class="card-text">كمية قليلة</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-exclamation-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="mb-3">
-    <a asp-action="Save" asp-route-id="0" class="btn btn-primary">إضافة منتج جديد</a>
+    <a asp-action="Save" asp-route-id="0" class="btn btn-primary">
+        <i class="fas fa-plus"></i> إضافة منتج جديد
+    </a>
 </div>
 
 <form asp-action="Index" method="get" class="card card-body mb-3">
-    <div class="row g-2">
-        <div class="col-md-3">
-            <label class="form-label">الاسم</label>
-            <input name="Name" value="@Model?.Name" class="form-control" />
+    <div class="row g-3">
+        <!-- الصف الأول: البحث الأساسي -->
+        <div class="col-md-4">
+            <label class="form-label">
+                <i class="fas fa-search"></i> اسم المنتج
+            </label>
+            <input name="Name" value="@Model?.Name" class="form-control" placeholder="ابحث بالاسم..." />
         </div>
-        <div class="col-md-3">
-            <label class="form-label">الوصف</label>
-            <input name="Description" value="@Model?.Description" class="form-control" />
+        <div class="col-md-4">
+            <label class="form-label">
+                <i class="fas fa-info-circle"></i> الوصف
+            </label>
+            <input name="Description" value="@Model?.Description" class="form-control" placeholder="ابحث في الوصف..." />
         </div>
-        <div class="col-md-3">
-            <label class="form-label">سعر البيع من</label>
-            <input name="MinRetailPrice" value="@Model?.MinRetailPrice" type="number" step="0.01" class="form-control" />
+        <div class="col-md-4">
+            <label class="form-label">
+                <i class="fas fa-hashtag"></i> رقم المنتج
+            </label>
+            <input name="Id" value="@Model?.Id" type="number" class="form-control" placeholder="رقم المنتج..." />
         </div>
-        <div class="col-md-3">
-            <label class="form-label">سعر البيع إلى</label>
-            <input name="MaxRetailPrice" value="@Model?.MaxRetailPrice" type="number" step="0.01" class="form-control" />
+
+        <!-- الصف الثاني: فلاتر الأسعار -->
+        <div class="col-md-6">
+            <label class="form-label">
+                <i class="fas fa-tag text-primary"></i> سعر البيع
+            </label>
+            <div class="row g-2">
+                <div class="col-6">
+                    <input name="MinRetailPrice" value="@Model?.MinRetailPrice" type="number" step="0.01" class="form-control" placeholder="من" />
+                </div>
+                <div class="col-6">
+                    <input name="MaxRetailPrice" value="@Model?.MaxRetailPrice" type="number" step="0.01" class="form-control" placeholder="إلى" />
+                </div>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label class="form-label">سعر الجملة من</label>
-            <input name="MinWholesalePrice" value="@Model?.MinWholesalePrice" type="number" step="0.01" class="form-control" />
+        <div class="col-md-6">
+            <label class="form-label">
+                <i class="fas fa-tags text-success"></i> سعر الجملة
+            </label>
+            <div class="row g-2">
+                <div class="col-6">
+                    <input name="MinWholesalePrice" value="@Model?.MinWholesalePrice" type="number" step="0.01" class="form-control" placeholder="من" />
+                </div>
+                <div class="col-6">
+                    <input name="MaxWholesalePrice" value="@Model?.MaxWholesalePrice" type="number" step="0.01" class="form-control" placeholder="إلى" />
+                </div>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label class="form-label">سعر الجملة إلى</label>
-            <input name="MaxWholesalePrice" value="@Model?.MaxWholesalePrice" type="number" step="0.01" class="form-control" />
+
+        <!-- الصف الثالث: فلاتر الكمية والعملة -->
+        <div class="col-md-4">
+            <label class="form-label">
+                <i class="fas fa-boxes text-warning"></i> الكمية المتوفرة
+            </label>
+            <div class="row g-2">
+                <div class="col-6">
+                    <input name="MinAvailableQuantity" value="@Model?.MinAvailableQuantity" type="number" step="0.01" class="form-control" placeholder="من" />
+                </div>
+                <div class="col-6">
+                    <input name="MaxAvailableQuantity" value="@Model?.MaxAvailableQuantity" type="number" step="0.01" class="form-control" placeholder="إلى" />
+                </div>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label class="form-label">الكمية من</label>
-            <input name="MinAvailableQuantity" value="@Model?.MinAvailableQuantity" type="number" step="0.01" class="form-control" />
-        </div>
-        <div class="col-md-3">
-            <label class="form-label">الكمية إلى</label>
-            <input name="MaxAvailableQuantity" value="@Model?.MaxAvailableQuantity" type="number" step="0.01" class="form-control" />
-        </div>
-        <div class="col-md-3">
-            <label class="form-label">العملة</label>
-            <select name="CurrencyType" class="form-select" asp-items="ViewBag.CurrencyList">
-                <option value="">الكل</option>
-                @if (!string.IsNullOrEmpty(Model?.CurrencyType))
+        <div class="col-md-4">
+            <label class="form-label">
+                <i class="fas fa-coins text-info"></i> العملة
+            </label>
+            <select name="CurrencyType" class="form-select">
+                <option value="">جميع العملات</option>
+                @if (ViewBag.CurrencyList != null)
                 {
-                    <option selected value="@Model.CurrencyType">@Model.CurrencyType</option>
+                    @foreach (var item in ViewBag.CurrencyList as SelectList)
+                    {
+                        <option value="@item.Value" selected="@(Model?.CurrencyType == item.Value)">@item.Text</option>
+                    }
                 }
             </select>
         </div>
-        <div class="col-md-3">
-            <label class="form-label">وحدة القياس</label>
-            <select name="UnitOfMeasureName" class="form-select" asp-items="ViewBag.UOMList">
-                <option value="">الكل</option>
-                @if (!string.IsNullOrEmpty(Model?.UnitOfMeasureName))
+        <div class="col-md-4">
+            <label class="form-label">
+                <i class="fas fa-ruler text-secondary"></i> وحدة القياس
+            </label>
+            <select name="UnitOfMeasureName" class="form-select">
+                <option value="">جميع الوحدات</option>
+                @if (ViewBag.UOMList != null)
                 {
-                    <option selected value="@Model.UnitOfMeasureName">@Model.UnitOfMeasureName</option>
+                    @foreach (var item in ViewBag.UOMList as SelectList)
+                    {
+                        <option value="@item.Value" selected="@(Model?.UnitOfMeasureName == item.Value)">@item.Text</option>
+                    }
                 }
             </select>
         </div>
-        <div class="col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-success me-2">تطبيق الفلترة</button>
-            <a asp-action="Index" class="btn btn-secondary">تفريغ</a>
+
+        <!-- الصف الرابع: فلاتر التاريخ -->
+@*         <div class="col-md-6">
+            <label class="form-label">
+                <i class="fas fa-calendar text-primary"></i> ترتيب حسب الافضل مبيعا حسب التاريخ
+            </label>
+            <div class="row g-2">
+                <div class="col-6">
+                    <input name="StartDate" value="@Model?.StartDate?" type="date" class="form-control" />
+                </div>
+                <div class="col-6">
+                    <input name="EndDate" value="@Model?.EndDate?" type="date" class="form-control" />
+                </div>
+            </div>
+        </div> *@
+
+        <!-- الصف الخامس: أزرار التحكم -->
+        <div class="col-md-6 d-flex align-items-end">
+            <div class="btn-group w-100" role="group">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-filter"></i> تطبيق الفلترة
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-eraser"></i> تفريغ الفلاتر
+                </a>
+                <button type="button" class="btn btn-info" onclick="exportToExcel()">
+                    <i class="fas fa-file-excel"></i> تصدير
+                </button>
+            </div>
         </div>
     </div>
-    
 </form>
 
 @if (TempData["SuccessMessage"] != null)
@@ -96,60 +227,140 @@
     </div>
 }
 
-<table class="table table-striped align-middle">
-    <thead>
-        <tr>
-            <th scope="col">الصورة</th>
-            <th scope="col">الاسم</th>
-            <th scope="col">الوصف</th>
-            <th scope="col">سعر البيع</th>
-            <th scope="col">سعر الجملة</th>
-            <th scope="col">الكمية المتوفرة</th>
-            <th scope="col">وحدة القياس</th>
-            <th scope="col">الإجراءات</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.products)
-        {
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
             <tr>
-                <!-- الصورة -->
-                <td>
-                    @if (!string.IsNullOrEmpty(item.ImagePath))
-                    {
-                        <img src="@item.ImagePath" alt="@item.Name" style="width: 60px; height: 60px; object-fit: cover;" class="rounded">
-                    }
-                    else
-                    {
-                        <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
-                            <i class="fas fa-image text-muted"></i>
-                        </div>
-                    }
-                </td>
-
-                <!-- البيانات -->
-                <td>@item.Name</td>
-                <td>@item.Description</td>
-                <td class="text-primary fw-bold">@item.RetailPrice.ToString("C")</td>
-                <td class="text-success fw-bold">@item.WholesalePrice @BAL.clsGlobal.GetCurrencyTypeString(1)</td>
-                <td class="fw-bold @(item.AvailableQuantity > 0 ? "text-success" : "text-danger")">@item.AvailableQuantity</td>
-                <td>@item.UOMName</td>
-
-                <!-- الإجراءات -->
-                <td>
-                    <div class="btn-group" role="group">
-                        <a asp-action="Save" asp-route-id="@item.ID" class="btn btn-sm btn-primary">
-                            <i class="fas fa-edit"></i> تعديل
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm btn-danger">
-                            <i class="fas fa-trash"></i> حذف
-                        </a>
-                    </div>
-                </td>
+                <th scope="col" width="80">
+                    <i class="fas fa-image"></i> الصورة
+                </th>
+                <th scope="col" width="120">
+                    <i class="fas fa-hashtag"></i> رقم المنتج
+                </th>
+                <th scope="col">
+                    <i class="fas fa-tag"></i> اسم المنتج
+                </th>
+                <th scope="col">
+                    <i class="fas fa-info-circle"></i> الوصف
+                </th>
+                <th scope="col" width="120">
+                    <i class="fas fa-tag text-primary"></i> سعر البيع
+                </th>
+                <th scope="col" width="120">
+                    <i class="fas fa-tags text-success"></i> سعر الجملة
+                </th>
+                <th scope="col" width="120">
+                    <i class="fas fa-boxes text-warning"></i> الكمية
+                </th>
+                <th scope="col" width="100">
+                    <i class="fas fa-ruler"></i> الوحدة
+                </th>
+                <th scope="col" width="100">
+                    <i class="fas fa-coins"></i> العملة
+                </th>
+                <th scope="col" width="150">
+                    <i class="fas fa-cogs"></i> الإجراءات
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.products)
+            {
+                <tr class="product-row" data-product-id="@item.ID">
+                    <!-- الصورة -->
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="@item.ImagePath" alt="@item.Name" 
+                                 style="width: 60px; height: 60px; object-fit: cover;" 
+                                 class="rounded shadow-sm" 
+                                 data-bs-toggle="tooltip" 
+                                 title="@item.Name">
+                        }
+                        else
+                        {
+                            <div class="bg-light d-flex align-items-center justify-content-center rounded shadow-sm" 
+                                 style="width: 60px; height: 60px;"
+                                 data-bs-toggle="tooltip" 
+                                 title="لا توجد صورة">
+                                <i class="fas fa-image text-muted"></i>
+                            </div>
+                        }
+                    </td>
+
+                    <!-- رقم المنتج -->
+                    <td>
+                        <span class="badge bg-secondary">#@item.ID</span>
+                    </td>
+
+                    <!-- اسم المنتج -->
+                    <td>
+                        <strong class="text-primary">@item.Name</strong>
+                    </td>
+
+                    <!-- الوصف -->
+                    <td>
+                        <span class="text-muted" title="@item.Description">
+                            @(string.IsNullOrEmpty(item.Description) ? "لا يوجد وصف" : 
+                              (item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description))
+                        </span>
+                    </td>
+
+                    <!-- سعر البيع -->
+                    <td>
+                        <span class="badge bg-primary fs-6">
+                            @item.RetailPrice.ToString("N2")
+                        </span>
+                    </td>
+
+                    <!-- سعر الجملة -->
+                    <td>
+                        <span class="badge bg-success fs-6">
+                            @item.WholesalePrice.ToString("N2")
+                        </span>
+                    </td>
+
+                    <!-- الكمية المتوفرة -->
+                    <td>
+                        <span class="badge @(item.AvailableQuantity > 10 ? "bg-success" : 
+                                              item.AvailableQuantity > 0 ? "bg-warning" : "bg-danger") fs-6">
+                            @item.AvailableQuantity.ToString("N0")
+                        </span>
+                    </td>
+
+                    <!-- وحدة القياس -->
+                    <td>
+                        <span class="badge bg-info">@item.UOMName</span>
+                    </td>
+
+                    <!-- العملة -->
+                    <td>
+                        <span class="badge bg-secondary">@item.CurrencyName</span>
+                    </td>
+
+                    <!-- الإجراءات -->
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Save" asp-route-id="@item.ID" 
+                               class="btn btn-sm btn-outline-primary" 
+                               data-bs-toggle="tooltip" 
+                               title="تعديل المنتج">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.ID" 
+                               class="btn btn-sm btn-outline-danger" 
+                               data-bs-toggle="tooltip" 
+                               title="حذف المنتج"
+                               onclick="return confirm('هل أنت متأكد من حذف هذا المنتج؟')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 
 @if (!Model.products.Any())
@@ -158,4 +369,69 @@
         <i class="fas fa-info-circle"></i>
         لا توجد منتجات مسجلة حالياً.
     </div>
+}
+
+@section Scripts {
+    <script>
+        // دالة تصدير البيانات إلى Excel
+        function exportToExcel() {
+            // إنشاء جدول HTML للتصدير
+            var table = document.querySelector('.table');
+            var clonedTable = table.cloneNode(true);
+            
+            // إزالة أعمدة الإجراءات
+            var actionColumns = clonedTable.querySelectorAll('th:last-child, td:last-child');
+            actionColumns.forEach(function(col) {
+                col.remove();
+            });
+            
+            // إنشاء HTML للتصدير
+            var htmlContent = `
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <title>قائمة المنتجات</title>
+                    <style>
+                        table { border-collapse: collapse; width: 100%; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    <h2>قائمة المنتجات - ${new Date().toLocaleDateString('ar-SA')}</h2>
+                    ${clonedTable.outerHTML}
+                </body>
+                </html>
+            `;
+            
+            // إنشاء ملف للتحميل
+            var blob = new Blob([htmlContent], { type: 'application/vnd.ms-excel' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'قائمة_المنتجات_' + new Date().toISOString().split('T')[0] + '.xls';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // تحسين تجربة المستخدم
+        $(document).ready(function() {
+            // إضافة تأثيرات بصرية للفلاتر
+            $('.form-control, .form-select').on('focus', function() {
+                $(this).addClass('shadow-sm');
+            }).on('blur', function() {
+                $(this).removeClass('shadow-sm');
+            });
+
+            // إضافة مؤشر التحميل عند إرسال النموذج
+            $('form').on('submit', function() {
+                $('button[type="submit"]').html('<i class="fas fa-spinner fa-spin"></i> جاري التحميل...');
+            });
+
+            // إضافة tooltips للأيقونات
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
 }

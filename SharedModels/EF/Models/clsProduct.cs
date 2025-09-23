@@ -19,7 +19,7 @@ namespace SharedModels.EF.Models
         public float WholesalePrice { get; set; }
         public float AvailableQuantity { get; set; }
         public string CurrencyType  { get; set; }
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         [ForeignKey("UnitOfMeasure")]
         public int UOMID {  get; set; }

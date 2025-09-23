@@ -166,16 +166,27 @@ namespace BAL.Services
 			var orderItems = await _orderRepo.GetItemsByOrderID(OrderID);
 			return orderItems.ToOrderItemsDTOList();
 		}
-
-		public async Task<bool> AddItemBALDTOAsync(OrderItemsDTO orderItemBALDTO)
+		public bool IsValidPriceAdjustment(OrderItemsDTO orderItems)
 		{
+			return orderItems.PriceAdjustment>=0&&(orderItems.PriceAdjustment <= orderItems.Quantity * orderItems.SellingPrice);
+        }
+
+        public async Task<bool> AddItemBALDTOAsync(OrderItemsDTO orderItemBALDTO)
+		{
+		
+			if (!IsValidPriceAdjustment(orderItemBALDTO))
+				return false;
+
 			var orderItem = orderItemBALDTO.ToOrderItemModel();
 			return await _orderRepo.AddItem(orderItem);
 		}
 
 		public async Task<bool> UpdateItemBALDTOAsync(OrderItemsDTO orderItemBALDTO)
 		{
-			var orderItem = orderItemBALDTO.ToOrderItemModel();
+            if (!IsValidPriceAdjustment(orderItemBALDTO))
+                return false;
+
+            var orderItem = orderItemBALDTO.ToOrderItemModel();
 			return await _orderRepo.UpdateItem(orderItem);
 		}
 

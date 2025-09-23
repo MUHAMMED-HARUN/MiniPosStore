@@ -196,20 +196,17 @@ namespace BAL.Services
         {
             try
             {
-                // Get the import order
                 clsImportOrderFilter filter = new clsImportOrderFilter();
                 filter.IOID = importOrderID;
-                var importOrder = await _importOrderRepo.GetAllDTOAsync(filter);
-                var order = importOrder.FirstOrDefault();
-                
-                if (order != null)
-                {
-                    // Get the import order items
-                    var items = await _importOrderRepo.GetImportOrderItemsByOrderIdDTOAsync(importOrderID);
-                    order.ImportOrderItems = items ?? new List<ImportOrderItemDTO>();
-                }
-                
-                return order;
+                var importOrders = await _importOrderRepo.GetAllDTOAsync(filter);
+                var importOrder = importOrders.FirstOrDefault();
+                if (importOrder == null)
+                    return null;
+
+                importOrder.ImportOrderItems = await _importOrderRepo.GetImportOrderItemsByOrderIdDTOAsync(importOrder.ImportOrderID);
+                importOrder.ItemsCount = importOrder.ImportOrderItems?.Count ?? 0;
+                return importOrder;
+
             }
             catch (Exception)
             {

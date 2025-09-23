@@ -1,12 +1,13 @@
 using DAL.EF.AppDBContext;
-using SharedModels.EF.DTO;
-using SharedModels.EF.Filters;
-using SharedModels.EF.Models;
 using DAL.IRepo;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
+using SharedModels.EF.Models;
+using SharedModels.EF.SP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,41 +33,45 @@ namespace DAL.IRepoServ
                 .ToListAsync();
         }
 
+        //public async Task<List<ProductDTO>> GetAllProductsAsync(clsProductFilter filter)
+        //{
+        //    string Query = @$"select * from GetProductsFiltered ( {clsDALUtil.GetSqlPrameterString<clsProductFilter>()})";
+
+        //    using (var connection = _context.Database.GetDbConnection().CreateCommand())
+        //    {
+        //        connection.CommandText = Query;
+        //        connection.CommandType = System.Data.CommandType.Text;
+
+        //        if (connection.Connection.State != System.Data.ConnectionState.Open)
+        //            connection.Connection.Open();
+
+        //        var arr = clsDALUtil.GetSqlPrameters<clsProductFilter>(filter).ToArray();
+        //        connection.Parameters.AddRange(arr);
+
+        //        List<ProductDTO> products = new List<ProductDTO>();
+        //        try
+        //        {
+
+        //            using (var reader = connection.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    var product = new ProductDTO();
+        //                    clsDALUtil.MapToClass<ProductDTO>(reader, ref product);
+        //                    products.Add(product);
+        //                }
+        //            }
+        //        }
+        //        catch (SqlException e)
+        //        {
+
+        //        }
+        //        return products;
+        //    }
+        //}
         public async Task<List<ProductDTO>> GetAllProductsAsync(clsProductFilter filter)
         {
-            string Query = @$"select * from GetProductsFiltered ( {clsDALUtil.GetSqlPrameterString<clsProductFilter>()})";
-
-            using (var connection = _context.Database.GetDbConnection().CreateCommand())
-            {
-                connection.CommandText = Query;
-                connection.CommandType = System.Data.CommandType.Text;
-
-                if (connection.Connection.State != System.Data.ConnectionState.Open)
-                    connection.Connection.Open();
-
-                var arr = clsDALUtil.GetSqlPrameters<clsProductFilter>(filter).ToArray();
-                connection.Parameters.AddRange(arr);
-
-                List<ProductDTO> products = new List<ProductDTO>();
-                try
-                {
-
-                using (var reader = connection.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var product = new ProductDTO();
-                        clsDALUtil.MapToClass<ProductDTO>(reader, ref product);
-                        products.Add(product);
-                    }
-                }
-                }
-                catch (SqlException e)
-                {
-
-                }
-                return products;
-            }
+            return await clsDALUtil.ExecuteFilterCommands<ProductDTO, clsProductFilter>(_context, filter, filter.FilterName);
         }
 
 
@@ -83,10 +88,10 @@ namespace DAL.IRepoServ
         {
             product.ActionDate = DateTime.Now;
             product.ActionType = 1; // Create
-            
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
-            
+
             return await GetProductByIdAsync(product.ID);
         }
 
@@ -109,7 +114,7 @@ namespace DAL.IRepoServ
             existingProduct.ActionType = 2; // Update
 
             await _context.SaveChangesAsync();
-            
+
             return await GetProductByIdAsync(product.ID);
         }
 
@@ -117,10 +122,10 @@ namespace DAL.IRepoServ
         {
             if (Product == null)
                 return false;
-          
+
             _context.Products.Update(Product);
             await _context.SaveChangesAsync();
-            
+
             return true;
         }
 
@@ -129,7 +134,7 @@ namespace DAL.IRepoServ
             return await _context.Products
                 .Include(p => p.UnitOfMeasure)
                 .Include(p => p.User)
-                .Where(p => p.Name.Contains(searchTerm) || 
+                .Where(p => p.Name.Contains(searchTerm) ||
                            p.Description.Contains(searchTerm))
                 .ToListAsync();
         }
@@ -166,7 +171,7 @@ namespace DAL.IRepoServ
                     product.AvailableQuantity += item.Quantity;
                     product.ActionDate = DateTime.Now;
                     product.ActionByUser = actionByUser;
-                    product.ActionType = 2 ; // Quantity Change or UpdateMode
+                    product.ActionType = 2; // Quantity Change or UpdateMode
                 }
             }
 
@@ -190,23 +195,23 @@ namespace DAL.IRepoServ
 
             // 2. جهز Dictionary للمنتجات لمزيد من السرعة
             List<int> productIds = orderItems.Select(oi => oi.ProductID).Distinct().ToList();
-            Dictionary<int,clsProduct>? products = await _context.Products
+            Dictionary<int, clsProduct>? products = await _context.Products
                 .Where(p => productIds.Contains(p.ID))
                 .ToDictionaryAsync(p => p.ID);
 
-         
-            Dictionary<int,float> requiredQuantities = orderItems
+
+            Dictionary<int, float> requiredQuantities = orderItems
                 .GroupBy(oi => oi.ProductID)
                 .ToDictionary(g => g.Key, g => g.Sum(oi => oi.Quantity));
 
-           
+
             bool isAvailable = requiredQuantities.All(rq =>
                 products.ContainsKey(rq.Key) && products[rq.Key].AvailableQuantity >= rq.Value);
 
             if (!isAvailable)
-                return false; 
+                return false;
 
-            
+
             foreach (var rq in requiredQuantities)
             {
                 products[rq.Key].AvailableQuantity -= rq.Value;
@@ -221,7 +226,7 @@ namespace DAL.IRepoServ
 
         public async Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm)
         {
-            return await _context.Products.Where(p => p.Name==searchTerm).Include(p => p.UnitOfMeasure).FirstOrDefaultAsync();
+            return await _context.Products.Where(p => p.Name == searchTerm).Include(p => p.UnitOfMeasure).FirstOrDefaultAsync();
         }
         public async Task<List<clsUnitOfMeasure>> GetAllUOMAsync()
         {
@@ -231,6 +236,10 @@ namespace DAL.IRepoServ
         public async Task<clsUnitOfMeasure> GetUOMByIdAsync(int id)
         {
             return await _context.UnitOfMeasures.FindAsync(id);
+        }
+        public async Task<double> GetNetProfitAsync(clsNetProfit_SP profit_SP)
+        {
+            return await clsDALUtil.ExecuteSPCommands<double, clsNetProfit_SP>(_context, profit_SP, profit_SP.SPName);
         }
     }
 }

@@ -1,10 +1,10 @@
-@model SharedModels.EF.Models.clsImportOrderItem
+@model SharedModels.EF.DTO.ImportOrderItemDTO
  
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <input type="hidden" asp-for="ImportOrderID" id="editImportOrderIdInput" />
-<input type="hidden" asp-for="ID" id="editImportOrderItemIdInput" />
+<input type="hidden" asp-for="ImportOrderItemID" id="editImportOrderItemIdInput" />
 
 <div class="row">
     <div class="col-md-6">
@@ -109,10 +109,30 @@ $(document).ready(function () {
         $('#editItemTotalAmount').val(total.toFixed(2));
     }
     
-    // تحديث معلومات المنتج عند تحميل الصفحة
-    $('#editProductSelect').trigger('change');
+    // تحميل بيانات العنصر عند فتح Modal التعديل
+    function loadEditItemData(itemId) {
+        $.get('/ImportOrders/GetImportOrderItemForEdit', { itemId: itemId }, function (data) {
+            if (data.success) {
+                $('#editImportOrderIdInput').val(data.item.importOrderID);
+                $('#editImportOrderItemIdInput').val(data.item.importOrderItemID);
+                $('#editProductSelect').val(data.item.productID);
+                $('#editQuantityInput').val(data.item.quantity);
+                $('#editSellingPriceInput').val(data.item.sellingPrice);
+                
+                // تحديث معلومات المنتج
+                $('#editProductSelect').trigger('change');
+                
+                // حساب المبلغ الإجمالي
+                calculateEditItemTotal();
+            }
+        });
+    }
     
-    // حساب المبلغ الإجمالي عند تحميل الصفحة
-    calculateEditItemTotal();
+    // تفعيل تحميل البيانات عند فتح Modal
+    $('#editItemModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var itemId = button.data('item-id');
+        loadEditItemData(itemId);
+    });
 });
 </script>

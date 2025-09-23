@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 using Microsoft.AspNetCore.Http;
@@ -6,10 +7,12 @@ namespace SharedModels.EF.DTO
 {
     public   class ProductDTO
     {
+        //[Description("ProductID")]
         public int ID { get; set; }
         
         [Required(ErrorMessage = "اسم المنتج مطلوب")]
         [Display(Name = "اسم المنتج")]
+        //[Description("ProductName")]
         public string Name { get; set; }
         
         [Display(Name = "الوصف")]
@@ -43,7 +46,9 @@ namespace SharedModels.EF.DTO
         [Display(Name = "وحدة القياس")]
         public int UOMID { get; set; }
         
-        [Display(Name = "اسم وحدة القياس")] 
+        [Display(Name = "اسم وحدة القياس")]
+        [Description("UnitOfMeasureName")] 
+        
         public string UOMName { get; set; }
         
         [Display(Name = "رمز وحدة القياس")]
@@ -58,5 +63,6 @@ namespace SharedModels.EF.DTO
         [Display(Name = "تاريخ العملية")]
         public DateTime ActionDate { get; set; }
         public IFormFile ProductImage { set; get; }
+        public float SoldCount { get; set; }
     }
 }

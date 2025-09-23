@@ -1,12 +1,12 @@
+using SharedModels.EF.DTO;
+using SharedModels.EF.Filters;
 using SharedModels.EF.Models;
-
+using SharedModels.EF.SP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SharedModels.EF.Filters;
-using SharedModels.EF.DTO;
 
 namespace BAL.Interfaces
 {
@@ -34,5 +34,6 @@ namespace BAL.Interfaces
         Task<bool> UpdateProductDTOAsync(ProductDTO ProductDTO, string currentUserId, string uploadPath);
         Task<List<ProductDTO>> SearchProductsBALDTOAsync(string searchTerm);
         Task<ProductDTO> SearchProductByNameBALDTOAsync(string searchTerm);
+        Task<double> GetNetProfit(clsNetProfit_SP profit_SP);
     }
 }

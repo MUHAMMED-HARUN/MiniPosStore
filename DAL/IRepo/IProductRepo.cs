@@ -1,6 +1,7 @@
 ﻿using SharedModels.EF.DTO;
 using SharedModels.EF.Filters;
 using SharedModels.EF.Models;
+using SharedModels.EF.SP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,6 @@ namespace DAL.IRepo
         Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm);
         Task<List<clsUnitOfMeasure>> GetAllUOMAsync();
         Task<clsUnitOfMeasure> GetUOMByIdAsync(int id);
+        Task<double> GetNetProfitAsync(clsNetProfit_SP profit_SP);
     }
 }

@@ -1,10 +1,13 @@
+using BAL.Interfaces;
 using DAL.EF.AppDBContext;
-using SharedModels.EF.Models;
 using DAL.IRepo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using MimiPosStore.Models;
+using SharedModels.EF.Models;
+using SharedModels.EF.SP;
 using System.Data;
 using System.Diagnostics;
 using System.Linq.Expressions;
@@ -16,10 +19,12 @@ namespace MimiPosStore.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         AppDBContext Context;
-        public HomeController(ILogger<HomeController> logger,AppDBContext appDB)
+        IProductService productService;
+        public HomeController(ILogger<HomeController> logger,AppDBContext appDB,IProductService product)
         {
             _logger = logger;
             Context = appDB;
+            productService = product;
         }
         
         public async Task<IActionResult> Index()
@@ -28,24 +33,30 @@ namespace MimiPosStore.Controllers
             {
                 // إحصائيات سريعة
                 var today = DateTime.Today;
-                
+
                 var ordersCount = await Context.Orders
                     .Where(o => o.OrderDate.Date == today)
                     .CountAsync();
-                
+
                 var productsCount = await Context.Products.CountAsync();
                 var customersCount = await Context.Customers.CountAsync();
                 var suppliersCount = await Context.Suppliers.CountAsync();
-                var importOrdersCount = await Context.ImportOrders.CountAsync();
-                
+                var importOrdersCount = await Context.ImportOrders.Where(o => o.ImportDate.Date == today).CountAsync();
+
                 var todaySales = await Context.Orders
                     .Where(o => o.OrderDate.Date == today)
                     .SumAsync(o => o.TotalAmount);
 
+                double NetProfit = await productService.GetNetProfit(new clsNetProfit_SP { TargetDate=DateTime.Now});
+
+
+
+
+
                 ViewBag.TodayOrders = ordersCount;
                 ViewBag.ProductsCount = productsCount;
                 ViewBag.CustomersCount = customersCount;
-                ViewBag.SuppliersCount = suppliersCount;
+                ViewBag.NetProfit = NetProfit;
                 ViewBag.ImportOrdersCount = importOrdersCount;
                 ViewBag.TodaySales = todaySales;
             }

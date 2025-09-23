@@ -99,7 +99,8 @@ namespace MimiPosStore.Controllers
 
             try
             {
-
+                if (OrderDTO.OrderID > 0)
+                    OrderDTO.ID = OrderDTO.OrderID;
                  
                 if (OrderDTO.ID == 0)
                 {

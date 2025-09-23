@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace SharedModels.EF.Filters
 {
-    public   class clsProductFilter
+    public class clsProductFilter
     {
+        public string FilterName = "[dbo].[GetProductsFiltered]";
         public int? Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
@@ -24,7 +25,10 @@ namespace SharedModels.EF.Filters
 
         public string? CurrencyType { get; set; }
         public string? UnitOfMeasureName { get; set; }
-  public      List <ProductDTO> products { set; get; } = new List<ProductDTO>();
+        
+        //public DateTime? StartDate { get; set; }
+        //public DateTime? EndDate { get; set; }
+        public List<ProductDTO> products { set; get; } = new List<ProductDTO>();
 
     }
 }

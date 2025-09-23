@@ -128,12 +128,10 @@ namespace MimiPosStore.Controllers
             }
 
             await PopulateDropDowns();
+      
+      
             
-            // Ensure ImportOrderItems is not null
-            if (importOrder.ImportOrderItems == null)
-            {
-                importOrder.ImportOrderItems = new List<ImportOrderItemDTO>();
-            }
+
 
             return View(importOrder);
         }
@@ -361,16 +359,15 @@ namespace MimiPosStore.Controllers
         // POST: ImportOrders/UpdateItem
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateItem(clsImportOrderItem ImportOrderItem)
+        public async Task<IActionResult> UpdateItem(ImportOrderItemDTO ImportOrderItemDTO)
         {
-            ModelState.Remove("Product");
-            ModelState.Remove("ImportOrder");
-
+            ModelState.Remove("ProductName");
+            
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _importOrderItemService.UpdateBALDTOAsync(ImportOrderItem);
+                    var result = await _importOrderItemService.UpdateBALDTOAsync(ImportOrderItemDTO);
                     if (result)
                     {
                         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -409,12 +406,11 @@ namespace MimiPosStore.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Edit), new { id = ImportOrderItem.ID });
+            return RedirectToAction(nameof(Edit), new { id = ImportOrderItemDTO.ImportOrderID });
         }
 
         // POST: ImportOrders/DeleteItem
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteItem(int itemId, int importOrderId)
         {
             try
@@ -423,18 +419,23 @@ namespace MimiPosStore.Controllers
                 if (result)
                 {
                     TempData["SuccessMessage"] = "تم حذف العنصر بنجاح";
+                    return Json(new { success = true });
                 }
                 else
                 {
                     TempData["ErrorMessage"] = "فشل في حذف العنصر";
+                    return Json(new { success = false });
+
                 }
             }
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "حدث خطأ أثناء حذف العنصر: " + ex.Message;
+                return Json(new { success = false });
+
             }
 
-            return RedirectToAction(nameof(Edit), new { id = importOrderId });
+
         }
 
         // GET: ImportOrders/GetImportOrderItems
@@ -500,27 +501,6 @@ namespace MimiPosStore.Controllers
                             sellingPrice = importOrderItem.SellingPrice
                         }
                     });
-                }
-                return Json(new { success = false, message = "العنصر غير موجود" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
-        }
-
-        // GET: ImportOrders/GetEditImportOrderItemPartial
-        [HttpGet]
-        public async Task<IActionResult> GetEditImportOrderItemPartial(int itemId)
-        {
-            try
-            {
-                var importOrderItem = await _importOrderItemService.GetByIdAsync(itemId);
-                if (importOrderItem != null)
-                {
-                    // Populate ViewBag with necessary data for the partial view
-                    await PopulateDropDowns();
-                    return PartialView("_EditImportOrderItem", importOrderItem);
                 }
                 return Json(new { success = false, message = "العنصر غير موجود" });
             }
