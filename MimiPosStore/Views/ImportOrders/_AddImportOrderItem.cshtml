@@ -10,23 +10,16 @@
     <div class="col-md-6">
         <div class="form-group mb-3">
             <label asp-for="ProductID" class="control-label">المنتج</label>
-            <select asp-for="ProductID" class="form-control" asp-items="ViewBag.ProductList" id="productSelect">
-                <option value="">-- اختر المنتج --</option>
-            </select>
+            <div class="input-group">
+                <input type="text" id="editProductSearch" class="form-control" placeholder="اكتب اسم المنتج" autocomplete="off" />
+                <button class="btn btn-primary" type="button" id="btnSearchProduct">
+                    <i class="fas fa-search"></i> بحث
+                </button>
+            </div>
+            <input type="hidden" asp-for="ProductID" id="editProductID" />
+            <div id="searchResults" class="list-group mt-1" style="max-height: 200px; overflow-y: auto;"></div>
             <span asp-validation-for="ProductID" class="text-danger"></span>
         </div>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="ProductID" class="control-label">المنتج</label>
-        <div class="input-group">
-            <input type="text" id="editProductSearch" class="form-control" placeholder="اكتب اسم المنتج" autocomplete="off" />
-            <button class="btn btn-primary" type="button" id="btnSearchProduct">
-                <i class="fas fa-search"></i> بحث
-            </button>
-        </div>
-        <input type="hidden" asp-for="ProductID" id="editProductID" />
-        <div id="searchResults" class="list-group mt-1" style="max-height: 200px; overflow-y: auto;"></div>
-        <span asp-validation-for="ProductID" class="text-danger"></span>
     </div>
 
     <div class="col-md-6">
@@ -76,11 +69,47 @@ $(document).ready(function () {
     var importOrderId = @Model.ImportOrderID;
     $('#importOrderIdInput').val(importOrderId);
     
-    // تحديث معلومات المنتج عند تغيير المنتج
-    $('#productSelect').change(function () {
-        var productId = $(this).val();
-        if (productId) {
-            $.get('/ImportOrders/GetProductInfo', { productId: productId }, function (data) {
+    // البحث عن المنتج
+    $("#btnSearchProduct").click(function () {
+        var searchTerm = $("#editProductSearch").val().trim();
+        if (!searchTerm) return;
+
+        $.ajax({
+            url: '/Products/SearchProductByNmae',
+            type: 'GET',
+            dataType: 'json',
+            data: { term: searchTerm },
+            success: function (data) {
+                var $results = $("#searchResults");
+                $results.empty();
+
+                if (!data || !data.id) {
+                    $results.append('<div class="list-group-item">لا توجد نتائج</div>');
+                    return;
+                }
+
+                // تعيين معرف المنتج في الحقل المخفي
+                $('#editProductID').val(data.id);
+                
+                // تحميل معلومات المنتج
+                loadProductInfo(data.id);
+                
+                // إخفاء نتائج البحث
+                $results.empty();
+            },
+            error: function () {
+                alert("حدث خطأ أثناء البحث.");
+            }
+        });
+    });
+    
+    // تحميل معلومات المنتج
+    function loadProductInfo(productId) {
+        // تعيين معرف المنتج في الحقل المخفي
+        $('#editProductID').val(productId);
+        
+        $.get('/ImportOrders/GetProductInfo', { productId: productId })
+            .done(function (data) {
                 if (data.success) {
                     $('#basePrice').text(data.retailPrice + ' ' + data.currencyType);
                     $('#availableQuantity').text(data.availableQuantity);
@@ -93,16 +122,25 @@ $(document).ready(function () {
                     // حساب المبلغ الإجمالي
                     calculateItemTotal();
                 } else {
-                    $('#productInfo').html('<p class="text-danger">خطأ في تحميل معلومات المنتج</p>');
+                    clearProductInfo();
+                    alert('خطأ في تحميل معلومات المنتج: ' + data.message);
                 }
+            })
+            .fail(function () {
+                clearProductInfo();
+                alert('حدث خطأ في الاتصال بالخادم');
             });
-        } else {
-            $('#productInfo').html('<p class="mb-1">السعر الأساسي: <span id="basePrice">-</span></p>' +
-                                 '<p class="mb-1">الكمية المتوفرة: <span id="availableQuantity">-</span></p>' +
-                                 '<p class="mb-1">العملة: <span id="currencyType">-</span></p>' +
-                                 '<p class="mb-0">وحدة القياس: <span id="unitOfMeasure">-</span></p>');
-        }
-    });
+    }
+    
+    function clearProductInfo() {
+        $('#basePrice').text('-');
+        $('#availableQuantity').text('-');
+        $('#currencyType').text('-');
+        $('#unitOfMeasure').text('-');
+        $('#sellingPriceInput').val('');
+        $('#itemTotalAmount').val('');
+        $('#editProductID').val(''); // مسح معرف المنتج
+    }
     
     // حساب المبلغ الإجمالي عند تغيير الكمية أو السعر
     $('#quantityInput, #sellingPriceInput').on('input', function () {

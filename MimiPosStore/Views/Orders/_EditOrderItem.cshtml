@@ -14,18 +14,35 @@
                 <div class="modal-body">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     
-                    <input type="text" asp-for="OrderID" readonly/>
+                    <input type="hidden" asp-for="OrderID" readonly />
                     <input type="hidden" hidden asp-for="ID" />
                     
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label  asp-for="Quantity" class="control-label">الكمية</label>
-                                <input    asp-for="Quantity" class="form-control" type="number" min="1" step="1" id="editQuantityInput" />
+                                <label asp-for="ProductID" class="control-label">المنتج</label>
+                                <div class="input-group">
+                                    <input type="text" id="editProductSearch" class="form-control" placeholder="اكتب اسم المنتج" autocomplete="off" />
+                                    <button class="btn btn-primary" type="button" id="btnSearchProduct">
+                                        <i class="fas fa-search"></i> بحث
+                                    </button>
+                                </div>
+                                <input type="hidden" asp-for="ProductID" id="editProductID" />
+                                <div id="searchResults" class="list-group mt-1" style="max-height: 200px; overflow-y: auto;"></div>
+                                <span asp-validation-for="ProductID" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Quantity" class="control-label">الكمية</label>
+                                <input asp-for="Quantity" class="form-control" type="number" min="1" step="1" id="editQuantityInput" />
                                 <span asp-validation-for="Quantity" class="text-danger"></span>
                             </div>
                         </div>
-                                                <div class="col-md-6">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="control-label">الكمية في المخزن</label>
                                 <input type="text" class="form-control" asp-for="AvailableQuantity" id="editAvailableQuantityDisplay" readonly />
@@ -40,11 +57,17 @@
                                 <span asp-validation-for="SellingPrice" class="text-danger"></span>
                             </div>
                         </div>
-
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="WholesalePrice" class="control-label">سعر الجملة</label>
+                                    <input asp-for="WholesalePrice" class="form-control" type="text" readonly id="WholesalePriceInput" />
+                                    <span asp-validation-for="WholesalePrice" class="text-danger"></span>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label asp-for="PriceAdjustment" class="control-label">الخصم</label>
-                                    <input asp-for="PriceAdjustment" class="form-control" pattern="[0-9]*" type="number" min="0" id="editSellingPriceInput" />
+                                    <input asp-for="PriceAdjustment" class="form-control" pattern="[0-9]*" value="0" type="number" min="0" id="editSellingPriceInput" />
                                     <span asp-validation-for="PriceAdjustment" class="text-danger"></span>
                                 </div>
                             </div>
@@ -87,14 +110,38 @@
 </div>
 <script>
 $(document).ready(function () {
-    // تحديث معلومات المنتج عند تغيير المنتج في نموذج التعديل
-    $('#editProductSelect').change(function () {
-        var productId = $(this).val();
-        if (productId) {
-            loadEditProductInfo(productId);
-        } else {
-            clearEditProductInfo();
-        }
+    // البحث عن المنتج في نموذج التعديل
+    $("#btnSearchProduct").click(function () {
+        var searchTerm = $("#editProductSearch").val().trim();
+        if (!searchTerm) return;
+
+        $.ajax({
+            url: '/Products/SearchProductByNmae',
+            type: 'GET',
+            dataType: 'json',
+            data: { term: searchTerm },
+            success: function (data) {
+                var $results = $("#searchResults");
+                $results.empty();
+
+                if (!data || !data.id) {
+                    $results.append('<div class="list-group-item">لا توجد نتائج</div>');
+                    return;
+                }
+
+                // تعيين معرف المنتج في الحقل المخفي
+                $('#editProductID').val(data.id);
+                
+                // تحميل معلومات المنتج
+                loadEditProductInfo(data.id);
+                
+                // إخفاء نتائج البحث
+                $results.empty();
+            },
+            error: function () {
+                alert("حدث خطأ أثناء البحث.");
+            }
+        });
     });
     
     // حساب المبلغ الإجمالي للعنصر في نموذج التعديل
@@ -103,39 +150,43 @@ $(document).ready(function () {
     });
     
     // تحميل معلومات المنتج في نموذج التعديل
-                    function loadEditProductInfo(productId) {
-                    $.get('/Orders/GetProductInfo', { productId: productId })
-                        .done(function (data) {
-                            if (data.success) {
-                                $('#editBasePrice').text(data.retailPrice + ' ' + data.currencyType);
-                                $('#editAvailableQuantity').text(data.availableQuantity);
-                                $('#editUnitOfMeasure').text(data.uomName);
-                                
-                                // تعيين الكمية المتوفرة في حقل العرض
-                                $('#editAvailableQuantityDisplay').val(data.availableQuantity);
-                                
-                                // تعيين السعر الأساسي كسعر البيع تلقائياً
-                                $('#editSellingPriceInput').val(data.retailPrice);
-                                calculateEditItemTotal();
-                            } else {
-                                clearEditProductInfo();
-                                alert('خطأ في تحميل معلومات المنتج: ' + data.message);
-                            }
-                        })
-                        .fail(function () {
-                            clearEditProductInfo();
-                            alert('حدث خطأ في الاتصال بالخادم');
-                        });
+    function loadEditProductInfo(productId) {
+        // تعيين معرف المنتج في الحقل المخفي
+        $('#editProductID').val(productId);
+        
+        $.get('/Orders/GetProductInfo', { productId: productId })
+            .done(function (data) {
+                if (data.success) {
+                    $('#editBasePrice').text(data.retailPrice + ' ' + data.currencyType);
+                    $('#editAvailableQuantity').text(data.availableQuantity);
+                    $('#editUnitOfMeasure').text(data.uomName);
+                    
+                    // تعيين الكمية المتوفرة في حقل العرض
+                    $('#editAvailableQuantityDisplay').val(data.availableQuantity);
+                    
+                    // تعيين السعر الأساسي كسعر البيع تلقائياً
+                    $('#editSellingPriceInput').val(data.retailPrice);
+                    calculateEditItemTotal();
+                } else {
+                    clearEditProductInfo();
+                    alert('خطأ في تحميل معلومات المنتج: ' + data.message);
                 }
+            })
+            .fail(function () {
+                clearEditProductInfo();
+                alert('حدث خطأ في الاتصال بالخادم');
+            });
+    }
     
-                    function clearEditProductInfo() {
-                    $('#editBasePrice').text('-');
-                    $('#editAvailableQuantity').text('-');
-                    $('#editUnitOfMeasure').text('-');
-                    $('#editAvailableQuantityDisplay').val('');
-                    $('#editSellingPriceInput').val('');
-                    $('#editItemTotalAmount').val('');
-                }
+    function clearEditProductInfo() {
+        $('#editBasePrice').text('-');
+        $('#editAvailableQuantity').text('-');
+        $('#editUnitOfMeasure').text('-');
+        $('#editAvailableQuantityDisplay').val('');
+        $('#editSellingPriceInput').val('');
+        $('#editItemTotalAmount').val('');
+        $('#editProductID').val(''); // مسح معرف المنتج
+    }
     
     function calculateEditItemTotal() {
         var quantity = parseFloat($('#editQuantityInput').val()) || 0;

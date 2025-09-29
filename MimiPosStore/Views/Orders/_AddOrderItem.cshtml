@@ -18,7 +18,7 @@
                     <input type="hidden" asp-for="ID" value="0" />
                     
                     <div class="row">
-                        <div class="col-md-6">
+                      @*   <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label asp-for="ProductID" class="control-label">المنتج</label>
                                 <select asp-for="ProductID" class="form-control" asp-items="ViewBag.ProductList" id="productSelect">
@@ -26,7 +26,7 @@
                                 </select>
                                 <span asp-validation-for="ProductID" class="text-danger"></span>
                             </div>
-                        </div>
+                        </div> *@
                         <div class="form-group mb-3">
                             <label asp-for="ProductID" class="control-label">المنتج</label>
                             <div class="input-group">
@@ -63,7 +63,13 @@
                                 <span asp-validation-for="SellingPrice" class="text-danger"></span>
                             </div>
                         </div>
-
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="WholesalePrice" class="control-label">سعر الجملة</label>
+                                <input asp-for="WholesalePrice" class="form-control" type="text" readonly id="WholesalePriceInput" />
+                                <span asp-validation-for="WholesalePrice" class="text-danger"></span>
+                            </div>
+                        </div>
              
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
@@ -145,7 +151,8 @@ $(document).ready(function () {
                     $('#availableQuantityDisplay').val(data.availableQuantity);
                     
                     // تعيين السعر الأساسي كسعر البيع تلقائياً
-                    $('#sellingPriceInput').val(data.retailPrice);
+                        $('#sellingPriceInput').val(data.retailPrice);
+                        $('#WholesalePriceInput').val(data.wholesalePrice);
                     calculateItemTotal();
                 } else {
                     clearProductInfo();
@@ -163,7 +170,8 @@ $(document).ready(function () {
         $('#availableQuantity').text('-');
         $('#unitOfMeasure').text('-');
         $('#availableQuantityDisplay').val('');
-        $('#sellingPriceInput').val('');
+            $('#sellingPriceInput').val('');
+                $('#WholesalePriceInput').val('');
         $('#itemTotalAmount').val('');
     }
     

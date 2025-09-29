@@ -16,13 +16,15 @@ namespace BAL.Services
 	public class OrderService : IOrderService
 	{
 		private readonly IOrderRepo _orderRepo;
+		private readonly IProductRepo _productRepo;
 		private readonly ICurrentUserService _currentUserServ;
         public clsGlobal.enSaveMode SaveMode { get; set; }
 		public virtual clsOrder Order { get; set; }
 
-		public OrderService(IOrderRepo orderRepo,ICurrentUserService currentUser)
+		public OrderService(IOrderRepo orderRepo,ICurrentUserService currentUser,IProductRepo productRepo)
 		{
 			_orderRepo = orderRepo;
+			_productRepo = productRepo;
 			SaveMode = clsGlobal.enSaveMode.Add;
 			_currentUserServ = currentUser;
 		}
@@ -64,17 +66,26 @@ namespace BAL.Services
 		{
 			return await _orderRepo.CancelOrderAsync(OrderID,_currentUserServ.GetCurrentUserId());
 		}
-
+		
 		public async Task<bool> AddItem(clsOrderItem orderItem)
 		{
-		
-			return await _orderRepo.AddItem(orderItem);
+            bool result = await _productRepo.HasAvailableQuantity(orderItem.ProductID, orderItem.Quantity);
+
+            if (!IsValidPriceAdjustment(orderItem)|| !result)
+                return await _orderRepo.AddItem(orderItem);
+			else
+				return false;
 		}
 
 		public async Task<bool> UpdateItem(clsOrderItem orderItem)
 		{
-			return await _orderRepo.UpdateItem(orderItem);
-		}
+            bool result = await _productRepo.HasAvailableQuantity(orderItem.ProductID, orderItem.Quantity);
+
+            if (!IsValidPriceAdjustment(orderItem) || !result)
+                return await _orderRepo.UpdateItem(orderItem);
+            else
+                return false;
+        }
 
 		public async Task<bool> DeleteItem(int OrderItemID)
 		{
@@ -170,11 +181,16 @@ namespace BAL.Services
 		{
 			return orderItems.PriceAdjustment>=0&&(orderItems.PriceAdjustment <= orderItems.Quantity * orderItems.SellingPrice);
         }
+        public bool IsValidPriceAdjustment(clsOrderItem orderItems)
+		{
+			return orderItems.PriceAdjustment>=0&&(orderItems.PriceAdjustment <= orderItems.Quantity * orderItems.SellingPrice);
+        }
 
         public async Task<bool> AddItemBALDTOAsync(OrderItemsDTO orderItemBALDTO)
 		{
-		
-			if (!IsValidPriceAdjustment(orderItemBALDTO))
+			bool result = await _productRepo.HasAvailableQuantity(orderItemBALDTO.ProductID, orderItemBALDTO.Quantity);
+
+            if (!IsValidPriceAdjustment(orderItemBALDTO)||!result)
 				return false;
 
 			var orderItem = orderItemBALDTO.ToOrderItemModel();
@@ -183,7 +199,9 @@ namespace BAL.Services
 
 		public async Task<bool> UpdateItemBALDTOAsync(OrderItemsDTO orderItemBALDTO)
 		{
-            if (!IsValidPriceAdjustment(orderItemBALDTO))
+            bool result = await _productRepo.HasAvailableQuantity(orderItemBALDTO.ProductID, orderItemBALDTO.Quantity);
+
+            if (!IsValidPriceAdjustment(orderItemBALDTO)|| !result)
                 return false;
 
             var orderItem = orderItemBALDTO.ToOrderItemModel();

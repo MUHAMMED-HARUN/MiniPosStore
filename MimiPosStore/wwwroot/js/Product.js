@@ -34,12 +34,17 @@ $(document).ready(function () {
         $.get('/Orders/GetProductInfo', { productId: productId })
             .done(function (data) {
                 if (data.success) {
+
                     $('#basePrice').text(data.retailPrice + ' ' + data.currencyType);
                     $('#availableQuantity').text(data.availableQuantity);
                     $('#unitOfMeasure').text(data.uomName);
 
+                    $('#editProductID').val(productId);
+
+
                     // تعيين السعر الأساسي كسعر البيع تلقائياً
                     $('#sellingPriceInput').val(data.retailPrice);
+                    $('#WholesalePriceInput').val(data.wholesalePrice);
                     $('#availableQuantityDisplay').val(data.availableQuantity);
                     calculateItemTotal();
                 } else {
@@ -59,6 +64,7 @@ $(document).ready(function () {
         $('#unitOfMeasure').text('-');
         $('#availableQuantityDisplay').val('');
         $('#sellingPriceInput').val('');
+        $('#WholesalePriceInput').val('');
         $('#itemTotalAmount').val('');
     }
 
@@ -181,13 +187,19 @@ $(document).ready(function () {
                 var $results = $("#searchResults");
                 $results.empty();
 
-                if (!data || data.length === 0) {
+                if (!data || !data.id) {
                     $results.append('<div class="list-group-item">لا توجد نتائج</div>');
                     return;
                 }
 
-
+                // تعيين معرف المنتج في الحقل المخفي
+                $('#editProductID').val(data.id);
+                
+                // تحميل معلومات المنتج
                 loadProductInfo(data.id);
+                
+                // إخفاء نتائج البحث
+                $results.empty();
             },
             error: function () {
                 alert("حدث خطأ أثناء البحث.");

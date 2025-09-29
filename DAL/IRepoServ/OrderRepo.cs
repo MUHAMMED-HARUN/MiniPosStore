@@ -73,6 +73,7 @@ namespace DAL.IRepoServ
                 "EXEC sp_set_session_context 'UserID', {0}",
                 CurentUserID
 );
+
                 _context.Orders.Remove(order);
                 await _context.SaveChangesAsync();
                 return true;

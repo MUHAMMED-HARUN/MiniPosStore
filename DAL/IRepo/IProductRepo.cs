@@ -21,9 +21,11 @@ namespace DAL.IRepo
         Task<List<clsProduct>> SearchProductsAsync(string searchTerm);
           Task<bool> IncreaseProductQuantityAsync( int[] ImportOrderItmesID, string ActionByUser);
           Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser);
+        Task<bool> HasAvailableQuantity(int ProductID, float Quantity);
         Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm);
         Task<List<clsUnitOfMeasure>> GetAllUOMAsync();
         Task<clsUnitOfMeasure> GetUOMByIdAsync(int id);
         Task<double> GetNetProfitAsync(clsNetProfit_SP profit_SP);
+        Task<double> GetTotalStockValueAsync(clsTotalStockValue_SP StoclVal);
     }
 }

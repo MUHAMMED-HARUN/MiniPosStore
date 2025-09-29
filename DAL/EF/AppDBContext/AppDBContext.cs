@@ -239,6 +239,7 @@ namespace DAL.EF.AppDBContext
     typeof(clsOrder),
     typeof(clsProduct),
     typeof(clsImportOrder)
+
 };
 
             var trackedClrTypes = this.Model.GetEntityTypes()

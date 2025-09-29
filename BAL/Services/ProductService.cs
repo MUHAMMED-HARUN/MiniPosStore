@@ -84,7 +84,10 @@ namespace BAL.Services
         {
             return await _productRepo.DecreaseProductQuantityAsync(OrderItemsID, _currentUserServ.GetCurrentUserId());
         }
-
+       public async  Task<bool> HasAvailableQuantity(int ProductID, float Quantity)
+        {
+            return await _productRepo.HasAvailableQuantity(ProductID, Quantity);
+        }
 
         public async Task<List<clsUnitOfMeasure>> GetAllUOMAsync()
         {
@@ -174,6 +177,10 @@ namespace BAL.Services
         public async Task<double> GetNetProfit(clsNetProfit_SP profit_SP)
         {
          return  await _productRepo.GetNetProfitAsync(profit_SP);
+        }
+        public async Task<double> GetTotalStockValueAsync(clsTotalStockValue_SP StockVal)
+        {
+            return await _productRepo.GetTotalStockValueAsync(StockVal);
         }
     }
 }

@@ -91,7 +91,8 @@ namespace DAL.Mapper
                 ProductSaleAmount = orderItem.Quantity * orderItem.SellingPrice,
                 Quantity = orderItem.Quantity,
                 SellingPrice = orderItem.SellingPrice,
-                PriceAdjustment=orderItem.PriceAdjustment
+                PriceAdjustment=orderItem.PriceAdjustment,
+                WholesalePrice =orderItem.WholesalePrice
             };
         }
 
@@ -107,7 +108,7 @@ namespace DAL.Mapper
                 Quantity = orderItemDTO.Quantity,
                 SellingPrice = orderItemDTO.SellingPrice,
                 PriceAdjustment = orderItemDTO.PriceAdjustment,
-
+                WholesalePrice= orderItemDTO.WholesalePrice
             };
         }
 

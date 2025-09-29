@@ -23,6 +23,7 @@ namespace SharedModels.EF.Models
 
         public float Quantity { get; set; }
         public float SellingPrice { get; set; }
+        public float WholesalePrice { get; set; }
         public float? PriceAdjustment { get; set; }
     }
 }

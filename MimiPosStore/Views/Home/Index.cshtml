@@ -258,7 +258,16 @@
                 <div class="card-body">
                     <i class="fas fa-dollar-sign fa-2x mb-2"></i>
                     <h6 class="card-title">المبيعات اليوم</h6>
-                    <h4 class="card-text">@ViewBag.TodaySales.ToString("C")</h4>
+                    <h4 class="card-text">@ViewBag.TodaySales</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-4 col-6 mb-3">
+            <div class="card bg-warning text-white text-center">
+                <div class="card-body">
+                    <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+                    <h6 class="card-title"> راس مال المحل</h6>
+                    <h4 class="card-text">@ViewBag.TotalStockValue</h4>
                 </div>
             </div>
         </div>

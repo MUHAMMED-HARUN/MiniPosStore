@@ -358,7 +358,8 @@ namespace MimiPosStore.Controllers
                         wholesalePrice = product.WholesalePrice,
                         availableQuantity = product.AvailableQuantity,
                         currencyType = product.CurrencyName,
-                        uomName = product.UOMName
+                        uomName = product.UOMName,
+                        ProductID = product.ID
                     });
                 }
                 return Json(new { success = false, message = "المنتج غير موجود" });

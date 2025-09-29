@@ -34,8 +34,11 @@ namespace SharedModels.EF.DTO
         [Display(Name = "سعر البيع")]
         [Range(0, double.MaxValue, ErrorMessage = "سعر البيع يجب أن يكون أكبر من أو يساوي صفر")]
         public float SellingPrice { get; set; }
+        [Required(ErrorMessage = "سعر الجملة مطلوب")]
+        [Display(Name = "سعر الجملة")]
+        public float WholesalePrice { get; set; } 
         [Display(Name = "خصومات او اضافات")]
-        public float? PriceAdjustment { get; set; }
+        public float? PriceAdjustment { get; set; } = 0;
         // خصائص محسوبة
         [Display(Name = "المجموع الفرعي")]
         public float SubTotal => Quantity * SellingPrice;

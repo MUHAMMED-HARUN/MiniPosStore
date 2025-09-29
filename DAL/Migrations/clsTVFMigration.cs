@@ -327,15 +327,7 @@ RETURN
         }
         public static void AddGetNetProfit_SP(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  StoredProcedure [dbo].[GetNetProfit]    Script Date: 01/04/47 01:57:45 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-create PROCEDURE [dbo].[GetNetProfit]
+            migrationBuilder.Sql(@"create or  ALTER PROCEDURE [dbo].[GetNetProfit]
     @TargetDate DATE,
 	@TargetOrder int =null,
 	@TargetProduct int =null
@@ -346,7 +338,7 @@ BEGIN
 
     WITH ProfitCTE AS (
         SELECT 
-            ((oi.SellingPrice - p.WholesalePrice) * oi.Quantity)
+            ((oi.SellingPrice - oi.WholesalePrice) * oi.Quantity)
             - ISNULL(oi.PriceAdjustment, 0) AS Profit
         FROM Orders AS o
         JOIN OrderItems AS oi
@@ -362,6 +354,35 @@ BEGIN
     FROM ProfitCTE;
 END
 ");
+        }
+        public static void AddGetTotalStockValue_SP(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.Sql(@"
+
+CREATE or alter PROCEDURE dbo.GetTotalStockValue
+    @ProductID INT = NULL  -- إذا تم تمرير قيمة، يتم حساب هذا المنتج فقط
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT SUM(p.WholesalePrice * p.AvailableQuantity) AS TotalStockValue
+    FROM Products AS p
+    WHERE (@ProductID IS NULL OR p.ID = @ProductID);
+END;");
+        }
+
+
+
+
+        public static void AddWholesalePriceColumnToOI(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AddColumn<float>(
+    name: "WholesalePrice",
+    table: "OrderItems",
+    type: "real",
+    nullable: false,
+    defaultValueSql: "0");
+
         }
     }
 }

@@ -169,7 +169,7 @@ namespace DAL
                 return default;
             {
 
-                string Query = @$"GetNetProfit";
+                string Query = @$"{SPName}";
 
                 using (var connection = _Context.Database.GetDbConnection().CreateCommand())
                 {

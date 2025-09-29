@@ -22,7 +22,7 @@ namespace BAL.Interfaces
          Task<bool> IncreaseProductQuantityAsync( int[] ImportOrderItmesID, string ActionByUser);
         Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser);
 
-
+        Task<bool> HasAvailableQuantity(int ProductID, float Quantity);
         Task<List<clsUnitOfMeasure>> GetAllUOMAsync();
         Task<clsUnitOfMeasure> GetUOMByIdAsync(int id);
         
@@ -35,5 +35,6 @@ namespace BAL.Interfaces
         Task<List<ProductDTO>> SearchProductsBALDTOAsync(string searchTerm);
         Task<ProductDTO> SearchProductByNameBALDTOAsync(string searchTerm);
         Task<double> GetNetProfit(clsNetProfit_SP profit_SP);
+        Task<double> GetTotalStockValueAsync(clsTotalStockValue_SP StockVal);
     }
 }

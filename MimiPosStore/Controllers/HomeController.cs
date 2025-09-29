@@ -48,6 +48,7 @@ namespace MimiPosStore.Controllers
                     .SumAsync(o => o.TotalAmount);
 
                 double NetProfit = await productService.GetNetProfit(new clsNetProfit_SP { TargetDate=DateTime.Now});
+                double StoclVal = await productService.GetTotalStockValueAsync(new clsTotalStockValue_SP { ProductID=null});
 
 
 
@@ -59,6 +60,7 @@ namespace MimiPosStore.Controllers
                 ViewBag.NetProfit = NetProfit;
                 ViewBag.ImportOrdersCount = importOrdersCount;
                 ViewBag.TodaySales = todaySales;
+                ViewBag.TotalStockValue = StoclVal;
             }
             catch (Exception ex)
             {

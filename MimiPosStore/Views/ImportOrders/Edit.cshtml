@@ -192,11 +192,18 @@
             // تفعيل تعديل العناصر
             $(document).on('click', '.edit-item-btn', function () {
                 var itemId = $(this).data('item-id');
-                $.get('/ImportOrders/GetImportOrderItemForEdit', { itemId: itemId }, function (data) {
-                    if (data.success) {
-                        $('#editItemContent').html(data.html);
+                $.ajax({
+                    url: '/ImportOrders/GetImportOrderItemForEdit',
+                    type: 'GET',
+                    data: { itemId: itemId },
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function (data) {
+                        $('#editItemContent').html(data);
                         $('#editItemModal').modal('show');
-                    } else {
+                    },
+                    error: function () {
                         alert('خطأ في تحميل بيانات العنصر');
                     }
                 });

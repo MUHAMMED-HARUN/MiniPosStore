@@ -122,9 +122,8 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/fileUpload.js" asp-append-version="true"></script>
     <script>
-        <script src="~/js/Product.js" asp-append-version="true"></script>
-
         $(document).ready(function () {
             // معاينة الصورة عند اختيارها
             $('#ProductImage').change(function () {
@@ -132,7 +131,7 @@
                 if (file) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#imagePreview').html('<img src="' + e.target.result + '" class="img-fluid rounded" style="max-height: 200px;">');
+                        $('#imagePreview').html('<img src="' + e.target.result + '" class="img-fluid rounded" alt="معاينة الصورة" style="max-height: 200px;">');
                     };
                     reader.readAsDataURL(file);
                 }

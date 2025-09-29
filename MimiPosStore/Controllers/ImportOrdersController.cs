@@ -362,7 +362,13 @@ namespace MimiPosStore.Controllers
         public async Task<IActionResult> UpdateItem(ImportOrderItemDTO ImportOrderItemDTO)
         {
             ModelState.Remove("ProductName");
-            
+            ModelState.Remove("CurrencyName");
+            ModelState.Remove("CurrencyType");
+            ModelState.Remove("UOMName");
+            ModelState.Remove("UOMSymbol");
+
+ 
+
             if (ModelState.IsValid)
             {
                 try
@@ -489,6 +495,13 @@ namespace MimiPosStore.Controllers
                 var importOrderItem = await _importOrderItemService.GetByIdBALDTOAsync(itemId);
                 if (importOrderItem != null)
                 {
+                    // إذا كان الطلب AJAX، أعد HTML
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return PartialView("_EditImportOrderItem", importOrderItem);
+                    }
+                    
+                    // وإلا أعد JSON
                     return Json(new
                     {
                         success = true,

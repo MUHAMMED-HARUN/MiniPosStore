@@ -1,36 +1,19 @@
-version: '3.8'
-
 networks:
   mimiposstoreApp:
 
 services:
-  miniPosStoreDB:
-    container_name: MiniPosStoreDB
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    ports:
-      - "1433:1433"
-    environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Sa123456!
-      - MSSQL_PID=Developer
-    volumes:
-      - sql_data:/var/opt/mssql
-    networks:
-      - mimiposstoreApp
-
   mimiposstore:
     container_name: mimiposstore-local
     build:
       context: .
       dockerfile: MimiPosStore/Dockerfile
     image: mimiposstore:local
-    depends_on:
-      - miniPosStoreDB
+    restart: unless-stopped
     environment:
-      - DB_HOST=miniPosStoreDB
+      - DB_HOST=host.docker.internal
       - DB_Name=MiniPosStore
       - DB_SA_PASSWORD=Sa123456!
-      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8080:8080"
@@ -53,11 +36,7 @@ services:
       - ./:/src
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      - miniPosStoreDB
     networks:
       - mimiposstoreApp
 
-volumes:
-  sql_data:
 

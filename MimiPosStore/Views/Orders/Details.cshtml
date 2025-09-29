@@ -256,6 +256,7 @@
                                         <th>المنتج</th>
                                         <th>الكمية</th>
                                         <th>سعر البيع</th>
+                                        <th>سعر الجملة</th>
                                         <th>المبلغ الإجمالي</th>
                                         <th>المبلغ المخصوم</th>
                                         <th>المبلغ بعد الخصم</th>
@@ -274,7 +275,7 @@
                                                 <span class="badge bg-primary">@item.Quantity.ToString("F2")</span>
                                             </td>
                                             <td>
-                                                <span class="text-success">@item.SellingPrice.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                                                <span class="text-success">@item.WholesalePrice.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                                             </td>
                                             <td>
                                                 <span class="text-primary fw-bold">@item.SubTotal.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>

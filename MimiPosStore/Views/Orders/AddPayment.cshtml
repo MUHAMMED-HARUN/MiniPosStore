@@ -36,7 +36,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="form-label">المبلغ الإجمالي</label>
-                                <input type="text" class="form-control text-success" value="@Model.TotalAmount.ToString("C")" readonly />
+                                <input type="text" class="form-control text-success" value="@Model.TotalAmount @BAL.clsGlobal.GetCurrencyTypeString(1)" readonly />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -51,7 +51,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label class="form-label">المبلغ المتبقي</label>
-                                <input type="text" class="form-control text-danger" value="@((Model.TotalAmount - Model.PaidAmount).ToString("C"))" readonly />
+                                <input type="text" class="form-control text-danger" value="@((Model.TotalAmount - Model.PaidAmount)+ BAL.clsGlobal.GetCurrencyTypeString(1))" readonly />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -59,7 +59,7 @@
                                 <label for="paymentAmount" class="form-label">مبلغ الدفعة الجديدة</label>
                                 <input type="number" id="paymentAmount" name="paymentAmount" class="form-control" 
                                        step="0.01" min="0.01" max="@(Model.TotalAmount - Model.PaidAmount)" required />
-                                <div class="form-text">أقصى مبلغ يمكن دفعه: @((Model.TotalAmount - Model.PaidAmount).ToString("C"))</div>
+                                <div class="form-text">أقصى مبلغ يمكن دفعه: @((Model.TotalAmount - Model.PaidAmount) + BAL.clsGlobal.GetCurrencyTypeString(1))</div>
                             </div>
                         </div>
                     </div>
@@ -89,12 +89,12 @@
                 <div class="row text-center">
                     <div class="col-6">
                         <div class="border-end">
-                            <h4 class="text-success mb-1">@Model.TotalAmount.ToString("C")</h4>
+                            <h4 class="text-success mb-1">@Model.TotalAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</h4>
                             <small class="text-muted">المبلغ الإجمالي</small>
                         </div>
                     </div>
                     <div class="col-6">
-                        <h4 class="text-info mb-1">@Model.PaidAmount.ToString("C")</h4>
+                        <h4 class="text-info mb-1">@Model.PaidAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</h4>
                         <small class="text-muted">المبلغ المدفوع</small>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                 <hr />
                 
                 <div class="text-center">
-                    <h3 class="text-danger mb-1">@((Model.TotalAmount - Model.PaidAmount).ToString("C"))</h3>
+                    <h3 class="text-danger mb-1">@((Model.TotalAmount - Model.PaidAmount) + BAL.clsGlobal.GetCurrencyTypeString(1))</h3>
                     <small class="text-muted">المبلغ المتبقي</small>
                 </div>
 

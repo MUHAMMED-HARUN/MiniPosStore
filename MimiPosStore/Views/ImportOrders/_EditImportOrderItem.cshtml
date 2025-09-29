@@ -10,23 +10,16 @@
     <div class="col-md-6">
         <div class="form-group mb-3">
             <label asp-for="ProductID" class="control-label">المنتج</label>
-            <select asp-for="ProductID" class="form-control" asp-items="ViewBag.ProductList" id="editProductSelect">
-                <option value="">-- اختر المنتج --</option>
-            </select>
+            <div class="input-group">
+                <input type="text" id="editProductSearch" class="form-control" placeholder="اكتب اسم المنتج" autocomplete="off" />
+                <button class="btn btn-primary" type="button" id="btnSearchProduct">
+                    <i class="fas fa-search"></i> بحث
+                </button>
+            </div>
+            <input type="hidden" asp-for="ProductID" id="editProductID" />
+            <div id="searchResults" class="list-group mt-1" style="max-height: 200px; overflow-y: auto;"></div>
             <span asp-validation-for="ProductID" class="text-danger"></span>
         </div>
-    </div>
-    <div class="form-group mb-3">
-        <label asp-for="ProductID" class="control-label">المنتج</label>
-        <div class="input-group">
-            <input type="text" id="editProductSearch" class="form-control" placeholder="اكتب اسم المنتج" autocomplete="off" />
-            <button class="btn btn-primary" type="button" id="btnSearchProduct">
-                <i class="fas fa-search"></i> بحث
-            </button>
-        </div>
-        <input type="hidden" asp-for="ProductID" id="editProductID" />
-        <div id="searchResults" class="list-group mt-1" style="max-height: 200px; overflow-y: auto;"></div>
-        <span asp-validation-for="ProductID" class="text-danger"></span>
     </div>
 
     <div class="col-md-6">
@@ -72,11 +65,47 @@
 
 <script>
 $(document).ready(function () {
-    // تحديث معلومات المنتج عند تغيير المنتج
-    $('#editProductSelect').change(function () {
-        var productId = $(this).val();
-        if (productId) {
-            $.get('/ImportOrders/GetProductInfo', { productId: productId }, function (data) {
+    // البحث عن المنتج في نموذج التعديل
+    $("#btnSearchProduct").click(function () {
+        var searchTerm = $("#editProductSearch").val().trim();
+        if (!searchTerm) return;
+
+        $.ajax({
+            url: '/Products/SearchProductByNmae',
+            type: 'GET',
+            dataType: 'json',
+            data: { term: searchTerm },
+            success: function (data) {
+                var $results = $("#searchResults");
+                $results.empty();
+
+                if (!data || !data.id) {
+                    $results.append('<div class="list-group-item">لا توجد نتائج</div>');
+                    return;
+                }
+
+                // تعيين معرف المنتج في الحقل المخفي
+                $('#editProductID').val(data.id);
+                
+                // تحميل معلومات المنتج
+                loadEditProductInfo(data.id);
+                
+                // إخفاء نتائج البحث
+                $results.empty();
+            },
+            error: function () {
+                alert("حدث خطأ أثناء البحث.");
+            }
+        });
+    });
+    
+    // تحميل معلومات المنتج في نموذج التعديل
+    function loadEditProductInfo(productId) {
+        // تعيين معرف المنتج في الحقل المخفي
+        $('#editProductID').val(productId);
+        
+        $.get('/ImportOrders/GetProductInfo', { productId: productId })
+            .done(function (data) {
                 if (data.success) {
                     $('#editBasePrice').text(data.retailPrice + ' ' + data.currencyType);
                     $('#editAvailableQuantity').text(data.availableQuantity);
@@ -86,16 +115,25 @@ $(document).ready(function () {
                     // حساب المبلغ الإجمالي
                     calculateEditItemTotal();
                 } else {
-                    $('#editProductInfo').html('<p class="text-danger">خطأ في تحميل معلومات المنتج</p>');
+                    clearEditProductInfo();
+                    alert('خطأ في تحميل معلومات المنتج: ' + data.message);
                 }
+            })
+            .fail(function () {
+                clearEditProductInfo();
+                alert('حدث خطأ في الاتصال بالخادم');
             });
-        } else {
-            $('#editProductInfo').html('<p class="mb-1">السعر الأساسي: <span id="editBasePrice">-</span></p>' +
-                                     '<p class="mb-1">الكمية المتوفرة: <span id="editAvailableQuantity">-</span></p>' +
-                                     '<p class="mb-1">العملة: <span id="editCurrencyType">-</span></p>' +
-                                     '<p class="mb-0">وحدة القياس: <span id="editUnitOfMeasure">-</span></p>');
-        }
-    });
+    }
+    
+    function clearEditProductInfo() {
+        $('#editBasePrice').text('-');
+        $('#editAvailableQuantity').text('-');
+        $('#editCurrencyType').text('-');
+        $('#editUnitOfMeasure').text('-');
+        $('#editSellingPriceInput').val('');
+        $('#editItemTotalAmount').val('');
+        $('#editProductID').val(''); // مسح معرف المنتج
+    }
     
     // حساب المبلغ الإجمالي عند تغيير الكمية أو السعر
     $('#editQuantityInput, #editSellingPriceInput').on('input', function () {
@@ -115,12 +153,14 @@ $(document).ready(function () {
             if (data.success) {
                 $('#editImportOrderIdInput').val(data.item.importOrderID);
                 $('#editImportOrderItemIdInput').val(data.item.importOrderItemID);
-                $('#editProductSelect').val(data.item.productID);
+                $('#editProductID').val(data.item.productID);
                 $('#editQuantityInput').val(data.item.quantity);
                 $('#editSellingPriceInput').val(data.item.sellingPrice);
                 
-                // تحديث معلومات المنتج
-                $('#editProductSelect').trigger('change');
+                // تحميل معلومات المنتج
+                if (data.item.productID) {
+                    loadEditProductInfo(data.item.productID);
+                }
                 
                 // حساب المبلغ الإجمالي
                 calculateEditItemTotal();

@@ -50,16 +50,19 @@
 // حساب وتجميع المبالغ الإجمالية لكل عناصر أمر الاستيراد وتحديث حقل TotalAmount
 $(document).ready(function () {
     function loadProductInfo(productId) {
-        $.get('/Orders/GetProductInfo', { productId: productId })
+        // تعيين معرف المنتج في الحقل المخفي
+        $('#editProductID').val(productId);
+        
+        $.get('/ImportOrders/GetProductInfo', { productId: productId })
             .done(function (data) {
                 if (data.success) {
                     $('#basePrice').text(data.retailPrice + ' ' + data.currencyType);
                     $('#availableQuantity').text(data.availableQuantity);
+                    $('#currencyType').text(data.currencyType);
                     $('#unitOfMeasure').text(data.uomName);
 
                     // تعيين السعر الأساسي كسعر البيع تلقائياً
                     $('#sellingPriceInput').val(data.retailPrice);
-                    $('#availableQuantityDisplay').val(data.availableQuantity);
                     calculateItemTotal();
                 } else {
                     clearProductInfo();
@@ -70,6 +73,16 @@ $(document).ready(function () {
                 clearProductInfo();
                 alert('حدث خطأ في الاتصال بالخادم');
             });
+    }
+    
+    function clearProductInfo() {
+        $('#basePrice').text('-');
+        $('#availableQuantity').text('-');
+        $('#currencyType').text('-');
+        $('#unitOfMeasure').text('-');
+        $('#sellingPriceInput').val('');
+        $('#itemTotalAmount').val('');
+        $('#editProductID').val(''); // مسح معرف المنتج
     }
     function parseFloatSafe(text) {
         return parseFloat(String(text).replace(/[^\d.-]/g, '')) || 0;
@@ -166,7 +179,7 @@ $(document).ready(function () {
         if (!searchTerm) return;
 
         $.ajax({
-            url: '/Products/SearchProductByNmae', // تم تصحيح الاسم
+            url: '/Products/SearchProductByNmae',
             type: 'GET',
             dataType: 'json',
             data: { term: searchTerm },
@@ -174,13 +187,19 @@ $(document).ready(function () {
                 var $results = $("#searchResults");
                 $results.empty();
 
-                if (!data || data.length === 0) {
+                if (!data || !data.id) {
                     $results.append('<div class="list-group-item">لا توجد نتائج</div>');
                     return;
                 }
 
-
+                // تعيين معرف المنتج في الحقل المخفي
+                $('#editProductID').val(data.id);
+                
+                // تحميل معلومات المنتج
                 loadProductInfo(data.id);
+                
+                // إخفاء نتائج البحث
+                $results.empty();
             },
             error: function () {
                 alert("حدث خطأ أثناء البحث.");

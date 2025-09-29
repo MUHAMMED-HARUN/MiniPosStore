@@ -91,7 +91,8 @@ namespace BAL.Mappers
                 ProductSaleAmount = orderItemDTO.ProductSaleAmount,
                 Quantity = orderItemDTO.Quantity,
                 SellingPrice = orderItemDTO.SellingPrice,
-                AvailableQuantity = orderItemDTO.AvailableQuantity
+                AvailableQuantity = orderItemDTO.AvailableQuantity,
+                WholesalePrice=orderItemDTO.WholesalePrice
             };
         }
         
@@ -108,7 +109,8 @@ namespace BAL.Mappers
                 ProductSaleAmount = orderItem.Quantity * orderItem.SellingPrice,
                 Quantity = orderItem.Quantity,
                 SellingPrice = orderItem.SellingPrice,
-                PriceAdjustment = orderItem.PriceAdjustment
+                PriceAdjustment = orderItem.PriceAdjustment,
+                WholesalePrice= orderItem.WholesalePrice
             };
         }
 
@@ -123,7 +125,8 @@ namespace BAL.Mappers
                 ProductID = orderItemBALDTO.ProductID,
                 Quantity = orderItemBALDTO.Quantity,
                 SellingPrice = orderItemBALDTO.SellingPrice,
-                PriceAdjustment = orderItemBALDTO.PriceAdjustment
+                PriceAdjustment = orderItemBALDTO.PriceAdjustment,
+                WholesalePrice=orderItemBALDTO.WholesalePrice
             };
         }
 

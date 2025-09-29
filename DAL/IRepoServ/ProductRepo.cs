@@ -223,7 +223,10 @@ namespace DAL.IRepoServ
             await _context.SaveChangesAsync();
             return true;
         }
-
+        public async Task<bool> HasAvailableQuantity(int ProductID,float Quantity)
+        {
+            return await _context.Products.AnyAsync(p => p.ID == ProductID && p.AvailableQuantity >= Quantity);
+        }
         public async Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm)
         {
             return await _context.Products.Where(p => p.Name == searchTerm).Include(p => p.UnitOfMeasure).FirstOrDefaultAsync();
@@ -240,6 +243,10 @@ namespace DAL.IRepoServ
         public async Task<double> GetNetProfitAsync(clsNetProfit_SP profit_SP)
         {
             return await clsDALUtil.ExecuteSPCommands<double, clsNetProfit_SP>(_context, profit_SP, profit_SP.SPName);
+        }
+        public async Task<double> GetTotalStockValueAsync(clsTotalStockValue_SP StoclVal)
+        {
+            return await clsDALUtil.ExecuteSPCommands<double, clsTotalStockValue_SP>(_context, StoclVal, StoclVal.SPName);
         }
     }
 }
