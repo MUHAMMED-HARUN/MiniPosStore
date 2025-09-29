@@ -26,9 +26,12 @@ namespace DAL.EF.AppDBContext
             if (databaseCreator != null)
             {
            
-                    Database.Migrate();
-                if (!databaseCreator.CanConnect())
+                
+          
+                var PendingMigrations = Database.GetPendingMigrations();
+                if(PendingMigrations.Any())
                 {
+                    Database.Migrate();
                 }
                 if (!databaseCreator.HasTables())
                 {
