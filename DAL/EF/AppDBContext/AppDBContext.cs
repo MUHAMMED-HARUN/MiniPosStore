@@ -26,9 +26,9 @@ namespace DAL.EF.AppDBContext
             if (databaseCreator != null)
             {
            
+                    Database.Migrate();
                 if (!databaseCreator.CanConnect())
                 {
-                    Database.Migrate();
                 }
                 if (!databaseCreator.HasTables())
                 {
