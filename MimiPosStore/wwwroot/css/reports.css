@@ -1,0 +1,405 @@
+/**
+ * Professional Reports CSS Styles
+ * Modern, responsive design with smooth animations and accessibility features
+ */
+
+/* ==========================================================================
+   Reports Container & Layout
+   ========================================================================== */
+
+.reports-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px 0;
+    position: relative;
+}
+
+.reports-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   Cards & Components
+   ========================================================================== */
+
+.reports-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reports-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================================================
+   Report Items
+   ========================================================================== */
+
+.report-item {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 12px;
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 4px solid #007bff;
+    position: relative;
+    overflow: hidden;
+}
+
+.report-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #007bff 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.report-item:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 
+        0 10px 25px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.report-item:hover::before {
+    opacity: 1;
+}
+
+/* Different border colors for different report types */
+.report-item:nth-child(6n+1) { border-left-color: #007bff; }
+.report-item:nth-child(6n+2) { border-left-color: #28a745; }
+.report-item:nth-child(6n+3) { border-left-color: #dc3545; }
+.report-item:nth-child(6n+4) { border-left-color: #6f42c1; }
+.report-item:nth-child(6n+5) { border-left-color: #fd7e14; }
+.report-item:nth-child(6n+6) { border-left-color: #20c997; }
+
+/* ==========================================================================
+   Report Icons
+   ========================================================================== */
+
+.report-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.report-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+    transform: rotate(45deg);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* Icon gradient backgrounds */
+.icon-sales { 
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.icon-profit { 
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.icon-debt { 
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.icon-import { 
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.icon-expense { 
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.icon-net { 
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* ==========================================================================
+   Buttons & Form Elements
+   ========================================================================== */
+
+.quick-report-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-report-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.quick-report-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+.quick-report-btn:hover::before {
+    left: 100%;
+}
+
+.date-input {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.date-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    background: white;
+    outline: none;
+}
+
+/* ==========================================================================
+   Loading States
+   ========================================================================== */
+
+.loading-spinner {
+    display: none;
+}
+
+.loading .loading-spinner {
+    display: inline-block;
+}
+
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: loading-slide 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-slide {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* ==========================================================================
+   Profit Indicators
+   ========================================================================== */
+
+.profit-positive { 
+    color: #28a745 !important;
+    text-shadow: 0 1px 3px rgba(40, 167, 69, 0.3);
+}
+
+.profit-negative { 
+    color: #dc3545 !important;
+    text-shadow: 0 1px 3px rgba(220, 53, 69, 0.3);
+}
+
+.profit-neutral { 
+    color: #ffc107 !important;
+    text-shadow: 0 1px 3px rgba(255, 193, 7, 0.3);
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+.fade-in {
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0);
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .reports-container {
+        padding: 10px 0;
+    }
+    
+    .report-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .reports-card {
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .report-item {
+        margin-bottom: 15px;
+    }
+    
+    .quick-report-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .date-input {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    .report-item {
+        text-align: center;
+    }
+    
+    .report-item .d-flex {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .report-item,
+    .quick-report-btn,
+    .reports-card {
+        transition: none;
+    }
+    
+    .fade-in,
+    .slide-in-left {
+        animation: none;
+    }
+    
+    .report-icon::before {
+        animation: none;
+    }
+}
+
+/* Focus indicators for keyboard navigation */
+.report-item:focus-within {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.quick-report-btn:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .reports-container {
+        background: white;
+        padding: 0;
+    }
+    
+    .reports-card {
+        background: white;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .report-item {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .quick-report-btn,
+    .dropdown,
+    form {
+        display: none;
+    }
+}

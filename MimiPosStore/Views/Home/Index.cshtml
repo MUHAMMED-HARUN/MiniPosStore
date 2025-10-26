@@ -185,6 +185,21 @@
                             </a>
                         </div>
                         <div class="col-md-2 col-sm-4 col-6 mb-2">
+                            <a asp-controller="RawMaterials" asp-action="Index" class="btn btn-outline-dark btn-sm w-100">
+                                <i class="fas fa-cubes"></i> المواد الخام
+                            </a>
+                        </div>
+                        <div class="col-md-2 col-sm-4 col-6 mb-2">
+                            <a asp-controller="Recipes" asp-action="Index" class="btn btn-outline-primary btn-sm w-100">
+                                <i class="fas fa-utensils"></i> الوصفات
+                            </a>
+                        </div>
+                        <div class="col-md-2 col-sm-4 col-6 mb-2">
+                            <a asp-controller="RecipeInfos" asp-action="Index" class="btn btn-outline-secondary btn-sm w-100">
+                                <i class="fas fa-receipt"></i> مكونات الوصفات
+                            </a>
+                        </div>
+                        <div class="col-md-2 col-sm-4 col-6 mb-2">
                             <a href="#" class="btn btn-outline-danger btn-sm w-100">
                                 <i class="fas fa-chart-bar"></i> التقارير
                             </a>
@@ -271,9 +286,36 @@
                 </div>
             </div>
         </div>
+        <video id="video" width="300" height="200" style="border:1px solid #ccc;"></video>
+        <input type="text" id="barcodeResult" placeholder="Scanned code will appear here" />
+        <button id="scanbtn">Start Scanning</button>
     </div>
 </div>
+@section Scripts {
+    <script src="/lib/zxing/zxing.min.js"></script>
+    <script src="/lib/SignalR/signalr.min.js"></script>
+    <script>
+        // 1️⃣ إنشاء اتصال SignalR
+        const connection = window.setupSignalRConnection(
+            "/barcodeHub", // مسار الهب
+            "ReceiveMessage", // الحدث الذي يستقبله JS
+            function(message) {
+                console.log("📩 رسالة مستلمة:", message);
+                alert("Received: " + message);
 
+            }
+        );
+
+        // 2️⃣ تشغيل ماسح الباركود وإرسال النتائج مباشرة
+        window.startBarcodeScan('video', 'barcodeResult', 'scanbtn', function(scannedText) {
+            console.log("📦 Barcode Scanned:", scannedText);
+
+            // إرسال الكود عبر SignalR
+            // يمكنك استبدال 'TargetUserIdHere' بمعرف المستخدم إذا أردت إرسال محدد
+            window.sendSignalRMessage(connection, "SendMessage", "TargetUserIdHere", scannedText);
+        });
+    </script>
+}
 <style>
     .card {
         transition: transform 0.2s ease-in-out;

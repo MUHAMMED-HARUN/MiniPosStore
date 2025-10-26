@@ -52,6 +52,44 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ImportOrders" asp-action="Index">
+                                <i class="fas fa-import me-1"></i>
+                                طلبات الاستيراد
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Expenses" asp-action="Index">
+                                <i class="fas fa-money-bill-wave me-1"></i>
+                                المصروفات
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">
+                                <i class="fas fa-chart-line me-1"></i>
+                                التقارير المالية
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="orderItemsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-list-alt me-1"></i>
+                                عناصر الطلبات
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="orderItemsDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Orders" asp-action="OrderItems">
+                                        <i class="fas fa-shopping-cart me-2"></i>
+                                        عناصر الطلبات
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="ImportOrders" asp-action="ImportOrderItems">
+                                        <i class="fas fa-import me-2"></i>
+                                        عناصر طلبات الاستيراد
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
@@ -62,6 +100,7 @@
                 </div>
             </div>
         </nav>
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -81,7 +120,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script src="~/js/barcodeReader.js"></script>
+    <script src="~/js/common.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

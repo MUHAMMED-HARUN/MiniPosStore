@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SharedModels.EF.Filters
 {
-    public   class clsOrderFilter
+    public class clsOrderFilter
     {
         public int? OrderID { get; set; }
 
@@ -25,6 +25,6 @@ namespace SharedModels.EF.Filters
 
         public string? PaymentStatus { get; set; }
         public string? ActionByUser { get; set; }
-      public  List<OrderDTO> orders { set; get; } = new List<OrderDTO>();
+        public List<OrderDTO> orders { set; get; } = new List<OrderDTO>();
     }
 }

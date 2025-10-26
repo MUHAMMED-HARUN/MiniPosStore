@@ -46,6 +46,7 @@ namespace BAL
             USD,
             EUR
         }
+
         public static SortedDictionary<int, string> GetCurrencyTypeList()
         {
             return new SortedDictionary<int, string>
@@ -58,6 +59,27 @@ namespace BAL
         public static string GetCurrencyTypeString(int CurrecyType)
         {
              if( GetCurrencyTypeList().TryGetValue(CurrecyType,out string Value))
+                return Value;
+            else
+                return string.Empty;
+        }
+
+        public enum enOrderItemType
+        {
+            Product = 1,
+            Material = 2
+        }
+        public static SortedDictionary<int, string> GetOrderItemTypeList()
+        {
+            return new SortedDictionary<int, string>
+            {
+                { (int)enOrderItemType.Product, "Product" },
+                { (int)enOrderItemType.Material, "Material" }
+            };
+        }
+        public static string GetOrderItemTypeString(int OrderItemType)
+        {
+            if (GetOrderItemTypeList().TryGetValue(OrderItemType, out string Value))
                 return Value;
             else
                 return string.Empty;

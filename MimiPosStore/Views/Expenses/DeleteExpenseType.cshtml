@@ -1,0 +1,48 @@
+@model SharedModels.EF.DTO.ExpenseTypeDTO
+
+@{
+    ViewData["Title"] = "حذف نوع المصروف";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">
+                        <i class="fas fa-trash"></i> حذف نوع المصروف
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        هل أنت متأكد من حذف نوع المصروف هذا؟
+                    </div>
+                    
+                    <dl class="row">
+                        <dt class="col-sm-3">رقم النوع:</dt>
+                        <dd class="col-sm-9">@Model.ID</dd>
+                        
+                        <dt class="col-sm-3">اسم النوع:</dt>
+                        <dd class="col-sm-9">@Model.Name</dd>
+                        
+                        <dt class="col-sm-3">الوصف:</dt>
+                        <dd class="col-sm-9">@Model.Description</dd>
+                    </dl>
+                    
+                    <form asp-action="DeleteExpenseType">
+                        <input type="hidden" asp-for="ID" />
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                            <a asp-action="ExpenseTypes" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> العودة للقائمة
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+   交集
+</div>

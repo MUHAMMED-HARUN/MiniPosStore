@@ -41,5 +41,13 @@ namespace DAL.IRepo
         // ImportOrderItems DTO Methods
         Task<ImportOrderItemDTO> GetImportOrderItemByIdDTOAsync(int ImportOrderItemID);
         Task<List<ImportOrderItemDTO>> GetImportOrderItemsByOrderIdDTOAsync(int ImportOrderID);
+        
+        // Import Order Item Union Methods
+        Task<List<ImportOrderItemUnionDTO>> GetImportOrderItemUnionDTOs(clsImportOrderItemUnionFilter filter);
+        Task<bool> AddRawMaterialItem(clsImportRawMaterialItem rawMaterialItem);
+        Task<bool> UpdateRawMaterialItem(clsImportRawMaterialItem rawMaterialItem);
+        Task<bool> DeleteRawMaterialItem(int rawMaterialItemID);
+        Task<List<clsImportRawMaterialItem>> GetRawMaterialItemsByOrderID(int importOrderID);
+        Task<clsImportRawMaterialItem> GetRawMaterialItemByIdAsync(int id);
     }
 }

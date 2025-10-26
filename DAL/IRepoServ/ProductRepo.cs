@@ -178,7 +178,28 @@ namespace DAL.IRepoServ
             // 6?? ��� ��������� �� ����� ��������
             return await _context.SaveChangesAsync() > 0;
         }
+        public async Task<bool> IncreaseProductQuantityAsync(int ProductID, float Quantity, string ActionByUser)
+        {
+            try
+            {
+                var product = await GetProductByIdAsync(ProductID);
+                if (product == null)
+                    return false;
 
+                product.AvailableQuantity += Quantity;
+                product.ActionDate = DateTime.Now;
+                product.ActionByUser = ActionByUser;
+                product.ActionType = 2;
+
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public async Task<bool> DecreaseProductQuantityAsync(int[] orderItemIds, string actionByUser)
         {
             if (orderItemIds == null || orderItemIds.Length == 0)
@@ -223,7 +244,7 @@ namespace DAL.IRepoServ
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> HasAvailableQuantity(int ProductID,float Quantity)
+        public async Task<bool> HasAvailableQuantity(int ProductID, float Quantity)
         {
             return await _context.Products.AnyAsync(p => p.ID == ProductID && p.AvailableQuantity >= Quantity);
         }
@@ -247,6 +268,48 @@ namespace DAL.IRepoServ
         public async Task<double> GetTotalStockValueAsync(clsTotalStockValue_SP StoclVal)
         {
             return await clsDALUtil.ExecuteSPCommands<double, clsTotalStockValue_SP>(_context, StoclVal, StoclVal.SPName);
+        }
+        public async Task<bool> ReserveQuantity(int ProductID, float ReserveedQuantity)
+        {
+            var Product = _context.Products.Where(p => p.ID == ProductID).FirstOrDefault();
+
+            if ((Product.ReservedQuantity + ReserveedQuantity) > Product.AvailableQuantity)
+                return false;
+            if (Product.ReservedQuantity == null)
+                Product.ReservedQuantity = new float();
+            Product.ReservedQuantity += ReserveedQuantity;
+            _context.Update(Product);
+            _context.SaveChanges();
+            return true;
+        }
+        public async Task<bool> DeReserveQuantity(int ProductID, float deReserveedQuantity)
+        {
+            var Product = await _context.Products.Where(p => p.ID == ProductID).FirstOrDefaultAsync();
+            if (Product == null)
+                return false;
+
+            var currentReserved = Product.ReservedQuantity;
+            if (currentReserved == null)
+                currentReserved = 0;
+
+            if (deReserveedQuantity > currentReserved)
+                return false;
+
+            Product.ReservedQuantity = currentReserved - deReserveedQuantity;
+            if (Product.ReservedQuantity < 0)
+                Product.ReservedQuantity = 0;
+
+            _context.Update(Product);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> IsExistProductByName(string ProductName,int ProductID=0)
+        {
+            if (ProductID == 0)
+                return await _context.Products.AnyAsync(p => p.Name == ProductName);
+            else
+                return await _context.Products.AnyAsync(p => p.Name == ProductName && p.ID != ProductID);
+
         }
     }
 }

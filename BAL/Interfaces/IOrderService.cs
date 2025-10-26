@@ -1,4 +1,6 @@
 using BAL;
+using BAL.Events.OrderEvents;
+using BAL.Events;
 using SharedModels.EF.DTO;
 using SharedModels.EF.Filters;
 using SharedModels.EF.Models;
@@ -14,7 +16,23 @@ namespace BAL.Interfaces
     {
         clsGlobal.enSaveMode SaveMode { get; set; }
         clsOrder Order { get; set; }
-        
+        public event AsyncEventHandler<OrderConfirmedEventArgs> OrderConfirmedEvent;
+        public event AsyncEventHandler<OrderItemAddedEventArgs> OrderItemAddedEvent;
+        public event AsyncEventHandler<OrderItemUpdatedEventArgs> OrderItemUpdatedEvent;
+        public event AsyncEventHandler<OrderDeletedEventArgs> OrderDeletedEvent;
+        public event AsyncEventHandler<OrderItemDeletedEventArgs> OrderItemDeletedEvent;
+        // Material order item events
+        public event AsyncEventHandler<MaterialOrderItemAddedEventArgs> MaterialOrderItemAddedEvent;
+        public event AsyncEventHandler<MaterialOrderItemUpdatedEventArgs> MaterialOrderItemUpdatedEvent;
+        public event AsyncEventHandler<MaterialOrderItemDeletedEventArgs> MaterialOrderItemDeletedEvent;
+        protected Task OnOrderConfirmed(clsOrder Order);
+        protected Task OnOrderItemAdded(clsOrderItem orderItem);
+        protected Task OnOrderItemUpdated(clsOrderItem oldOrderItem, clsOrderItem newOrderItem);
+        protected Task OnOrderDeleted(OrderDTO order);
+        protected Task OnOrderItemDeleted(clsOrderItem orderItem);
+        protected Task OnMaterialOrderItemAdded(clsRawMaterialOrderItem orderItem);
+        protected Task OnMaterialOrderItemUpdated(clsRawMaterialOrderItem oldOrderItem, clsRawMaterialOrderItem newOrderItem);
+        protected Task OnMaterialOrderItemDeleted(clsRawMaterialOrderItem orderItem);
         Task<bool> CreateAsync(clsOrder order);
         Task<bool> UpdateAsync(clsOrder order);
         Task<bool> DeleteAsync(int OrderID, string CurentUserID);
@@ -51,5 +69,12 @@ namespace BAL.Interfaces
         Task<bool> IsFullyPaidAsync(int orderID);
         
         Task<bool> Save();
+        Task<List<OrderItemUnionDTO>> GetOrderItemUnionDTOs(clsOrderItemUnionFilter filter);
+
+        // Material order items
+        Task<bool> AddMaterialOrderItem(clsRawMaterialOrderItem item);
+        Task<bool> UpdateMaterialOrderItem(clsRawMaterialOrderItem item);
+        Task<bool> DeleteMaterialOrderItem(int orderMaterialItemId);
+
     }
 }

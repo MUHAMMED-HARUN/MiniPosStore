@@ -129,7 +129,16 @@
                     <span class="badge bg-warning">@BAL.clsGlobal.GetPaymentStatusList()[@item.PaymentStatus]</span>
                 </td>
                 <td>
-                    <span class="badge bg-info">@item.ItemsCount</span>
+                    <span class="badge bg-info">@item.UnionItems.Count</span>
+                    @if (item.UnionItems.Any())
+                    {
+                        <div class="mt-1">
+                            <small class="text-muted">
+                                @item.UnionItems.Count(i => i.ItemType == 1) منتج | 
+                                @item.UnionItems.Count(i => i.ItemType == 2) مادة خام
+                            </small>
+                        </div>
+                    }
                 </td>
                 <td>
                     <div class="btn-group" role="group">

@@ -1,0 +1,175 @@
+@model SharedModels.EF.Models.clsRawMaterialOrderItem
+
+<div class="modal fade" id="addRawMaterialItemModal" tabindex="-1" aria-labelledby="addRawMaterialItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addRawMaterialItemModalLabel">
+                    <i class="fas fa-flask"></i> إضافة عنصر مادة خام
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="AddRawMaterialItem" method="post" id="addRawMaterialItemForm">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="OrderID" id="rmOrderIdInput" />
+                    <input type="hidden" asp-for="RawMaterialID" id="rmIdInput" />
+
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="mb-3">
+                                <label for="rmSearch" class="form-label">المادة الخام</label>
+                                <div class="input-group">
+                                    <input type="text" id="rmSearch" class="form-control" placeholder="اكتب اسم المادة الخام للبحث" />
+                                    <button class="btn btn-outline-primary" type="button" id="btnSearchRawMaterial"><i class="fas fa-search"></i></button>
+                                </div>
+                                <small class="text-muted">سيتم تعبئة بيانات المادة الخام عند اختيارها</small>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="mb-3">
+                                <label class="form-label">الكمية المتاحة</label>
+                                <input type="text" class="form-control" id="rmAvailableQuantity" readonly />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label asp-for="Quantity" class="form-label">الكمية</label>
+                                <input asp-for="Quantity" class="form-control" id="rmQuantityInput" />
+                                <span asp-validation-for="Quantity" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label asp-for="SellingPrice" class="form-label">سعر البيع</label>
+                                <input asp-for="SellingPrice" class="form-control" id="rmSellingPriceInput" />
+                                <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label asp-for="WholesalePrice" class="form-label">سعر الجملة</label>
+                                <input asp-for="WholesalePrice" class="form-control" id="rmWholesalePriceInput" readonly />
+                                <span asp-validation-for="WholesalePrice" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">الوحدة</label>
+                                <input type="text" class="form-control" id="rmUOMName" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">العملة</label>
+                                <input type="text" class="form-control" id="rmCurrency" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> إضافة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        (function () {
+            // ✅ تحميل معلومات المادة الخام
+            async function loadRawMaterialInfo(materialId) {
+                if (!materialId) return;
+
+                try {
+                    const response = await fetch(`/Orders/GetRawMaterialInfo?rawMaterialId=${encodeURIComponent(materialId)}`);
+                    const data = await response.json();
+
+                     if (data.success) {
+                        document.getElementById('rmAvailableQuantity').value = data.availableQuantity;
+                        document.getElementById('rmUOMName').value = data.uomName;
+                        document.getElementById('rmCurrency').value = data.currencyType;
+                         const wp = document.getElementById('rmWholesalePriceInput');
+                         if (wp) { wp.value = (data.wholesalePrice ?? '').toString(); }
+                    }
+                } catch (error) {
+                    console.error('Error loading raw material info:', error);
+                }
+            }
+
+            // ✅ البحث عن المادة الخام
+            const btnSearchRawMaterial = document.getElementById('btnSearchRawMaterial');
+            if (btnSearchRawMaterial) {
+                btnSearchRawMaterial.addEventListener('click', async function () {
+                    const term = document.getElementById('rmSearch').value;
+                    if (!term) return;
+
+                    try {
+                        const response = await fetch(`/RawMaterials/SearchRawMaterialByName?term=${encodeURIComponent(term)}`);
+                        const material = await response.json();
+
+                        const mid = material && (material.id || material.ID);
+                        if (mid) {
+                            document.getElementById('rmIdInput').value = mid;
+                            loadRawMaterialInfo(mid);
+                        } else {
+                            alert('لم يتم العثور على مادة خام');
+                        }
+                    } catch (error) {
+                        alert('حدث خطأ في البحث');
+                        console.error(error);
+                    }
+                });
+            }
+
+            // ✅ إرسال النموذج
+            const addForm = document.getElementById('addRawMaterialItemForm');
+            if (addForm) {
+                addForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(addForm);
+
+                    try {
+                        const response = await fetch(addForm.action, {
+                            method: 'POST',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            // إخفاء المودال (إذا كنت تستخدم Bootstrap 5)
+                            const modal = document.getElementById('addRawMaterialItemModal');
+                            if (modal) {
+                                const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+                                modalInstance.hide();
+                            }
+
+                            if (typeof loadOrderItems === 'function') loadOrderItems();
+                            if (typeof showSuccessToast === 'function') showSuccessToast(result.message);
+
+                            addForm.reset();
+                        } else {
+                            alert(result.message || 'حدث خطأ أثناء إضافة العنصر');
+                        }
+                    } catch (error) {
+                        alert('حدث خطأ أثناء إضافة العنصر');
+                        console.error(error);
+                    }
+                });
+            }
+        })();
+    </script>
+
+</div>
+
+

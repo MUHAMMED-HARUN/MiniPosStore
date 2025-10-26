@@ -1,0 +1,92 @@
+@model SharedModels.EF.Filters.clsRawMaterialFilter
+@{
+    ViewData["Title"] = "المواد الخام";
+}
+
+<h2>المواد الخام</h2>
+
+<form method="get" class="mb-3">
+    <div class="row g-2">
+        <div class="col">
+            <input class="form-control" name="Name" placeholder="الاسم" value="@Model?.Name" />
+        </div>
+        <div class="col">
+            <input class="form-control" name="Description" placeholder="الوصف" value="@Model?.Description" />
+        </div>
+        <div class="col">
+            <select class="form-select" name="UOMID" asp-items="ViewBag.UOMList">
+                <option value="">وحدة القياس</option>
+            </select>
+        </div>
+        <div class="col">
+            <select class="form-select" name="CurrencyTypeID" asp-items="ViewBag.CurrencyList">
+                <option value="">العملة</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary" type="submit">بحث</button>
+            <a class="btn btn-success" asp-action="Save">إضافة</a>
+        </div>
+    </div>
+    <div class="row g-2 mt-2">
+        <div class="col">
+            <input class="form-control" type="number" step="0.01" name="PurchasePriceFrom" placeholder="سعر من" value="@Model?.PurchasePriceFrom" />
+        </div>
+        <div class="col">
+            <input class="form-control" type="number" step="0.01" name="PurchasePriceTo" placeholder="سعر إلى" value="@Model?.PurchasePriceTo" />
+        </div>
+        <div class="col">
+            <input class="form-control" type="number" step="0.01" name="AvailableQuantityFrom" placeholder="كمية من" value="@Model?.AvailableQuantityFrom" />
+        </div>
+        <div class="col">
+            <input class="form-control" type="number" step="0.01" name="AvailableQuantityTo" placeholder="كمية إلى" value="@Model?.AvailableQuantityTo" />
+        </div>
+    </div>
+    <div class="row g-2 mt-2">
+        <div class="col">
+            <input class="form-control" name="SupplierName" placeholder="اسم المورد" value="@Model?.SupplierName" />
+        </div>
+        <div class="col">
+            <input class="form-control" type="date" name="ActionDateFrom" value="@(Model?.ActionDateFrom?.ToString("yyyy-MM-dd"))" />
+        </div>
+        <div class="col">
+            <input class="form-control" type="date" name="ActionDateTo" value="@(Model?.ActionDateTo?.ToString("yyyy-MM-dd"))" />
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>الاسم</th>
+            <th>الوصف</th>
+            <th>السعر</th>
+            <th>الكمية</th>
+            <th>الوحدة</th>
+            <th>المورد</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.rawMaterials)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.PurchasePrice</td>
+                <td>@item.AvailableQuantity</td>
+                <td>@item.UOMName</td>
+                <td>@item.SupplierName</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="Save" asp-route-id="@item.ID">تعديل</a>
+                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@item.ID">تفاصيل</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.ID">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    </table>
+
+

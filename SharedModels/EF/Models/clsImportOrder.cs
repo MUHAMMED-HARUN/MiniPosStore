@@ -37,5 +37,6 @@ namespace SharedModels.EF.Models
 
 
         public virtual ICollection<clsImportOrderItem> ImportOrderItems { get; set; }
+        public virtual ICollection<clsImportRawMaterialItem> ImportRawMaterialItems { get; set; }
     }
 }

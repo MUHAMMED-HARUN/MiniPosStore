@@ -372,5 +372,10 @@ namespace DAL.IRepoServ
                 })
                 .ToListAsync();
         }
+        public async Task<List<OrderItemUnionDTO>> GetOrderItemUnionDTOs(clsOrderItemUnionFilter filter)
+        {
+            return await clsDALUtil.ExecuteFilterCommands<OrderItemUnionDTO, clsOrderItemUnionFilter>(_context, filter, filter.FilterName);
+        }
+
     }
 }

@@ -1,0 +1,46 @@
+@model SharedModels.EF.Models.clsRawMaterial
+@{
+    ViewData["Title"] = Model.ID == 0 ? "إضافة مادة خام" : "تعديل مادة خام";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Save" method="post">
+    <input type="hidden" asp-for="ID" />
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">الاسم</label>
+            <input class="form-control" asp-for="Name" />
+        </div>
+        <div class="col-md-8">
+            <label class="form-label">الوصف</label>
+            <input class="form-control" asp-for="Description" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">سعر الشراء</label>
+            <input class="form-control" asp-for="PurchasePrice" type="number" step="0.01" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">الكمية المتاحة</label>
+            <input class="form-control" asp-for="AvailableQuantity" type="number" step="0.01" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">الوحدة</label>
+            <select class="form-select" asp-for="UOMID" asp-items="ViewBag.UOMList"></select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">العملة</label>
+            <select class="form-select" asp-for="CurrencyTypeID" asp-items="ViewBag.CurrencyList"></select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">المورد</label>
+            <select class="form-select" asp-for="MaterialSupplier" asp-items="ViewBag.SupplierList"></select>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">حفظ</button>
+            <a class="btn btn-secondary" asp-action="Index">رجوع</a>
+        </div>
+    </div>
+</form>
+
+

@@ -1,0 +1,325 @@
+@model SharedModels.EF.Filters.clsOrderItemUnionFilter
+
+@{
+    ViewData["Title"] = "عناصر الطلبات";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-list-alt"></i> عناصر الطلبات
+                    </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Filters Section -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="card card-primary collapsed-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-filter"></i> فلاتر البحث
+                                    </h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="display: none;">
+                                    <form asp-action="OrderItems" method="get">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="OrderItemID" class="control-label">رقم عنصر الطلب</label>
+                                                    <input asp-for="OrderItemID" class="form-control" placeholder="رقم عنصر الطلب" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="OrderID" class="control-label">رقم الطلب</label>
+                                                    <input asp-for="OrderID" class="form-control" placeholder="رقم الطلب" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="ItemID" class="control-label">رقم العنصر</label>
+                                                    <input asp-for="ItemID" class="form-control" placeholder="رقم العنصر" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="ItemType" class="control-label">نوع العنصر</label>
+                                                    <select asp-for="ItemType" class="form-control">
+                                                        <option value="">جميع الأنواع</option>
+                                                        @foreach (var item in ViewBag.ItemTypeList as SelectList)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="Name" class="control-label">اسم العنصر</label>
+                                                    <input asp-for="Name" class="form-control" placeholder="اسم العنصر" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="Description" class="control-label">الوصف</label>
+                                                    <input asp-for="Description" class="form-control" placeholder="الوصف" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="UOMID" class="control-label">وحدة القياس</label>
+                                                    <select asp-for="UOMID" class="form-control">
+                                                        <option value="">جميع الوحدات</option>
+                                                        @foreach (var item in ViewBag.UOMList as SelectList)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="QuantityFrom" class="control-label">الكمية من</label>
+                                                    <input asp-for="QuantityFrom" type="number" step="0.01" class="form-control" placeholder="الكمية من" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="QuantityTo" class="control-label">الكمية إلى</label>
+                                                    <input asp-for="QuantityTo" type="number" step="0.01" class="form-control" placeholder="الكمية إلى" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="SellingPriceFrom" class="control-label">سعر البيع من</label>
+                                                    <input asp-for="SellingPriceFrom" type="number" step="0.01" class="form-control" placeholder="سعر البيع من" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="SellingPriceTo" class="control-label">سعر البيع إلى</label>
+                                                    <input asp-for="SellingPriceTo" type="number" step="0.01" class="form-control" placeholder="سعر البيع إلى" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="WholesalePriceFrom" class="control-label">سعر الجملة من</label>
+                                                    <input asp-for="WholesalePriceFrom" type="number" step="0.01" class="form-control" placeholder="سعر الجملة من" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="WholesalePriceTo" class="control-label">سعر الجملة إلى</label>
+                                                    <input asp-for="WholesalePriceTo" type="number" step="0.01" class="form-control" placeholder="سعر الجملة إلى" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="CurrencyType" class="control-label">نوع العملة</label>
+                                                    <select asp-for="CurrencyType" class="form-control">
+                                                        <option value="">جميع العملات</option>
+                                                        @foreach (var item in ViewBag.CurrencyTypeList as SelectList)
+                                                        {
+                                                            <option value="@item.Value">@item.Text</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="ReservedQuantityFrom" class="control-label">الكمية المحجوزة من</label>
+                                                    <input asp-for="ReservedQuantityFrom" type="number" step="0.01" class="form-control" placeholder="الكمية المحجوزة من" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="ReservedQuantityTo" class="control-label">الكمية المحجوزة إلى</label>
+                                                    <input asp-for="ReservedQuantityTo" type="number" step="0.01" class="form-control" placeholder="الكمية المحجوزة إلى" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">&nbsp;</label>
+                                                    <div>
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="fas fa-search"></i> بحث
+                                                        </button>
+                                                        <a asp-action="OrderItems" class="btn btn-secondary">
+                                                            <i class="fas fa-undo"></i> إعادة تعيين
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div class="row">
+                        <div class="col-12">
+                            @if (Model.OrderItemUnionDTOs != null && Model.OrderItemUnionDTOs.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>رقم عنصر الطلب</th>
+                                                <th>رقم الطلب</th>
+                                                <th>نوع العنصر</th>
+                                                <th>اسم العنصر</th>
+                                                <th>الوصف</th>
+                                                <th>الكمية</th>
+                                                <th>سعر البيع</th>
+                                                <th>سعر الجملة</th>
+                                                <th>وحدة القياس</th>
+                                                <th>نوع العملة</th>
+                                                <th>الكمية المحجوزة</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.OrderItemUnionDTOs)
+                                            {
+                                                <tr>
+                                                    <td>@item.OrderItemID</td>
+                                                    <td>@item.OrderID</td>
+                                                    <td>
+                                                        @if (item.ItemType == 1)
+                                                        {
+                                                            <span class="badge bg-primary">
+                                                                <i class="fas fa-box"></i> منتج
+                                                            </span>
+                                                        }
+                                                        else if (item.ItemType == 2)
+                                                        {
+                                                            <span class="badge bg-warning">
+                                                                <i class="fas fa-cube"></i> مادة خام
+                                                            </span>
+                                                        }
+                                                    </td>
+                                                    <td><strong>@item.Name</strong></td>
+                                                    <td>@item.Description</td>
+                                                    <td>
+                                                        <span class="badge bg-info">@item.Quantity.ToString("N2")</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-primary fw-bold">@item.SellingPrice.ToString("N2")</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-success fw-bold">@item.WholesalePrice.ToString("N2")</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-secondary">@item.UOMID</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-dark">@item.CurrencyType</span>
+                                                    </td>
+                                                    <td>
+                                                        @if (item.ReservedQuantity > 0)
+                                                        {
+                                                            <span class="badge bg-warning">@item.ReservedQuantity.ToString("N2")</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">-</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- Summary Statistics -->
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-info"><i class="fas fa-list"></i></span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">إجمالي العناصر</span>
+                                                <span class="info-box-number">@Model.OrderItemUnionDTOs.Count()</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-success"><i class="fas fa-cube"></i></span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">المنتجات</span>
+                                                <span class="info-box-number">@Model.OrderItemUnionDTOs.Count(x => x.ItemType == 1)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-warning"><i class="fas fa-box"></i></span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">المواد الخام</span>
+                                                <span class="info-box-number">@Model.OrderItemUnionDTOs.Count(x => x.ItemType == 2)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-primary"><i class="fas fa-shopping-cart"></i></span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">إجمالي الكمية</span>
+                                                <span class="info-box-number">@Model.OrderItemUnionDTOs.Sum(x => x.Quantity).ToString("N2")</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-info text-center">
+                                    <i class="fas fa-info-circle"></i>
+                                    لا توجد عناصر طلبات مطابقة للفلاتر المحددة.
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable if needed
+            $('.table').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Arabic.json"
+                },
+                "responsive": true,
+                "pageLength": 25,
+                "order": [[0, "desc"]]
+            });
+        });
+    </script>
+}

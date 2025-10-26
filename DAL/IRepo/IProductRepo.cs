@@ -20,6 +20,7 @@ namespace DAL.IRepo
         Task<bool> DeleteProductAsync(clsProduct Product,string CurentUserID);
         Task<List<clsProduct>> SearchProductsAsync(string searchTerm);
           Task<bool> IncreaseProductQuantityAsync( int[] ImportOrderItmesID, string ActionByUser);
+        Task<bool> IncreaseProductQuantityAsync(int ProductID, float Quantity, string ActionByUser);
           Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser);
         Task<bool> HasAvailableQuantity(int ProductID, float Quantity);
         Task<clsProduct> SearchProductByNameBALDTOAsync(string searchTerm);
@@ -27,5 +28,8 @@ namespace DAL.IRepo
         Task<clsUnitOfMeasure> GetUOMByIdAsync(int id);
         Task<double> GetNetProfitAsync(clsNetProfit_SP profit_SP);
         Task<double> GetTotalStockValueAsync(clsTotalStockValue_SP StoclVal);
+        Task<bool> ReserveQuantity(int ProductID, float Quantity);
+        Task<bool> DeReserveQuantity(int ProductID, float deReserveedQuantity);
+        Task<bool> IsExistProductByName(string ProductName, int ProductID = 0);
     }
 }

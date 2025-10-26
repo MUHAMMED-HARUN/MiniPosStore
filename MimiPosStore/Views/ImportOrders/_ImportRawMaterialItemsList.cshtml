@@ -1,0 +1,59 @@
+@model List<SharedModels.EF.Models.clsImportRawMaterialItem>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>المادة الخام</th>
+                    <th>الكمية المستوردة</th>
+                    <th>سعر الشراء</th>
+                    <th>المبلغ الإجمالي</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+                    <tr class="import-raw-material-item-row" data-item-id="@item.ID">
+                        <td>@(i + 1)</td>
+                        <td>
+                            <strong>@(string.IsNullOrEmpty(item.RawMaterial?.Name) ? "غير محدد" : item.RawMaterial.Name)</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-warning">@item.Quantity</span>
+                        </td>
+                        <td>
+                            <span class="text-success">@item.SellingPrice @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </td>
+                        <td>
+                            <span class="item-total text-primary fw-bold">@((item.Quantity * item.SellingPrice).ToString("F2")) @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-warning edit-raw-material-item-btn" 
+                                        data-item-id="@item.ID" title="تعديل">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-raw-material-item-btn" 
+                                        data-item-id="@item.ID" title="حذف">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle"></i>
+        لا توجد مواد خام في هذا أمر الاستيراد.
+    </div>
+}

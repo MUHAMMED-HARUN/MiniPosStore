@@ -1,4 +1,6 @@
 using BAL;
+using BAL.Events.ImportOrderEvents;
+using BAL.Events;
 using SharedModels.EF.DTO;
 using SharedModels.EF.Filters;
 using SharedModels.EF.Models;
@@ -14,6 +16,12 @@ namespace BAL.Interfaces
     {
         clsGlobal.enSaveMode SaveMode { get; set; }
         clsImportOrder importOrder { get; set; }
+        
+        // Events
+        event AsyncEventHandler<ImportOrderConfirmedEventArgs> ImportOrderConfirmedEvent;
+        event AsyncEventHandler<ImportOrderItemUnionAddedEventArgs> ImportOrderItemUnionAddedEvent;
+        event AsyncEventHandler<ImportOrderItemUnionUpdatedEventArgs> ImportOrderItemUnionUpdatedEvent;
+        event AsyncEventHandler<ImportOrderItemUnionDeletedEventArgs> ImportOrderItemUnionDeletedEvent;
         
         // Basic CRUD Operations
         Task<bool> AddAsync(clsImportOrder importOrder);
@@ -51,5 +59,25 @@ namespace BAL.Interfaces
         Task<bool> IsFullyPaidAsync(int importOrderID);
         
         Task<bool> Save();
+        
+        // Import Order Item Union Methods
+        Task<List<ImportOrderItemUnionDTO>> GetImportOrderItemUnionDTOs(clsImportOrderItemUnionFilter filter);
+        
+        // Event Raisers
+        Task OnImportOrderConfirmed(clsImportOrder importOrder);
+        Task OnImportOrderItemUnionAdded(ImportOrderItemUnionDTO importOrderItem);
+        Task OnImportOrderItemUnionUpdated(ImportOrderItemUnionDTO oldImportOrderItem, ImportOrderItemUnionDTO newImportOrderItem);
+        Task OnImportOrderItemUnionDeleted(ImportOrderItemUnionDTO importOrderItem);
+        
+        // Import Order Item Management
+        Task<bool> AddItem(clsImportOrderItem importOrderItem);
+        Task<bool> AddRawMaterialItem(clsImportRawMaterialItem rawMaterialItem);
+        Task<bool> UpdateItem(clsImportOrderItem importOrderItem);
+        Task<bool> UpdateRawMaterialItem(clsImportRawMaterialItem rawMaterialItem);
+        Task<bool> DeleteItem(int importOrderItemID);
+        Task<bool> DeleteRawMaterialItem(int rawMaterialItemID);
+        Task<List<clsImportOrderItem>> GetItemsByImportOrderID(int importOrderID);
+        Task<List<clsImportRawMaterialItem>> GetRawMaterialItemsByImportOrderID(int importOrderID);
+        Task<clsImportRawMaterialItem> GetRawMaterialItemByIdAsync(int id);
     }
 }

@@ -51,7 +51,16 @@
 
                     <dt class="col-sm-4">عدد العناصر:</dt>
                     <dd class="col-sm-8">
-                        <span class="badge bg-info">@Model.ItemsCount</span>
+                        <span class="badge bg-info">@Model.UnionItems.Count</span>
+                        @if (Model.UnionItems.Any())
+                        {
+                            <div class="mt-1">
+                                <small class="text-muted">
+                                    @Model.UnionItems.Count(i => i.ItemType == 1) منتج | 
+                                    @Model.UnionItems.Count(i => i.ItemType == 2) مادة خام
+                                </small>
+                            </div>
+                        }
                     </dd>
 
                     <dt class="col-sm-4">المستخدم المسؤول:</dt>
@@ -71,41 +80,81 @@
                 </h5>
             </div>
             <div class="card-body">
-                @if (Model.ImportOrderItems != null && Model.ImportOrderItems.Any())
+                @if (Model.UnionItems != null && Model.UnionItems.Any())
                 {
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>المنتج</th>
+                                    <th>النوع</th>
+                                    <th>الاسم</th>
                                     <th>الكمية</th>
                                     <th>سعر البيع</th>
-                                    <th>المبلغ الإجمالي</th>
-                                    <th>العملة</th>
+                                    <th>سعر الجملة</th>
                                     <th>وحدة القياس</th>
+                                    <th>العملة</th>
+                                    <th>الإجراءات</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.ImportOrderItems)
+                                @foreach (var item in Model.UnionItems)
                                 {
                                     <tr>
                                         <td>
-                                            <div class="d-flex align-items-center">
-@*                                                 @if (item.HasProductImage)
+                                            @if (item.ItemType == 1)
+                                            {
+                                                <span class="badge bg-primary">
+                                                    <i class="fas fa-box"></i> منتج
+                                                </span>
+                                            }
+                                            else if (item.ItemType == 2)
+                                            {
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-cube"></i> مادة خام
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <strong>@item.Name</strong>
+                                            @if (!string.IsNullOrEmpty(item.Description))
+                                            {
+                                                <br><small class="text-muted">@item.Description</small>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">@item.Quantity.ToString("N2")</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-success fw-bold">@item.SellingPrice.ToString("N2")</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-primary fw-bold">@item.WholesalePrice.ToString("N2")</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">@item.UOMName (@item.UOMName)</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-dark">@item.CurrencyName</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                @if (item.ItemType == 1)
                                                 {
-                                                    <img src="@item.ProductImageUrl" alt="@item.ProductName" 
-                                                         class="me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                                                } *@
-                                                <div>
-                                                    <strong>@item.ProductName</strong>
-                                                </div>
+                                                    <a href="/Products/Edit/@item.ItemID" class="btn btn-sm btn-outline-primary" title="تعديل المنتج">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                }
+                                                else if (item.ItemType == 2)
+                                                {
+                                                    <a href="/RawMaterials/Edit/@item.ItemID" class="btn btn-sm btn-outline-warning" title="تعديل المادة الخام">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                }
+                                                <button type="button" class="btn btn-sm btn-outline-danger" title="حذف العنصر">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </div>
                                         </td>
-                                        <td>@item.Quantity</td>
-                                        <td>@item.SellingPrice</td>
-                                        <td>@item.TotalItemAmount</td>
-                                        <td>@item.CurrencyName</td>
-                                        <td>@item.UOMName</td>
                                     </tr>
                                 }
                             </tbody>

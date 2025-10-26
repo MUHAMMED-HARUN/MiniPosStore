@@ -101,7 +101,7 @@ namespace DAL
                 if (!prop.CanWrite)
                     continue;
                 string propName;
-                var descrAttr = prop.GetCustomAttribute<DescriptionAttribute>();
+                var descrAttr = prop.GetCustomAttributes<DescriptionAttribute>().FirstOrDefault();
 
                 if (descrAttr != null) 
                     propName = descrAttr.Description;
@@ -113,7 +113,17 @@ namespace DAL
                     if (readerColumns.Contains(propName))
                     {
                         var Val = reader[propName];
-                        prop.SetValue(obj, Convert.ChangeType(Val, prop.PropertyType));
+                        if (Val == DBNull.Value)
+                        {
+                            prop.SetValue(obj, default);
+                        }
+                        else
+                        {
+                            Type TargetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                            var SaveVal = Convert.ChangeType(Val, TargetType);
+
+                            prop.SetValue(obj, SaveVal);
+                        }
                     }
                 }
                 catch (IndexOutOfRangeException e)
@@ -156,7 +166,7 @@ namespace DAL
                     }
                     catch (SqlException s)
                     {
-
+                        
                     }
 
                     return listResult;

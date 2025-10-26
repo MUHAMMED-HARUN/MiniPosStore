@@ -30,5 +30,6 @@ namespace SharedModels.EF.Models
 
 
         public virtual ICollection<clsOrderItem> OrderItems { get; set; }
+        public virtual ICollection<clsRawMaterialOrderItem> RawMaterialOrderItems { get; set; }
     }
 }

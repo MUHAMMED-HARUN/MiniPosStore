@@ -1,0 +1,15 @@
+@model SharedModels.EF.Models.clsRecipe
+@{
+    ViewData["Title"] = "حذف وصفة";
+}
+
+<h2>تأكيد الحذف</h2>
+<div class="alert alert-warning">هل أنت متأكد من حذف: <strong>@Model.Name</strong>؟</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ID" />
+    <button class="btn btn-danger" type="submit">حذف</button>
+    <a class="btn btn-secondary" asp-action="Index">رجوع</a>
+</form>
+
+

@@ -51,7 +51,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "aa5be32b-7da3-4dc5-9a65-94e8cf8d3fad",
+                            Id = "42f84904-5174-4783-bd93-d07b716e14d5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -146,8 +146,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "50b19da8-8d4f-4059-bb4c-d085eb730b11",
-                            RoleId = "aa5be32b-7da3-4dc5-9a65-94e8cf8d3fad"
+                            UserId = "22acdc0a-5634-4354-b946-65f9aa3ba59f",
+                            RoleId = "42f84904-5174-4783-bd93-d07b716e14d5"
                         });
                 });
 
@@ -187,6 +187,65 @@ namespace DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsExpenseType", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ExpenseTypes");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsExpenses", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("ActionByUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("ActionType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<float>("Amount")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpenseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExpenseTypeID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ActionByUser");
+
+                    b.HasIndex("ExpenseTypeID");
+
+                    b.ToTable("Expenses");
                 });
 
             modelBuilder.Entity("SharedModels.EF.Models.clsImportOrder", b =>
@@ -263,6 +322,35 @@ namespace DAL.Migrations
                     b.HasIndex("ProductID");
 
                     b.ToTable("ImportOrderItems");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsImportRawMaterialItem", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("ImportOrderID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<int>("RawMaterialID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("SellingPrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ImportOrderID");
+
+                    b.HasIndex("RawMaterialID");
+
+                    b.ToTable("ImportRawMaterialItems");
                 });
 
             modelBuilder.Entity("SharedModels.EF.Models.clsLogRegister", b =>
@@ -370,6 +458,9 @@ namespace DAL.Migrations
                     b.Property<float>("SellingPrice")
                         .HasColumnType("real");
 
+                    b.Property<float>("WholesalePrice")
+                        .HasColumnType("real");
+
                     b.HasKey("ID");
 
                     b.HasIndex("OrderID");
@@ -448,6 +539,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float?>("ReservedQuantity")
+                        .HasColumnType("real");
+
                     b.Property<float>("RetailPrice")
                         .HasColumnType("real");
 
@@ -464,6 +558,172 @@ namespace DAL.Migrations
                     b.HasIndex("UOMID");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRawMaterial", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ActionType")
+                        .HasColumnType("int");
+
+                    b.Property<float>("AvailableQuantity")
+                        .HasColumnType("real");
+
+                    b.Property<int>("CurrencyTypeID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaterialSupplier")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("PurchasePrice")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("ReservedQuantity")
+                        .HasColumnType("real");
+
+                    b.Property<int>("UOMID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("MaterialSupplier");
+
+                    b.HasIndex("UOMID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("RawMaterials");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRawMaterialOrderItem", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("OrderID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<int>("RawMaterialID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("SellingPrice")
+                        .HasColumnType("float");
+
+                    b.Property<double>("WholesalePrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OrderID");
+
+                    b.HasIndex("RawMaterialID");
+
+                    b.ToTable("RawMaterialOrderItems");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRecipe", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ActionType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("YieldQuantity")
+                        .HasColumnType("real");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRecipeInfo", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("ActionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ActionType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RawMaterialID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipeID")
+                        .HasColumnType("int");
+
+                    b.Property<float>("RequiredMaterialQuantity")
+                        .HasColumnType("real");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("RawMaterialID");
+
+                    b.HasIndex("RecipeID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("RecipeInfos");
                 });
 
             modelBuilder.Entity("SharedModels.EF.Models.clsSupplier", b =>
@@ -639,19 +899,19 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "50b19da8-8d4f-4059-bb4c-d085eb730b11",
+                            Id = "22acdc0a-5634-4354-b946-65f9aa3ba59f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "13bfee64-9a4a-49e9-8309-808214c9679d",
+                            ConcurrencyStamp = "a8ee8f3f-bb0c-4cca-8a90-16908a0394a1",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJdZJhNaklh+TairfFIjTR6ESXyBlxhKKJSzOa0qY5e5SNsTd1eEYs7ttnhlGTLA3Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKN1Q0v0N6EGUE+65tv/1gi5wAscw5C5jz48YHSOCAtnqV0ugh+BzTNv5xg1KHlkbA==",
                             Permissions = 0,
                             PersonID = 1,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b1819f22-37e0-4608-bf03-18bafd57aab8",
+                            SecurityStamp = "533d3988-b415-4b5a-a0bd-9a998082f4d6",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -719,6 +979,25 @@ namespace DAL.Migrations
                     b.Navigation("Person");
                 });
 
+            modelBuilder.Entity("SharedModels.EF.Models.clsExpenses", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsUser", "User")
+                        .WithMany()
+                        .HasForeignKey("ActionByUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsExpenseType", "ExpenseType")
+                        .WithMany()
+                        .HasForeignKey("ExpenseTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExpenseType");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SharedModels.EF.Models.clsImportOrder", b =>
                 {
                     b.HasOne("SharedModels.EF.Models.clsUser", "User")
@@ -759,6 +1038,25 @@ namespace DAL.Migrations
                     b.Navigation("ImportOrder");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsImportRawMaterialItem", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsImportOrder", "ImportOrder")
+                        .WithMany("ImportRawMaterialItems")
+                        .HasForeignKey("ImportOrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsRawMaterial", "RawMaterial")
+                        .WithMany("ImportRawMaterialItems")
+                        .HasForeignKey("RawMaterialID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ImportOrder");
+
+                    b.Navigation("RawMaterial");
                 });
 
             modelBuilder.Entity("SharedModels.EF.Models.clsLogRegister", b =>
@@ -829,6 +1127,98 @@ namespace DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SharedModels.EF.Models.clsRawMaterial", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsSupplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("MaterialSupplier")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsUnitOfMeasure", "unitOfMeasure")
+                        .WithMany()
+                        .HasForeignKey("UOMID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("User");
+
+                    b.Navigation("unitOfMeasure");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRawMaterialOrderItem", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsOrder", "Order")
+                        .WithMany("RawMaterialOrderItems")
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsRawMaterial", "RawMaterial")
+                        .WithMany("RawMaterialOrderItems")
+                        .HasForeignKey("RawMaterialID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("RawMaterial");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRecipe", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsProduct", "Product")
+                        .WithMany("Variants")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRecipeInfo", b =>
+                {
+                    b.HasOne("SharedModels.EF.Models.clsRawMaterial", "RawMaterial")
+                        .WithMany("RecipeInfos")
+                        .HasForeignKey("RawMaterialID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsRecipe", "Recipe")
+                        .WithMany("RecipeInfos")
+                        .HasForeignKey("RecipeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SharedModels.EF.Models.clsUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RawMaterial");
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SharedModels.EF.Models.clsSupplier", b =>
                 {
                     b.HasOne("SharedModels.EF.Models.clsPerson", "Person")
@@ -859,11 +1249,15 @@ namespace DAL.Migrations
             modelBuilder.Entity("SharedModels.EF.Models.clsImportOrder", b =>
                 {
                     b.Navigation("ImportOrderItems");
+
+                    b.Navigation("ImportRawMaterialItems");
                 });
 
             modelBuilder.Entity("SharedModels.EF.Models.clsOrder", b =>
                 {
                     b.Navigation("OrderItems");
+
+                    b.Navigation("RawMaterialOrderItems");
                 });
 
             modelBuilder.Entity("SharedModels.EF.Models.clsPerson", b =>
@@ -880,6 +1274,22 @@ namespace DAL.Migrations
                     b.Navigation("ImportedProducts");
 
                     b.Navigation("OrderItems");
+
+                    b.Navigation("Variants");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRawMaterial", b =>
+                {
+                    b.Navigation("ImportRawMaterialItems");
+
+                    b.Navigation("RawMaterialOrderItems");
+
+                    b.Navigation("RecipeInfos");
+                });
+
+            modelBuilder.Entity("SharedModels.EF.Models.clsRecipe", b =>
+                {
+                    b.Navigation("RecipeInfos");
                 });
 
             modelBuilder.Entity("SharedModels.EF.Models.clsSupplier", b =>

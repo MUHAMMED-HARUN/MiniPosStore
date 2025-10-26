@@ -1,0 +1,289 @@
+@model MimiPosStore.Models.ReportsViewModel
+@{
+    ViewData["Title"] = "التقارير المالية";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/reports.css" asp-append-version="true" />
+}
+
+<div class="reports-container">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="reports-card p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h1 class="display-6 mb-2">
+                                <i class="fas fa-chart-line text-primary me-3"></i>
+                                التقارير المالية
+                            </h1>
+                            <p class="lead text-muted mb-0">تقارير شاملة عن أداء المتجر المالي</p>
+                        </div>
+                        <div class="text-end">
+                            <div class="badge bg-primary fs-6 p-2">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                @DateTime.Today.ToString("dd/MM/yyyy")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Selection -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="reports-card p-4">
+                    <h4 class="mb-3">
+                        <i class="fas fa-calendar-check text-primary me-2"></i>
+                        اختيار فترة التقرير
+                    </h4>
+                    
+                    <form asp-action="GenerateReports" method="post" id="reportsForm">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="row align-items-end">
+                            <div class="col-md-3">
+                                <label asp-for="StartDate" class="form-label fw-bold">تاريخ البداية</label>
+                                <input asp-for="StartDate" type="date" class="form-control date-input" />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label asp-for="EndDate" class="form-label fw-bold">تاريخ النهاية</label>
+                                <input asp-for="EndDate" type="date" class="form-control date-input" />
+                                <span asp-validation-for="EndDate" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <button type="submit" class="btn quick-report-btn btn-lg w-100" id="generateBtn">
+                                    <span class="loading-spinner spinner-border spinner-border-sm me-2" role="status"></span>
+                                    <i class="fas fa-chart-bar me-2"></i>
+                                    إنشاء التقرير
+                                </button>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-bolt me-2"></i>
+                                        تقارير سريعة
+                                    </button>
+                                    <ul class="dropdown-menu w-100">
+                                        <li><a class="dropdown-item" href="@Url.Action("QuickReport", new { period = "today" })">
+                                            <i class="fas fa-sun me-2"></i>اليوم
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("QuickReport", new { period = "week" })">
+                                            <i class="fas fa-calendar-week me-2"></i>هذا الأسبوع
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("QuickReport", new { period = "month" })">
+                                            <i class="fas fa-calendar-alt me-2"></i>هذا الشهر
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                        {
+                            <div class="alert alert-danger mt-3">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                @Model.ErrorMessage
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Results -->
+        @if (Model.HasData)
+        {
+            <div class="fade-in">
+                <!-- Summary Header -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="reports-card p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h4 class="mb-1">
+                                        <i class="fas fa-calendar-alt text-primary me-2"></i>
+                                        تقرير الفترة: @Model.DateRangeDisplay
+                                    </h4>
+                                    <small class="text-muted">(@Model.DaysInRange يوم)</small>
+                                </div>
+                                <div class="text-end">
+                                    <h3 class="mb-0 profit-@Model.ProfitabilityColor">
+                                        <i class="fas fa-chart-line me-2"></i>
+                                        @Model.ProfitabilityStatus
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Reports Grid -->
+                <div class="row">
+                    <!-- Order Sales -->
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="report-item p-4 h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="report-icon icon-sales me-3">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">إجمالي المبيعات</h6>
+                                    <h4 class="mb-0 fw-bold">@Model.OrderSales.ToString("C2")</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Net Profit -->
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="report-item p-4 h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="report-icon icon-profit me-3">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">صافي ربح الطلبات</h6>
+                                    <h4 class="mb-0 fw-bold profit-@(Model.OrderNetProfit >= 0 ? "positive" : "negative")">
+                                        @Model.OrderNetProfit.ToString("C2")
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Remaining Order Debt -->
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="report-item p-4 h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="report-icon icon-debt me-3">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">ديون الطلبات المتبقية</h6>
+                                    <h4 class="mb-0 fw-bold">@Model.RemainingOrderDebt.ToString("C2")</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Import Order Cost -->
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="report-item p-4 h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="report-icon icon-import me-3">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">تكلفة طلبات الاستيراد</h6>
+                                    <h4 class="mb-0 fw-bold">@Model.ImportOrderCost.ToString("C2")</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Remaining Import Debt -->
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="report-item p-4 h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="report-icon icon-debt me-3">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">ديون الاستيراد المتبقية</h6>
+                                    <h4 class="mb-0 fw-bold">@Model.RemainingImportDebt.ToString("C2")</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Total Expenses -->
+                    <div class="col-xl-4 col-lg-6 mb-4">
+                        <div class="report-item p-4 h-100">
+                            <div class="d-flex align-items-center">
+                                <div class="report-icon icon-expense me-3">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="text-muted mb-1">إجمالي المصروفات</h6>
+                                    <h4 class="mb-0 fw-bold text-danger">@Model.TotalExpenses.ToString("C2")</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Store Net Profit - Featured -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="reports-card p-4">
+                            <div class="text-center">
+                                <div class="report-icon icon-net mx-auto mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-store" style="font-size: 32px;"></i>
+                                </div>
+                                <h3 class="mb-2">صافي ربح المتجر</h3>
+                                <h1 class="display-4 fw-bold profit-@Model.ProfitabilityColor mb-3">
+                                    @Model.StoreNetProfit.ToString("C2")
+                                </h1>
+                                <p class="lead text-muted">
+                                    الربح الإجمالي للمتجر خلال الفترة المحددة
+                                    <br>
+                                    <small>(صافي ربح الطلبات - إجمالي المصروفات)</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else if (!Model.HasData && ViewBag.Method == "POST")
+        {
+            <div class="row">
+                <div class="col-12">
+                    <div class="reports-card p-5 text-center">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4>لا توجد بيانات للفترة المحددة</h4>
+                        <p class="text-muted">تأكد من وجود معاملات في الفترة المحddة وحاول مرة أخرى</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/reports.js" asp-append-version="true"></script>
+    <script>
+        // Page-specific initialization
+        $(document).ready(function() {
+            // Reset loading state if there are validation errors
+            @if (!ViewContext.ModelState.IsValid)
+            {
+                <text>
+                if (window.reportsManager) {
+                    window.reportsManager.hideLoadingState();
+                }
+                </text>
+            }
+
+            // Trigger animations if data is present
+            @if (Model.HasData)
+            {
+                <text>
+                setTimeout(() => {
+                    if (window.reportsManager) {
+                        window.reportsManager.animateCounters();
+                    }
+                }, 100);
+                </text>
+            }
+        });
+    </script>
+}

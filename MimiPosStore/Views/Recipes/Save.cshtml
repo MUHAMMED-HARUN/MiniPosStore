@@ -1,0 +1,68 @@
+@model SharedModels.EF.Models.clsRecipe
+@{
+    ViewData["Title"] = Model.ID == 0 ? "إضافة وصفة" : "تعديل وصفة";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Save" method="post">
+    <input type="hidden" asp-for="ID" />
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">الاسم</label>
+            <input class="form-control" asp-for="Name" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">المنتج</label>
+            <select class="form-select" asp-for="ProductID" asp-items="ViewBag.ProductList"></select>
+        </div>
+        <div class="col-12">
+            <label class="form-label">الوصف</label>
+            <input class="form-control" asp-for="Description" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">كمية الإنتاج</label>
+            <input class="form-control" asp-for="YieldQuantity" type="number" step="0.01" />
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">حفظ</button>
+            <a class="btn btn-secondary" asp-action="Index">رجوع</a>
+        </div>
+    </div>
+</form>
+
+@if (Model.ID > 0)
+{
+    <hr />
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h4>مكونات الوصفة</h4>
+        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addInfoModal">إضافة مكون</button>
+    </div>
+    <div id="recipeInfosContainer">
+        @await Html.PartialAsync("_RecipeInfosList", new List<SharedModels.EF.DTO.RecipeInfoDTO>())
+    </div>
+
+    @await Html.PartialAsync("_AddRecipeInfo", new SharedModels.EF.Models.clsRecipeInfo { RecipeID = Model.ID })
+    @await Html.PartialAsync("_EditRecipeInfo", new SharedModels.EF.Models.clsRecipeInfo { RecipeID = Model.ID })
+}
+
+@section Scripts {
+    <script>
+        (function(){
+            function loadRecipeInfos(){
+                var container = document.getElementById('recipeInfosContainer');
+                if(!container) return;
+                var recipeId = @Model.ID;
+                if(!recipeId || recipeId <= 0) return;
+                fetch('/RecipeInfos/GetByRecipeId?recipeId=' + recipeId, { headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+                    .then(function(res){ if(!res.ok) throw new Error('خطأ في التحميل'); return res.text(); })
+                    .then(function(html){ container.innerHTML = html; })
+                    .catch(function(){ container.innerHTML = '<div class="alert alert-danger">فشل تحميل المكونات</div>'; });
+            }
+            window.loadRecipeInfos = loadRecipeInfos;
+            if (@Model.ID > 0) {
+                loadRecipeInfos();
+            }
+        })();
+    </script>
+}

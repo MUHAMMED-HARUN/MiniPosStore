@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SharedModels.EF.Filters;
 
 namespace MimiPosStore.Controllers
 {
@@ -25,13 +26,15 @@ namespace MimiPosStore.Controllers
         private readonly IOrderService _orderService;
         private readonly ICustomerService _customerService;
         private readonly IProductService _productService;
+        private readonly IRawMaterialService _rawMaterialService;
 
 
-        public OrdersController(IOrderService orderService, ICustomerService customerService, IProductService productService)
+        public OrdersController(IOrderService orderService, ICustomerService customerService, IProductService productService, IRawMaterialService rawMaterialService)
         {
             _orderService = orderService;
             _customerService = customerService;
             _productService = productService;
+            _rawMaterialService = rawMaterialService;
         }
 
         // GET: Orders
@@ -110,12 +113,6 @@ namespace MimiPosStore.Controllers
                 else
                 {
                     bool result = await _orderService.UpdateBALDTOAsync(OrderDTO);
-                    if (!string.IsNullOrEmpty(ItemIds))
-                    {
-                        var ArrayItemsID = JsonSerializer.Deserialize<int[]>(ItemIds);
-                        if (ArrayItemsID?.Length > 0)
-                            await _productService.DecreaseProductQuantityAsync(ArrayItemsID, "");
-                    }
 
                     if (result)
                     {
@@ -327,14 +324,42 @@ namespace MimiPosStore.Controllers
             return RedirectToAction(nameof(Save), new { id = orderId });
         }
 
+        // POST: Orders/DeleteMaterialItem
+        [HttpPost]
+        public async Task<IActionResult> DeleteMaterialItem(int itemId, int orderId)
+        {
+            try
+            {
+                var result = await _orderService.DeleteMaterialOrderItem(itemId);
+                if (result)
+                {
+                    TempData["SuccessMessage"] = "تم حذف عنصر المادة الخام بنجاح";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "فشل في حذف عنصر المادة الخام";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "حدث خطأ أثناء حذف عنصر المادة الخام: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Save), new { id = orderId });
+        }
+
         // GET: Orders/GetOrderItems
         [HttpGet]
         public async Task<IActionResult> GetOrderItems(int orderId)
         {
             try
             {
-                var orderItems = await _orderService.GetOrderItemsByOrderIdBALDTOAsync(orderId);
-                return PartialView("_OrderItemsList", orderItems);
+                var unionFilter = new SharedModels.EF.Filters.clsOrderItemUnionFilter
+                {
+                    OrderID = orderId
+                };
+                var unionItems = await _orderService.GetOrderItemUnionDTOs(unionFilter);
+                return PartialView("_OrderItemsList", unionItems);
             }
             catch (Exception ex)
             {
@@ -368,6 +393,79 @@ namespace MimiPosStore.Controllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
+        }
+
+        // GET: Orders/GetRawMaterialInfo
+        [HttpGet]
+        public async Task<IActionResult> GetRawMaterialInfo(int rawMaterialId)
+        {
+            try
+            {
+                var material = await _rawMaterialService.GetByIdBALDTOAsync(rawMaterialId);
+                if (material != null)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        availableQuantity = material.AvailableQuantity,
+                        currencyType = material.CurrencyTypeID,
+                        uomName = material.UOMName,
+                        wholesalePrice = material.PurchasePrice
+                    });
+                }
+                return Json(new { success = false, message = "المادة الخام غير موجودة" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        // POST: Orders/AddRawMaterialItem -> delegated to OrderService (events handle reservation)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddRawMaterialItem(clsRawMaterialOrderItem item)
+        {
+            ModelState.Remove("Order");
+            ModelState.Remove("RawMaterial");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var ok = await _orderService.AddMaterialOrderItem(item);
+                    if (ok)
+                    {
+                        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                        {
+                            return Json(new { success = true, message = "تم إضافة عنصر المادة الخام بنجاح" });
+                        }
+                        TempData["SuccessMessage"] = "تم إضافة عنصر المادة الخام بنجاح";
+                    }
+                    else
+                    {
+                        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                        {
+                            return Json(new { success = false, message = "فشل في إضافة عنصر المادة الخام" });
+                        }
+                        TempData["ErrorMessage"] = "فشل في إضافة عنصر المادة الخام";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = false, message = "حدث خطأ أثناء إضافة عنصر المادة الخام: " + ex.Message });
+                    }
+                    TempData["ErrorMessage"] = "حدث خطأ أثناء إضافة عنصر المادة الخام: " + ex.Message;
+                }
+            }
+            else if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var errors = ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray());
+                return Json(new { success = false, errors });
+            }
+
+            return RedirectToAction(nameof(Save), new { id = item.OrderID });
         }
 
         // GET: Orders/Details/5
@@ -427,6 +525,75 @@ namespace MimiPosStore.Controllers
             }
         }
 
+        // GET: Orders/GetMaterialItemForEdit
+        [HttpGet]
+        public async Task<IActionResult> GetMaterialItemForEdit(int itemId,int orderId)
+        {
+            // هنا يوجد خطا في تسمية ال 
+            // GetMaterialItemForEdit(int itemId,int orderId)
+            // بدل ان يكون itemid 
+            // يجب ان يصير OrderItemID
+            try
+            {
+                clsOrderItemUnionFilter unionFilter = new clsOrderItemUnionFilter();
+                unionFilter.OrderItemID = itemId;
+                unionFilter.ItemType = ((int)clsGlobal.enOrderItemType.Material);
+                unionFilter.OrderID = orderId;
+                var matItem =  (await _orderService.GetOrderItemUnionDTOs(unionFilter)).FirstOrDefault();
+                if (matItem != null)
+                {
+                    var materialDto = await _rawMaterialService.GetByIdBALDTOAsync(matItem.ItemID);
+                    return Json(new
+                    {
+                        success = true,
+                        item = new
+                        {
+                            id = matItem.OrderItemID,
+                            name = matItem.Name,
+                            orderID = matItem.OrderID,
+                            materialID = matItem.ItemID,
+                            quantity = matItem.Quantity,
+                            sellingPrice = matItem.SellingPrice,
+                            wholesalePrice = matItem.WholesalePrice,
+                            availableQuantity = materialDto?.AvailableQuantity ?? 0,
+                            uomName = materialDto?.UOMName ?? ""
+                        }
+                    });
+                }
+                return Json(new { success = false, message = "عنصر المادة غير موجود" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        // POST: Orders/UpdateMaterialItem
+        [HttpPost]
+        public async Task<IActionResult> UpdateMaterialItem(SharedModels.EF.Models.clsRawMaterialOrderItem matItem)
+        {
+            ModelState.Remove("Order");
+            ModelState.Remove("RawMaterial");
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+                return Json(new { success = false, errors = errors });
+            }
+
+            try
+            {
+                var ok = await _orderService.UpdateMaterialOrderItem(matItem);
+                return Json(new { success = ok, message = ok ? "تم تحديث عنصر المادة بنجاح" : "فشل تحديث عنصر المادة" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
 
         // GET: Orders/AddPayment
         [HttpGet]
@@ -467,6 +634,28 @@ namespace MimiPosStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Orders/OrderItems - شاشة عناصر الطلبات مع الفلاتر
+        public async Task<IActionResult> OrderItems(clsOrderItemUnionFilter filter)
+        {
+            try
+            {
+                // Populate dropdowns for filters
+                await PopulateOrderItemsDropDowns();
+
+                var orderItems = await _orderService.GetOrderItemUnionDTOs(filter);
+                
+                // Wrap results in filter model for the view convenience
+                filter.OrderItemUnionDTOs = orderItems;
+
+                return View(filter);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "حدث خطأ أثناء تحميل قائمة عناصر الطلبات: " + ex.Message;
+                return View(new clsOrderItemUnionFilter { OrderItemUnionDTOs = new List<OrderItemUnionDTO>() });
+            }
+        }
+
         private async Task PopulateDropDowns()
         {
             try
@@ -493,6 +682,43 @@ namespace MimiPosStore.Controllers
                     new { Key = (byte)1, Value = "مدفوع جزئياً" },
                     new { Key = (byte)2, Value = "مدفوع بالكامل" }
                 }, "Key", "Value");
+            }
+        }
+
+        private async Task PopulateOrderItemsDropDowns()
+        {
+            try
+            {
+                // Item Type dropdown
+                ViewBag.ItemTypeList = new SelectList(new[]
+                {
+                    new { Key = 1, Value = "منتج" },
+                    new { Key = 2, Value = "مادة خام" }
+                }, "Key", "Value");
+
+                // Currency Type dropdown
+                ViewBag.CurrencyTypeList = new SelectList(new[]
+                {
+                    new { Key = 1, Value = "TRY" },
+                    new { Key = 2, Value = "USD" },
+                    new { Key = 3, Value = "EUR" }
+                }, "Key", "Value");
+
+                // UOM dropdown - يمكن تحسين هذا بجلب البيانات من قاعدة البيانات
+                ViewBag.UOMList = new SelectList(new[]
+                {
+                    new { Key = 1, Value = "قطعة" },
+                    new { Key = 2, Value = "كيلو" },
+                    new { Key = 3, Value = "جرام" },
+                    new { Key = 4, Value = "لتر" }
+                }, "Key", "Value");
+            }
+            catch (Exception ex)
+            {
+                // في حالة حدوث خطأ، إعداد قوائم فارغة
+                ViewBag.ItemTypeList = new SelectList(new List<object>(), "Key", "Value");
+                ViewBag.CurrencyTypeList = new SelectList(new List<object>(), "Key", "Value");
+                ViewBag.UOMList = new SelectList(new List<object>(), "Key", "Value");
             }
         }
     }

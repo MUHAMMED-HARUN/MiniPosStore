@@ -1,4 +1,4 @@
-@model List<SharedModels.EF.DTO.OrderItemsDTO>
+@model List<SharedModels.EF.DTO.OrderItemUnionDTO>
  
     
 @if (Model != null && Model.Any())
@@ -8,7 +8,7 @@
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
-                    <th>المنتج</th>
+                    <th>العنصر</th>
                     <th>الكمية</th>
                     <th>سعر البيع</th>
                     <th>سعر الجملة</th>
@@ -22,37 +22,59 @@
                 @for (int i = 0; i < Model.Count; i++)
                 {
                     var item = Model[i];
-                    <tr class="order-item-row" data-item-id="@item.ID">
+                    <tr class="order-item-row" data-item-id="@item.OrderItemID">
                         <td>@(i + 1)</td>
                         <td>
-                            <strong>@(string.IsNullOrEmpty(item.ProductName) ? "غير محدد" : item.ProductName)</strong>
+                            <strong>@(string.IsNullOrEmpty(item.Name) ? "غير محدد" : item.Name)</strong>
                         </td>
                         <td>
                             <span class="badge bg-primary">@item.Quantity</span>
                         </td>
                         <td>
-                            <span class="text-success">@item.SellingPrice @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                            <span class="text-success">@item.SellingPrice @BAL.clsGlobal.GetCurrencyTypeString(item.CurrencyType)</span>
                         </td>
                         <td>
-                            <span class="text-success">@item.WholesalePrice @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                            <span class="text-success">@item.WholesalePrice @BAL.clsGlobal.GetCurrencyTypeString(item.CurrencyType)</span>
                         </td>
                         <td>
-                            <span class="item-total text-primary fw-bold">@item.SubTotal.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                            <span class="item-total text-primary fw-bold">@( (item.Quantity * item.SellingPrice).ToString("F2") ) @BAL.clsGlobal.GetCurrencyTypeString(item.CurrencyType)</span>
                         </td>
                         <td>
-                            <span class="item-discount text-warning fw-bold">@item.DiscountAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                            <span class="item-discount text-warning fw-bold">@((item.PriceAdjustment ?? 0).ToString("F2")) @BAL.clsGlobal.GetCurrencyTypeString(item.CurrencyType)</span>
                         </td>
                         <td>
-                            <span class="item-final text-success fw-bold">@item.FinalAmount.ToString("F2") @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                            <span class="item-final text-success fw-bold">@((item.Quantity * item.SellingPrice - (item.PriceAdjustment ?? 0)).ToString("F2")) @BAL.clsGlobal.GetCurrencyTypeString(item.CurrencyType)</span>
                         </td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="editOrderItem(@item.ID, @item.OrderID)" title="تعديل">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteItem(@item.ID, @item.OrderID)" title="حذف">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                @{
+                                    var isProduct = item.ItemType == (int)BAL.clsGlobal.enOrderItemType.Product;
+                                    var editController = isProduct ? "Products" : "RawMaterials";
+                                }
+                                @if (isProduct)
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="editOrderItem(@item.OrderItemID, @item.OrderID)" title="تعديل المنتج">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="editRawMaterialItem(@item.OrderItemID, @item.OrderID)" title="تعديل المادة">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                }
+                                @if (isProduct)
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteItem(@item.OrderItemID, @item.OrderID)" title="حذف">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteMaterialItem(@item.OrderItemID, @item.OrderID)" title="حذف المادة">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
                             </div>
 
                         </td>

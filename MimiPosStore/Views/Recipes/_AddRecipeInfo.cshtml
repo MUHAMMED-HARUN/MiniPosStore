@@ -1,0 +1,100 @@
+@model SharedModels.EF.Models.clsRecipeInfo
+
+<div class="modal fade" id="addInfoModal" tabindex="-1" aria-labelledby="addInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addInfoModalLabel"><i class="fas fa-plus"></i> إضافة مكون للوصفة</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Save" asp-controller="RecipeInfos" method="post" id="addInfoForm">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="RecipeID" />
+                    <input type="hidden" asp-for="ID" value="0" />
+
+                    <div class="mb-3">
+                        <label class="form-label">المادة</label>
+                        <div class="input-group">
+                            <input type="text" id="addMaterialSearch" class="form-control" placeholder="اكتب اسم المادة" autocomplete="off" />
+                            <button class="btn btn-primary" type="button" id="btnSearchMaterial">
+                                <i class="fas fa-search"></i> بحث
+                            </button>
+                        </div>
+                        <input type="hidden" asp-for="RawMaterialID" id="addMaterialID" />
+                        <div id="materialResults" class="list-group mt-1" style="max-height: 200px; overflow-y: auto;"></div>
+                        <span asp-validation-for="RawMaterialID" class="text-danger"></span>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col">
+                            <label class="form-label">الكمية المطلوبة</label>
+                            <input class="form-control" asp-for="RequiredMaterialQuantity" type="number" step="0.01" min="0" />
+                            <span asp-validation-for="RequiredMaterialQuantity" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إضافة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // زر البحث
+        document.getElementById("btnSearchMaterial").addEventListener("click", function () {
+            const term = document.getElementById("addMaterialSearch").value.trim();
+            if (!term) return;
+
+            fetch(`/RawMaterials/SearchRawMaterialByName?term=${encodeURIComponent(term)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("خطأ أثناء البحث");
+                    return res.json();
+                })
+                .then(data => {
+                    const results = document.getElementById("materialResults");
+                    results.innerHTML = "";
+                    if (!data || !data.id) {
+                        results.innerHTML = `<div class="list-group-item">لا توجد نتائج</div>`;
+                        return;
+                    }
+                    document.getElementById("addMaterialID").value = data.id;
+                })
+                .catch(() => alert("خطأ أثناء البحث"));
+        });
+
+        // الفورم
+        document.getElementById("addInfoForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new URLSearchParams(new FormData(form));
+
+            fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        // إغلاق المودال (لو تستخدم Bootstrap 5)
+                        const modal = bootstrap.Modal.getInstance(document.getElementById("addInfoModal"));
+                        modal.hide();
+
+                        if (typeof loadRecipeInfos === "function") loadRecipeInfos();
+                        form.reset();
+                    } else {
+                        alert(res.message || "فشل الإضافة");
+                    }
+                })
+                .catch(() => alert("خطأ في الاتصال"));
+        });
+    });
+</script>
+
+
+

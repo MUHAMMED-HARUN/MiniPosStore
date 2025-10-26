@@ -1,7 +1,6 @@
 using BAL.Interfaces;
 using BAL.Services;
 using DAL.EF.AppDBContext;
-using SharedModels.EF.Models;
 using DAL.IRepo;
 using DAL.IRepoServ;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +8,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using MimiPosStore.Hubs;
+using SharedModels.EF.Models;
 
 namespace MimiPosStore
 {
@@ -42,6 +43,10 @@ namespace MimiPosStore
             builder.Services.AddScoped<ISupplierRepo, SupplierRepo>();
             builder.Services.AddScoped<IPeopleRepo, PeopleRepo>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
+            // New repos
+            builder.Services.AddScoped<DAL.IRepo.IRawMaterialService, RawMaterialRepo>();
+            builder.Services.AddScoped<IRecipeRepo, RecipeRepo>();
+            builder.Services.AddScoped<IRecipeInfoRepo, RecipeInfoRepo>();
 
             // BAL Services
             builder.Services.AddScoped<IProductService, ProductService>();
@@ -57,47 +62,53 @@ namespace MimiPosStore
             builder.Services.AddScoped<IPeopleService, PeopleService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+            // New services
+            builder.Services.AddScoped<BAL.Interfaces.IRawMaterialService, RawMaterialService>();
+            builder.Services.AddScoped<IRecipeService, RecipeService>();
+            builder.Services.AddScoped<IRecipeInfoService, RecipeInfoService>();
+            
+            // Expense Services
+            builder.Services.AddScoped<DAL.IRepo.IExpenseService, DAL.IRepoServ.ExpenseService>();
+            builder.Services.AddScoped<BAL.Interfaces.IExpenseService, BAL.Services.ExpenseService>();
+
+
+            // Reports Services - Following SOLID principles
+            builder.Services.AddScoped<DAL.IRepoServ.clsReportsRepo>();
+            builder.Services.AddScoped<IReportsService, ReportsService>();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
-            // Build connection string based on environment variables if present (Docker),
-            // otherwise fall back to appsettings connection strings.
+            string connectionString;
+
+#if DEBUG
+            connectionString = builder.Configuration.GetConnectionString("cs")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "";
+#else
             var envDbHost = Environment.GetEnvironmentVariable("DB_HOST");
             var envDbName = Environment.GetEnvironmentVariable("DB_Name");
             var envDbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
-            string connectionString;
             if (!string.IsNullOrWhiteSpace(envDbHost) && !string.IsNullOrWhiteSpace(envDbName) && !string.IsNullOrWhiteSpace(envDbPassword))
             {
                 connectionString = $"Server={envDbHost},1433;Database={envDbName};User Id=sa;Password={envDbPassword};TrustServerCertificate=True;";
             }
-            else
-            {
-                connectionString = builder.Configuration.GetConnectionString("cs")
-                    ?? builder.Configuration.GetConnectionString("DefaultConnection")
-                    ?? "";
-            }
-
+            else 
+            InvalidOperationException("Environment variables for DB connection are not set.")
+#endif
+            // Primary DbContext for regular operations and Identity
             builder.Services.AddDbContext<AppDBContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            // 3️⃣ Identity يستخدم الـ DbContext العادي فقط
             builder.Services.AddIdentity<clsUser, IdentityRole>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = false; // لا تحتاج لتأكيد البريد
-                options.User.RequireUniqueEmail = false; // إلغاء إلزام البريد الإلكتروني
+                options.SignIn.RequireConfirmedAccount = false;
+                options.User.RequireUniqueEmail = false;
             })
-            .AddEntityFrameworkStores<AppDBContext>()
+                        .AddEntityFrameworkStores<AppDBContext>()
             .AddDefaultTokenProviders();
 
-            var result = new List< clsCustomer>();
-         result.Where(i => i.PersonID == 1)                         // 1. فلترة حسب التاريخ
-          .GroupBy(i => i.PersonID)                        // 2. تجميع حسب رقم المنتج
-          .Select(g => new                                  // 3. اختيار شكل النتيجة
-          {
-              ProductID = g.Key,
-              Count = g.Count()
-          })
-          .OrderBy(x => x.ProductID); 
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
@@ -107,10 +118,11 @@ namespace MimiPosStore
             
             builder.Services.AddSingleton<IEmailSender, FakeEmailSender>();
 
-
+            builder.Services.AddSignalR();
             var app = builder.Build();
 
      CreateDataBase(app);
+            app.MapHub<MessageHub>("/barcodeHub");
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

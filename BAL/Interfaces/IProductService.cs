@@ -20,6 +20,7 @@ namespace BAL.Interfaces
         Task<bool> DeleteProductAsync(int id, string uploadPath);
         Task<List<clsProduct>> SearchProductsAsync(string searchTerm);
          Task<bool> IncreaseProductQuantityAsync( int[] ImportOrderItmesID, string ActionByUser);
+        Task<bool> IncreaseProductQuantityAsync(int ProductID, float Quantity, string ActionByUser);
         Task<bool> DecreaseProductQuantityAsync(int[] OrderItemsID, string actionByUser);
 
         Task<bool> HasAvailableQuantity(int ProductID, float Quantity);
@@ -36,5 +37,11 @@ namespace BAL.Interfaces
         Task<ProductDTO> SearchProductByNameBALDTOAsync(string searchTerm);
         Task<double> GetNetProfit(clsNetProfit_SP profit_SP);
         Task<double> GetTotalStockValueAsync(clsTotalStockValue_SP StockVal);
+        Task<bool> ReserveQuantity(int ProductID, float ReserveedQuantity);
+        Task<bool> DeReserveQuantity(int ProductID, float deReserveedQuantity);
+        
+        // Import Order handling
+        Task HandleImportOrderConfirmed(int importOrderID, List<SharedModels.EF.DTO.ImportOrderItemUnionDTO> productItems);
+        Task<bool> IsExistProductByName(string ProductName, int ProductID = 0);
     }
 }

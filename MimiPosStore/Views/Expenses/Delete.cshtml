@@ -1,0 +1,57 @@
+@model SharedModels.EF.DTO.ExpensesDTO
+
+@{
+    ViewData["Title"] = "حذف المصروف";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">
+                        <i class="fas fa-trash"></i> حذف المصروف
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        هل أنت متأكد من حذف هذا المصروف؟
+                    </div>
+                    
+                    <dl class="row">
+                        <dt class="col-sm-3">رقم المصروف:</dt>
+                        <dd class="col-sm-9">@Model.ID</dd>
+                        
+                        <dt class="col-sm-3">تاريخ المصروف:</dt>
+                        <dd class="col-sm-9">@Model.ExpenseDate.ToString("yyyy-MM-dd")</dd>
+                        
+                        <dt class="col-sm-3">نوع المصروف:</dt>
+                        <dd class="col-sm-9">@Model.ExpenseTypeName</dd>
+                        
+                        <dt class="col-sm-3">الوصف:</dt>
+                        <dd class="col-sm-9">@Model.Description</dd>
+                        
+                        <dt class="col-sm-3">المبلغ:</dt>
+                        <dd class="col-sm-9">@Model.Amount.ToString("N2")</dd>
+                        
+                        <dt class="col-sm-3">المستخدم:</dt>
+                        <dd class="col-sm-9">@Model.UserName</dd>
+                    </dl>
+                    
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="ID" />
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> العودة للقائمة
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

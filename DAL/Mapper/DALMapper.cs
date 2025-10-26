@@ -294,6 +294,109 @@ namespace DAL.Mapper
             };
         }
 
+        // RawMaterial Mappers
+        public static RawMaterialDTO ToRawMaterialDTO(this clsRawMaterial rawMaterial)
+        {
+            if (rawMaterial == null) return null;
+
+            return new RawMaterialDTO
+            {
+                ID = rawMaterial.ID,
+                Name = rawMaterial.Name,
+                Description = rawMaterial.Description,
+                PurchasePrice = rawMaterial.PurchasePrice,
+                AvailableQuantity = rawMaterial.AvailableQuantity,
+                ProductionLossQuantity = 0,
+                UOMID = rawMaterial.UOMID,
+                UOMName = rawMaterial.unitOfMeasure?.Name ?? "",
+                CurrencyTypeID = rawMaterial.CurrencyTypeID,
+                MaterialSupplier = rawMaterial.MaterialSupplier,
+                SupplierName = rawMaterial.Supplier?.StoreName ?? "",
+                ActionDate = rawMaterial.ActionDate
+            };
+        }
+
+        public static clsRawMaterial ToRawMaterialModel(this RawMaterialDTO rawMaterialDTO)
+        {
+            if (rawMaterialDTO == null) return null;
+
+            return new clsRawMaterial
+            {
+                ID = rawMaterialDTO.ID,
+                Name = rawMaterialDTO.Name,
+                Description = rawMaterialDTO.Description,
+                PurchasePrice = rawMaterialDTO.PurchasePrice,
+                AvailableQuantity = rawMaterialDTO.AvailableQuantity,
+                UOMID = rawMaterialDTO.UOMID,
+                CurrencyTypeID = rawMaterialDTO.CurrencyTypeID,
+                MaterialSupplier = rawMaterialDTO.MaterialSupplier,
+                ActionDate = rawMaterialDTO.ActionDate
+            };
+        }
+
+        // Recipe Mappers
+        public static RecipeDTO ToRecipeDTO(this clsRecipe recipe)
+        {
+            if (recipe == null) return null;
+
+            return new RecipeDTO
+            {
+                ID = recipe.ID,
+                Name = recipe.Name,
+                Description = recipe.Description,
+                ProductID = recipe.ProductID,
+                ProductName = recipe.Product?.Name ?? "",
+                YieldQuantity = recipe.YieldQuantity,
+                ActionDate = recipe.ActionDate
+            };
+        }
+
+        public static clsRecipe ToRecipeModel(this RecipeDTO recipeDTO)
+        {
+            if (recipeDTO == null) return null;
+
+            return new clsRecipe
+            {
+                ID = recipeDTO.ID,
+                Name = recipeDTO.Name,
+                Description = recipeDTO.Description,
+                ProductID = recipeDTO.ProductID,
+                YieldQuantity = recipeDTO.YieldQuantity,
+                ActionDate = recipeDTO.ActionDate
+            };
+        }
+
+        // RecipeInfo Mappers
+        public static RecipeInfoDTO ToRecipeInfoDTO(this clsRecipeInfo recipeInfo)
+        {
+            if (recipeInfo == null) return null;
+
+            return new RecipeInfoDTO
+            {
+                ID = recipeInfo.ID,
+                RecipeID = recipeInfo.RecipeID,
+                RecipeName = recipeInfo.Recipe?.Name ?? "",
+                MaterialID = recipeInfo.RawMaterialID,
+                MaterialName = recipeInfo.RawMaterial?.Name ?? "",
+                RequiredMaterialQuantity = recipeInfo.RequiredMaterialQuantity,
+                ActionDate = recipeInfo.ActionDate
+            };
+        }
+
+        public static clsRecipeInfo ToRecipeInfoModel(this RecipeInfoDTO recipeInfoDTO)
+        {
+            if (recipeInfoDTO == null) return null;
+
+            return new clsRecipeInfo
+            {
+                ID = recipeInfoDTO.ID,
+                RecipeID = recipeInfoDTO.RecipeID,
+                RawMaterialID = recipeInfoDTO.MaterialID,
+                RequiredMaterialQuantity = recipeInfoDTO.RequiredMaterialQuantity,
+                ActionDate = recipeInfoDTO.ActionDate
+            };
+        }
+
         // List Mappers
         public static List<CustomerDTO> ToCustomerDTOList(this IEnumerable<clsCustomer> customers)
         {
@@ -363,6 +466,36 @@ namespace DAL.Mapper
         public static List<clsImportOrderItem> ToImportOrderItemModelList(this IEnumerable<ImportOrderItemDTO> importOrderItemDTOs)
         {
             return importOrderItemDTOs?.Select(ioi => ioi.ToImportOrderItemModel()).ToList() ?? new List<clsImportOrderItem>();
+        }
+
+        public static List<RawMaterialDTO> ToRawMaterialDTOList(this IEnumerable<clsRawMaterial> rawMaterials)
+        {
+            return rawMaterials?.Select(rm => rm.ToRawMaterialDTO()).ToList() ?? new List<RawMaterialDTO>();
+        }
+
+        public static List<clsRawMaterial> ToRawMaterialModelList(this IEnumerable<RawMaterialDTO> rawMaterialDTOs)
+        {
+            return rawMaterialDTOs?.Select(rm => rm.ToRawMaterialModel()).ToList() ?? new List<clsRawMaterial>();
+        }
+
+        public static List<RecipeDTO> ToRecipeDTOList(this IEnumerable<clsRecipe> recipes)
+        {
+            return recipes?.Select(r => r.ToRecipeDTO()).ToList() ?? new List<RecipeDTO>();
+        }
+
+        public static List<clsRecipe> ToRecipeModelList(this IEnumerable<RecipeDTO> recipeDTOs)
+        {
+            return recipeDTOs?.Select(r => r.ToRecipeModel()).ToList() ?? new List<clsRecipe>();
+        }
+
+        public static List<RecipeInfoDTO> ToRecipeInfoDTOList(this IEnumerable<clsRecipeInfo> recipeInfos)
+        {
+            return recipeInfos?.Select(ri => ri.ToRecipeInfoDTO()).ToList() ?? new List<RecipeInfoDTO>();
+        }
+
+        public static List<clsRecipeInfo> ToRecipeInfoModelList(this IEnumerable<RecipeInfoDTO> recipeInfoDTOs)
+        {
+            return recipeInfoDTOs?.Select(ri => ri.ToRecipeInfoModel()).ToList() ?? new List<clsRecipeInfo>();
         }
 
         // Additional ImportOrder Mappers for different scenarios

@@ -24,6 +24,7 @@ namespace SharedModels.EF.DTO
         public DateTime ActionDate { get; set; }
         public int ItemsCount { get; set; }
         public List<ImportOrderItemDTO> ImportOrderItems { get; set; } = new List<ImportOrderItemDTO>();
+        public List<ImportOrderItemUnionDTO> UnionItems { get; set; } = new List<ImportOrderItemUnionDTO>();
     }
 }
 

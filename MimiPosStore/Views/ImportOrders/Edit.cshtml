@@ -1,4 +1,5 @@
 @using SharedModels.EF.DTO
+@using SharedModels.EF.Models
 @model SharedModels.EF.DTO.ImportOrderDTO
  
 @{
@@ -13,7 +14,8 @@
 
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="Edit" method="post" id="editImportOrderForm">
+        <form asp-action="Edit" method="post" id="importOrderForm" data-import-order-id="@Model.ImportOrderID">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <input type="hidden" asp-for="ImportOrderID" />
@@ -77,12 +79,38 @@
                 </h5>
             </div>
             <div class="card-body">
-                <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                    <i class="fas fa-plus"></i> إضافة عنصر جديد
-                </button>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-success" id="addProductBtn" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                            <i class="fas fa-plus"></i> إضافة منتج
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-warning" id="addRawMaterialBtn" data-bs-toggle="modal" data-bs-target="#addRawMaterialItemModal">
+                            <i class="fas fa-cube"></i> إضافة مادة خام
+                        </button>
+                    </div>
+                </div>
                 
-                <div id="importOrderItemsList">
-                    @await Html.PartialAsync("_ImportOrderItemsList", Model.ImportOrderItems )
+                <div id="importOrderItems">
+                    <!-- سيتم تحميل عناصر أمر الاستيراد هنا عبر AJAX -->
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>المبلغ الإجمالي:</strong> <span id="totalAmount">@Model.TotalAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>المبلغ المدفوع:</strong> <span id="paidAmount">@Model.PaidAmount @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>المبلغ المتبقي:</strong> <span id="remainingAmount" class="text-danger">@((Model.TotalAmount - Model.PaidAmount).ToString("F2")) @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>عدد العناصر:</strong> <span id="itemsCount">0</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -131,106 +159,51 @@
     </div>
 </div> 
 
-<!-- Modal إضافة عنصر جديد -->
-<div class="modal fade" id="addItemModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">إضافة عنصر جديد</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form asp-action="AddItem" method="post">
-                <div class="modal-body">
-                    @await Html.PartialAsync("_AddImportOrderItem", new ImportOrderItemDTO { ImportOrderID = Model.ImportOrderID })
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">إضافة</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<!-- Modal تعديل عنصر -->
+<!-- Modal تعديل منتج -->
 <div class="modal fade" id="editItemModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">تعديل العنصر</h5>
+                <h5 class="modal-title">
+                    <i class="fas fa-edit"></i> تعديل المنتج
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form asp-action="UpdateItem" method="post">
+            <form asp-action="UpdateItem" method="post" id="editItemForm">
                 <div class="modal-body">
-                    <div id="editItemContent">
+                    <div id="editItemModalContent">
                         <!-- سيتم تحميل المحتوى هنا -->
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">تحديث</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> تحديث
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<!-- Modal تعديل مادة خام -
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script src="~/js/ImportOder.js" asp-append-version="true"></script>
-    <script>
-        $(document).ready(function () {
-            // تحديث معلومات المورد عند تغيير الاختيار
-            $('#SupplierID').change(function () {
-                var supplierId = $(this).val();
-                if (supplierId) {
-                    // يمكن إضافة AJAX call هنا لجلب معلومات المورد
-                }
-            });
-
-            // تفعيل تعديل العناصر
-            $(document).on('click', '.edit-item-btn', function () {
-                var itemId = $(this).data('item-id');
-                $.ajax({
-                    url: '/ImportOrders/GetImportOrderItemForEdit',
-                    type: 'GET',
-                    data: { itemId: itemId },
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    success: function (data) {
-                        $('#editItemContent').html(data);
-                        $('#editItemModal').modal('show');
-                    },
-                    error: function () {
-                        alert('خطأ في تحميل بيانات العنصر');
-                    }
-                });
-            });
-
-            // تفعيل حذف العناصر
-            $(document).on('click', '.delete-item-btn', function () {
-                if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
-                    var itemId = $(this).data('item-id');
-                    var importOrderId = @Model.ImportOrderID;
-                    
-                    $.post('/ImportOrders/DeleteItem', { itemId: itemId, importOrderId: importOrderId }, function (data) {
-                        if (data.success) {
-                            location.reload();
-                        } else {
-                            alert('خطأ في حذف العنصر');
-                        }
-                    });
-                }
-            });
-
-            // تحديث قائمة العناصر
-            function refreshItemsList() {
-                $.get('/ImportOrders/GetImportOrderItems', { importOrderId: @Model.ImportOrderID }, function (data) {
-                    $('#importOrderItemsList').html(data);
-                });
-            }
-        });
-    </script>
+    <!-- ملفات JavaScript المنظمة -->
+    <script src="~/js/importOrder.js" asp-append-version="true"></script>
+    <script src="~/js/importOrderEdit.js" asp-append-version="true"></script>
+    <script src="~/js/importOrderUnionItems.js" asp-append-version="true"></script>
 }
+
+<!-- Modals للعناصر -->
+<div id="partialViewsContainer">
+    @await Html.PartialAsync("_AddImportOrderItem", new ImportOrderItemDTO { ImportOrderID = Model.ImportOrderID })
+    @await Html.PartialAsync("_EditImportOrderItem", new ImportOrderItemDTO { ImportOrderID = Model.ImportOrderID })
+    @await Html.PartialAsync("_AddImportRawMaterialItem", new clsImportRawMaterialItem { ImportOrderID = Model.ImportOrderID })
+    @await Html.PartialAsync("_EditImportRawMaterialItem", new clsImportRawMaterialItem { ImportOrderID = Model.ImportOrderID })
+</div>

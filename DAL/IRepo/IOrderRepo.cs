@@ -38,5 +38,7 @@ namespace DAL.IRepo
         
         // Search Methods
         Task<List<clsOrder>> SearchOrdersAsync(string searchTerm);
+
+        Task<List<OrderItemUnionDTO>> GetOrderItemUnionDTOs(clsOrderItemUnionFilter filter);
     }
 }

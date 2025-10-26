@@ -33,6 +33,7 @@ namespace DAL.EF.AppDBContext
                 {
                     Database.Migrate();
                 }
+
                 if (!databaseCreator.HasTables())
                 {
                     databaseCreator.CreateTables();
@@ -51,7 +52,13 @@ namespace DAL.EF.AppDBContext
         public DbSet<clsUser>Users  { get; set; }
         public DbSet<clsUnitOfMeasure>UnitOfMeasures  { get; set; }
         public DbSet<clsLogRegister> LogRegisters { get; set; }
-
+        public DbSet<clsRawMaterial> RawMaterials { get; set; }
+        public DbSet<clsRecipe> Recipes { get; set; }
+        public DbSet<clsRecipeInfo> RecipeInfos { get; set; }
+        public DbSet<clsRawMaterialOrderItem> RawMaterialOrderItems { get; set; }
+        public DbSet<clsImportRawMaterialItem> ImportRawMaterialItems { get; set; }
+        public DbSet<clsExpenses> Expenses { get; set; }
+        public DbSet<clsExpenseType> ExpenseTypes { get; set; }
         void SeedDataForUOM(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<clsUnitOfMeasure>().HasData(
@@ -241,7 +248,10 @@ namespace DAL.EF.AppDBContext
 {
     typeof(clsOrder),
     typeof(clsProduct),
-    typeof(clsImportOrder)
+    typeof(clsImportOrder),
+    typeof(clsRawMaterial),
+    typeof(clsRecipe),
+    typeof(clsRecipeInfo)
 
 };
 
@@ -262,7 +272,24 @@ namespace DAL.EF.AppDBContext
                 clsLogRegister log = new clsLogRegister();
                 log.TableName = e.Entity.GetType().Name; // اسم الجدول أو الكلاس
                 log.ActionDate = DateTime.Now;
-                log.ActoinByUser = e.CurrentValues["ActionByUser"].ToString();
+      
+                object UserID ;
+                try
+                {
+                    if (e.CurrentValues.Properties.Any(p => p.Name == "ActionByUser"))
+                        UserID = e.CurrentValues["ActionByUser"];
+                    else
+                        UserID = e.CurrentValues["UserID"];
+
+
+
+                }
+                catch (Exception ee)
+                {
+                    UserID = "";
+                }
+
+                log.ActoinByUser = UserID.ToString();
                 log.ActionType = e.State.ToString();
                 log.Version = 1;
                 log.NewData = e.State != EntityState.Deleted?

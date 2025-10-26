@@ -111,9 +111,12 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="mb-3">
+                    <div class="mb-3 d-flex gap-2">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                            <i class="fas fa-plus"></i> إضافة عنصر جديد
+                            <i class="fas fa-plus"></i> إضافة عنصر منتج
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addRawMaterialItemModal">
+                            <i class="fas fa-flask"></i> إضافة عنصر مادة خام
                         </button>
                     </div>
 
@@ -147,9 +150,41 @@
 {
     @await Html.PartialAsync("_AddOrderItem", new OrderItemsDTO { OrderID = Model.ID })
     @await Html.PartialAsync("_EditOrderItem", new OrderItemsDTO { OrderID = Model.ID })
+    @await Html.PartialAsync("_AddRawMaterialItem", new SharedModels.EF.Models.clsRawMaterialOrderItem { OrderID = Model.ID })
+    @await Html.PartialAsync("_EditRawMaterialItem", new SharedModels.EF.Models.clsRawMaterialOrderItem { OrderID = Model.ID })
 }
 
+
+
+
 @section Scripts {
+
+
+    <script src="/lib/zxing/zxing.min.js"></script>
+    <script src="/lib/SignalR/signalr.min.js"></script>
+    <script>
+        // 1️⃣ إنشاء اتصال SignalR
+        const connection = window.setupSignalRConnection(
+            "/barcodeHub", // مسار الهب
+            "ReceiveMessage", // الحدث الذي يستقبله JS
+            function(message) {
+                console.log("📩 رسالة مستلمة:", message);
+                alert("Received: " + message);
+                document.getElementById("editProductSearch").value= message;
+                document.getElementById("btnSearchProduct").click();
+            }
+        );
+
+        // 2️⃣ تشغيل ماسح الباركود وإرسال النتائج مباشرة
+        window.startBarcodeScan('video', 'barcodeResult', 'scanbtn', function(scannedText) {
+            console.log("📦 Barcode Scanned:", scannedText);
+
+            // إرسال الكود عبر SignalR
+            // يمكنك استبدال 'TargetUserIdHere' بمعرف المستخدم إذا أردت إرسال محدد
+            window.sendSignalRMessage(connection, "SendMessage", "TargetUserIdHere", scannedText);
+        });
+    </script>
+
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
     <script>
@@ -244,13 +279,21 @@
             }
         }
 
+        function deleteMaterialItem(itemId, orderId) {
+            if (confirm('هل أنت متأكد من حذف عنصر المادة الخام؟')) {
+                $.post('/Orders/DeleteMaterialItem', { itemId: itemId, orderId: orderId })
+                    .done(function () { loadOrderItems(); })
+                    .fail(function () { alert('حدث خطأ أثناء حذف عنصر المادة الخام'); });
+            }
+        }
+
         function editOrderItem(itemId, orderId) {
             $.get('/Orders/GetOrderItemForEdit', { itemId: itemId })
                 .done(function (data) {
                     if (data.success) {
                         $('#editItemModal #ID').val(data.item.id);
                         $('#editItemModal #OrderID').val(data.item.orderID);
-                        $('#editItemModal #editProductSelect').val(data.item.productID);
+                        $('#editItemModal #editProductID').val(data.item.productID);
                         $('#editItemModal #editQuantityInput').val(data.item.quantity);
                         $('#editItemModal #availableQuantityDisplay').val(data.item.availableQuantity);
                         $('#editItemModal #editSellingPriceInput').val(data.item.sellingPrice);
@@ -264,6 +307,48 @@
                 })
                 .fail(function () { alert('حدث خطأ في الاتصال بالخادم'); });
         }
+
+        function editRawMaterialItem(itemId, orderId) {
+            $.get('/Orders/GetMaterialItemForEdit', { itemId: itemId, orderId:orderId})
+                .done(function (data) {
+                    if (data.success) {
+                        $('#editRawMaterialItemModal #rm_ID').val(data.item.id);
+                        $('#editRawMaterialItemModal #rm_OrderID').val(data.item.orderID);
+                        $('#editRawMaterialItemModal #rm_MaterialID').val(data.item.materialID);
+                        $('#editRawMaterialItemModal #rm_MaterialName').val(data.item.name);
+                        $('#editRawMaterialItemModal #rm_Quantity').val(data.item.quantity);
+                        $('#editRawMaterialItemModal #rm_SellingPrice').val(data.item.sellingPrice);
+                        $('#editRawMaterialItemModal #rm_WholesalePrice').val(data.item.wholesalePrice);
+                        $('#editRawMaterialItemModal #rm_AvailableQuantity').val(data.item.availableQuantity);
+                        $('#editRawMaterialItemModal #rm_UOMName').val(data.item.uomName);
+
+                        var modal = new bootstrap.Modal(document.getElementById('editRawMaterialItemModal'));
+                        modal.show();
+                    } else {
+                        alert('خطأ في تحميل بيانات عنصر المادة: ' + data.message);
+                    }
+                })
+                .fail(function () { alert('حدث خطأ في الاتصال بالخادم'); });
+        }
+
+        $('#btnSaveRawMaterialItem').on('click', function () {
+            var formData = $('#editRawMaterialItemForm').serialize();
+            $.post('/Orders/UpdateMaterialItem', formData)
+                .done(function (data) {
+                    if (data.success) {
+                        $('#editRawMaterialItemModal').modal('hide');
+                        loadOrderItems();
+                        showSuccessToast(data.message);
+                    } else {
+                        if (data.errors) {
+                            alert('تحقق من الحقول المطلوبة');
+                        } else {
+                            alert(data.message || 'فشل تحديث عنصر المادة');
+                        }
+                    }
+                })
+                .fail(function () { alert('حدث خطأ أثناء حفظ البيانات'); });
+        });
 
         function loadEditProductInfo(productId) {
             $.get('/Orders/GetProductInfo', { productId: productId })

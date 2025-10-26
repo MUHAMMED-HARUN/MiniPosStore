@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DAL;
 
 namespace DAL.IRepoServ
 {
@@ -24,13 +25,42 @@ namespace DAL.IRepoServ
         {
             try
             {
-                await _context.ImportOrders.AddAsync(importOrder);
+                // Create a clean ImportOrder object without navigation properties
+                var cleanImportOrder = new clsImportOrder
+                {
+                    SupplierID = importOrder.SupplierID,
+                    TotalAmount = importOrder.TotalAmount,
+                    PaidAmount = importOrder.PaidAmount,
+                    ImportDate = importOrder.ImportDate,
+                    PaymentStatus = importOrder.PaymentStatus,
+                    ActionByUser = importOrder.ActionByUser,
+                    ActionType = importOrder.ActionType,
+                    ActionDate = importOrder.ActionDate
+                };
+
+                await _context.ImportOrders.AddAsync(cleanImportOrder);
                 await _context.SaveChangesAsync();
+                
+                // Update the original object with the generated ID
+                importOrder.ID = cleanImportOrder.ID;
+                
                 return true;
             }
-            catch
+            catch(Exception e)
             {
-                return false;
+                // Log the exception for debugging
+                System.Diagnostics.Debug.WriteLine($"ImportOrderRepo.AddAsync Error: {e.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack Trace: {e.StackTrace}");
+                
+                // Get inner exception details
+                string errorMessage = e.Message;
+                if (e.InnerException != null)
+                {
+                    errorMessage += $" | Inner Exception: {e.InnerException.Message}";
+                }
+                
+                // Re-throw the exception to see it in the application
+                throw new Exception($"فشل في إضافة أمر الاستيراد: {errorMessage}", e);
             }
         }
 
@@ -330,6 +360,87 @@ namespace DAL.IRepoServ
               
                 })
                 .ToListAsync();
+        }
+
+               public async Task<List<ImportOrderItemUnionDTO>> GetImportOrderItemUnionDTOs(clsImportOrderItemUnionFilter filter)
+               {
+                   return await clsDALUtil.ExecuteFilterCommands<ImportOrderItemUnionDTO, clsImportOrderItemUnionFilter>(_context, filter, filter.FilterName);
+               }
+
+               public async Task<bool> AddRawMaterialItem(clsImportRawMaterialItem rawMaterialItem)
+               {
+                   try
+                   {
+                       await _context.ImportRawMaterialItems.AddAsync(rawMaterialItem);
+                       await _context.SaveChangesAsync();
+                       return true;
+                   }
+                   catch (Exception)
+                   {
+                       return false;
+                   }
+               }
+
+               public async Task<bool> UpdateRawMaterialItem(clsImportRawMaterialItem rawMaterialItem)
+               {
+                   try
+                   {
+                       _context.ImportRawMaterialItems.Update(rawMaterialItem);
+                       await _context.SaveChangesAsync();
+                       return true;
+                   }
+                   catch (Exception)
+                   {
+                       return false;
+                   }
+               }
+
+               public async Task<List<clsImportRawMaterialItem>> GetRawMaterialItemsByOrderID(int importOrderID)
+               {
+                   try
+                   {
+                       return await _context.ImportRawMaterialItems
+                           .Where(item => item.ImportOrderID == importOrderID)
+                           .ToListAsync();
+                   }
+                   catch (Exception)
+                   {
+                       return new List<clsImportRawMaterialItem>();
+                   }
+               }
+
+        public async Task<clsImportRawMaterialItem> GetRawMaterialItemByIdAsync(int id)
+        {
+            try
+            {
+                return await _context.ImportRawMaterialItems
+                    .FirstOrDefaultAsync(item => item.ID == id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> DeleteRawMaterialItem(int rawMaterialItemID)
+        {
+            try
+            {
+                var item = await _context.ImportRawMaterialItems
+                    .FirstOrDefaultAsync(i => i.ID == rawMaterialItemID);
+                
+                if (item != null)
+                {
+                    _context.ImportRawMaterialItems.Remove(item);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

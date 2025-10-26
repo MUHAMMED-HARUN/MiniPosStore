@@ -20,7 +20,7 @@ namespace MimiPosStore.Controllers
     {
         private readonly IProductService _productService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly ICurrentUserService _CurentUserService;
+        private readonly ICurrentUserService _CurentUserService; 
 
         public ProductsController(IProductService productService, IWebHostEnvironment webHostEnvironment,ICurrentUserService currentUser)
         {
@@ -77,7 +77,8 @@ namespace MimiPosStore.Controllers
             {
                 try
                 {
-                    // TODO: Get current user ID from authentication
+                    ProductDTO.Name = ProductDTO.Name.Trim();
+                    // TODO: Get current user id from authentication
                     string currentUserId = _CurentUserService.GetCurrentUserId(); // Placeholder
                     string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "product", "imgs");
 
@@ -89,8 +90,14 @@ namespace MimiPosStore.Controllers
                         {
                             ProductDTO.ImagePath = BAL.clsUtil.SaveImage(ProductDTO.ProductImage, uploadPath);
                         }
-                        await _productService.CreateProductDTOAsync(ProductDTO, currentUserId, uploadPath);
+                        bool result =   await _productService.CreateProductDTOAsync(ProductDTO, currentUserId, uploadPath);
+                        if(result)
                         TempData["SuccessMessage"] = "تم إضافة المنتج بنجاح";
+                        else
+                            TempData["ErrorMessage"] = "اسم المنتج هذا محجوز بالفعل اختر اسم اخر";
+
+
+
                     }
                     else
                     {
@@ -110,8 +117,13 @@ namespace MimiPosStore.Controllers
                             }
                         }
                         
-                        await _productService.UpdateProductDTOAsync(ProductDTO, currentUserId, uploadPath);
-                        TempData["SuccessMessage"] = "تم تحديث المنتج بنجاح";
+                        
+                        bool result =await _productService.UpdateProductDTOAsync(ProductDTO, currentUserId, uploadPath);
+                           if (result)
+                            TempData["SuccessMessage"] = "تم تحديث المنتج بنجاح";
+                           else
+                            TempData["ErrorMessage"] ="اسم المنتج هذا محجوز بالفعل اختر اسم اخر";
+
                     }
 
                     return RedirectToAction(nameof(Index));
@@ -167,7 +179,7 @@ namespace MimiPosStore.Controllers
         // GET: Products/Search
         public IActionResult Search(string searchTerm)
         {
-            // Redirect to Index with filter query (search by Name)
+            // Redirect to Index with filter query (search by ItemName)
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 return RedirectToAction(nameof(Index));
@@ -178,9 +190,39 @@ namespace MimiPosStore.Controllers
         [HttpGet]
         public async Task<JsonResult> SearchProductByNmae(string term)
         {
-            ProductDTO product= await _productService.SearchProductByNameBALDTOAsync(term);
+            try
+            {
+                if (string.IsNullOrEmpty(term))
+                {
+                    return Json(new List<object>());
+                }
 
-            return Json(product);
+                var products = await _productService.SearchProductByNameBALDTOAsync(term);
+                
+                if (products != null)
+                {
+
+                    var result = new
+                    {
+                        success = true,
+                        id = products.ID,
+                        name = products.Name,
+                        retailPrice = products.RetailPrice,
+                        wholesalePrice = products.WholesalePrice,
+                        availableQuantity = products.AvailableQuantity,
+                        currencyType = products.CurrencyName,
+                        uomName = products.UOMName
+                    };
+
+                    return Json(result);
+                }
+
+                return Json(new List<object>());
+            }
+            catch (Exception ex)
+            {
+                return Json(new List<object>());
+            }
         }
 
 

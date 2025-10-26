@@ -1,0 +1,137 @@
+@model SharedModels.EF.Models.clsRecipeInfo
+
+<div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editInfoModalLabel"><i class="fas fa-edit"></i> تعديل مكون الوصفة</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Save" asp-controller="RecipeInfos" method="post" id="editInfoForm">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="RecipeID" />
+                    <input type="hidden" asp-for="ID" />
+
+                    <div class="mb-3">
+                        <label class="form-label">المادة</label>
+                        <div class="input-group">
+                            <input type="text" id="editMaterialSearch" class="form-control" placeholder="اكتب اسم المادة" autocomplete="off" />
+                            <button class="btn btn-primary" type="button" id="btnEditSearchMaterial">
+                                <i class="fas fa-search"></i> بحث
+                            </button>
+                        </div>
+                        <input type="hidden" asp-for="RawMaterialID" id="editMaterialID" />
+                        <div id="editMaterialResults" class="list-group mt-1" style="max-height: 200px; overflow-y: auto;"></div>
+                        <span asp-validation-for="RawMaterialID" class="text-danger"></span>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col">
+                            <label class="form-label">الكمية المطلوبة</label>
+                            <input class="form-control" asp-for="RequiredMaterialQuantity" type="number" step="0.01" min="0" />
+                            <span asp-validation-for="RequiredMaterialQuantity" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+  window.editRecipeInfo = function(itemId){
+    fetch('/RecipeInfos/GetForEdit?itemId=' + encodeURIComponent(itemId))
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if(!res.success){ alert(res.message || 'العنصر غير موجود'); return; }
+        document.querySelector('#editInfoModal #ID').value = res.item.id;
+        document.querySelector('#editInfoModal #RecipeID').value = res.item.recipeID;
+        document.querySelector('#editInfoModal #editMaterialID').value = res.item.rawMaterialID;
+        document.querySelector('#editInfoModal #RequiredMaterialQuantity').value = res.item.requiredQty;
+        // إذا كان حقل الفاقد موجودًا في الصفحة، قم بتعبئته
+        var lossInput = document.querySelector('#editInfoModal #ProductionLossQuantity');
+        if (lossInput) { lossInput.value = res.item.lossQty; }
+        var modalEl = document.getElementById('editInfoModal');
+        var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+      })
+      .catch(function(){ alert('خطأ في الاتصال'); });
+  }
+
+  var btnSearch = document.getElementById('btnEditSearchMaterial');
+  if(btnSearch){
+    btnSearch.addEventListener('click', function(){
+      var term = (document.getElementById('editMaterialSearch').value || '').trim();
+      if(!term) return;
+      fetch('/RawMaterials/SearchRawMaterialByName?term=' + encodeURIComponent(term))
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var results = document.getElementById('editMaterialResults');
+          results.innerHTML = '';
+          if(!data || !data.id){
+            results.innerHTML = '<div class="list-group-item">لا توجد نتائج</div>';
+            return;
+          }
+          document.getElementById('editMaterialID').value = data.id;
+        })
+        .catch(function(){ alert('خطأ أثناء البحث'); });
+    });
+  }
+
+  var form = document.getElementById('editInfoForm');
+  if(form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var formData = new URLSearchParams(new FormData(form));
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+        .then(function(r){ return r.json(); })
+        .then(function(res){
+          if(res.success){
+            var modalEl = document.getElementById('editInfoModal');
+            var modal = bootstrap.Modal.getInstance(modalEl);
+            if(modal) modal.hide();
+            if (typeof window.loadRecipeInfos === 'function') window.loadRecipeInfos();
+          } else {
+            alert(res.message || 'فشل التحديث');
+          }
+        })
+        .catch(function(){ alert('خطأ في الاتصال'); });
+    });
+  }
+
+  window.deleteRecipeInfo = function(itemId){
+    if(!confirm('هل تريد حذف هذا المكون؟')) return;
+    var data = new URLSearchParams();
+    data.set('id', itemId);
+    fetch('/RecipeInfos/DeleteAjax', { method: 'POST', body: data })
+      .then(function(r){ return r.json(); })
+      .then(function(res){ if (res.success && typeof window.loadRecipeInfos === 'function') window.loadRecipeInfos(); else alert('فشل الحذف'); })
+      .catch(function(){ alert('فشل الحذف'); });
+  }
+
+  window.loadRecipeInfos = function(){
+    var recipeIdEl = document.getElementById('RecipeID') || document.getElementById('ID');
+    if(!recipeIdEl) return;
+    var recipeId = recipeIdEl.value || recipeIdEl.textContent;
+    if(!recipeId) return;
+    var container = document.getElementById('recipeInfosContainer');
+    if(!container) return;
+    fetch('/RecipeInfos/GetByRecipeId?recipeId=' + encodeURIComponent(recipeId), { headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+      .then(function(r){ return r.text(); })
+      .then(function(html){ container.innerHTML = html; })
+      .catch(function(){ container.innerHTML = '<div class="alert alert-danger">فشل تحميل المكونات</div>'; });
+  }
+})();
+</script>
+
+

@@ -8553,11 +8553,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
+      "projectUniqueName": "D:\\Project\\Gitcommit\\Renew\\‏‏‏‏MiniPosStore - نسخة (2)\\MimiPosStore\\MimiPosStore.csproj",
       "projectName": "MimiPosStore",
-      "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\MimiPosStore\\MimiPosStore.csproj",
+      "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏‏‏MiniPosStore - نسخة (2)\\MimiPosStore\\MimiPosStore.csproj",
       "packagesPath": "C:\\Users\\muham\\.nuget\\packages\\",
-      "outputPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\MimiPosStore\\obj\\",
+      "outputPath": "D:\\Project\\Gitcommit\\Renew\\‏‏‏‏MiniPosStore - نسخة (2)\\MimiPosStore\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Visual Studio\\Shared\\NuGetPackages"
@@ -8578,11 +8578,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\BAL\\BAL.csproj": {
-              "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\BAL\\BAL.csproj"
+            "D:\\Project\\Gitcommit\\Renew\\‏‏‏‏MiniPosStore - نسخة (2)\\BAL\\BAL.csproj": {
+              "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏‏‏MiniPosStore - نسخة (2)\\BAL\\BAL.csproj"
             },
-            "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\DAL.csproj": {
-              "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏MiniPosStore\\DAL\\DAL.csproj"
+            "D:\\Project\\Gitcommit\\Renew\\‏‏‏‏MiniPosStore - نسخة (2)\\DAL\\DAL.csproj": {
+              "projectPath": "D:\\Project\\Gitcommit\\Renew\\‏‏‏‏MiniPosStore - نسخة (2)\\DAL\\DAL.csproj"
             }
           }
         }

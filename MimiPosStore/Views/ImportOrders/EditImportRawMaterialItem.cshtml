@@ -1,0 +1,70 @@
+@model SharedModels.EF.Models.clsImportRawMaterialItem
+
+@{
+    ViewData["Title"] = "تعديل مادة خام في أمر الاستيراد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-cube"></i> تعديل مادة خام في أمر الاستيراد
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateRawMaterialItem" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="ID" />
+                        <input type="hidden" asp-for="ImportOrderID" />
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="RawMaterialID" class="form-label">المادة الخام</label>
+                                    <select asp-for="RawMaterialID" class="form-control" asp-items="ViewBag.RawMaterialList">
+                                        <option value="">-- اختر المادة الخام --</option>
+                                    </select>
+                                    <span asp-validation-for="RawMaterialID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Quantity" class="form-label">الكمية</label>
+                                    <input asp-for="Quantity" class="form-control" type="number" step="0.01" min="0" />
+                                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="SellingPrice" class="form-label">سعر البيع</label>
+                                    <input asp-for="SellingPrice" class="form-control" type="number" step="0.01" min="0" />
+                                    <span asp-validation-for="SellingPrice" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save"></i> حفظ التغييرات
+                            </button>
+                            <a href="@Url.Action("Edit", "ImportOrders", new { id = ViewBag.ImportOrderId })" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> العودة
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

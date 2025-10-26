@@ -1,0 +1,71 @@
+@model SharedModels.EF.DTO.ExpensesDTO
+
+@{
+    ViewData["Title"] = "تفاصيل المصروف";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-eye"></i> تفاصيل المصروف
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">رقم المصروف:</dt>
+                        <dd class="col-sm-9">@Model.ID</dd>
+                        
+                        <dt class="col-sm-3">تاريخ المصروف:</dt>
+                        <dd class="col-sm-9">@Model.ExpenseDate.ToString("yyyy-MM-dd")</dd>
+                        
+                        <dt class="col-sm-3">نوع المصروف:</dt>
+                        <dd class="col-sm-9">@Model.ExpenseTypeName</dd>
+                        
+                        <dt class="col-sm-3">الوصف:</dt>
+                        <dd class="col-sm-9">@Model.Description</dd>
+                        
+                        <dt class="col-sm-3">المبلغ:</dt>
+                        <dd class="col-sm-9">@Model.Amount.ToString("N2")</dd>
+                        
+                        <dt class="col-sm-3">المستخدم:</dt>
+                        <dd class="col-sm-9">@Model.UserName</dd>
+                        
+                        <dt class="col-sm-3">نوع الإجراء:</dt>
+                        <dd class="col-sm-9">
+                            @switch (Model.ActionType)
+                            {
+                                case 1:
+                                    <span class="badge bg-success">إضافة</span>
+                                    break;
+                                case 2:
+                                    <span class="badge bg-warning">تحديث</span>
+                                    break;
+                                case 3:
+                                    <span class="badge bg-danger">حذف</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-secondary">غير محدد</span>
+                                    break;
+                            }
+                        </dd>
+                        
+                        <dt class="col-sm-3">تاريخ الإجراء:</dt>
+                        <dd class="col-sm-9">@Model.ActionDate.ToString("yyyy-MM-dd")</dd>
+                    </dl>
+                    
+                    <div class="form-group">
+                        <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> تعديل
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> العودة للقائمة
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

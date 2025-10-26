@@ -1,5 +1,4 @@
-@using SharedModels.EF.DTO;
-@model List<ImportOrderItemDTO>
+@model List<SharedModels.EF.DTO.ImportOrderItemDTO>
 
 @if (Model != null && Model.Any())
 {
@@ -9,11 +8,9 @@
                 <tr>
                     <th>#</th>
                     <th>المنتج</th>
-                    <th>الكمية</th>
-                    <th>سعر البيع</th>
+                    <th>الكمية المستوردة</th>
+                    <th>سعر الشراء</th>
                     <th>المبلغ الإجمالي</th>
-                    <th>العملة</th>
-                    <th>وحدة القياس</th>
                     <th>الإجراءات</th>
                 </tr>
             </thead>
@@ -24,32 +21,16 @@
                     <tr class="import-order-item-row" data-item-id="@item.ImportOrderItemID">
                         <td>@(i + 1)</td>
                         <td>
-                            <div class="d-flex align-items-center">
-@*                                 @if (item.HasProductImage)
-                                {
-                                    <img src="@item.ProductImageUrl" alt="@item.ProductName" 
-                                         class="me-2" style="width: 30px; height: 30px; object-fit: cover;">
-                                } *@
-                                <div>
-                                    <strong>@item.ProductName</strong>
-       
-                                </div>
-                            </div>
+                            <strong>@(string.IsNullOrEmpty(item.ProductName) ? "غير محدد" : item.ProductName)</strong>
                         </td>
                         <td>
                             <span class="badge bg-primary">@item.Quantity</span>
                         </td>
                         <td>
-                            <span class="text-success">@item.SellingPrice</span>
+                            <span class="text-success">@item.SellingPrice @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                         </td>
                         <td>
-                            <span class="item-total text-primary fw-bold">@item.TotalItemAmount</span>
-                        </td>
-                        <td>
-                            <span class="badge bg-info">@item.CurrencyName</span>
-                        </td>
-                        <td>
-                            <span class="badge bg-secondary">@item.UOMName</span>
+                            <span class="item-total text-primary fw-bold">@((item.Quantity * item.SellingPrice).ToString("F2")) @BAL.clsGlobal.GetCurrencyTypeString(1)</span>
                         </td>
                         <td>
                             <div class="btn-group" role="group">
@@ -73,8 +54,6 @@ else
 {
     <div class="alert alert-info text-center">
         <i class="fas fa-info-circle"></i>
-        <strong>لا توجد عناصر في هذا أمر الاستيراد</strong>
-        <br />
-        <small>اضغط على زر "إضافة عنصر جديد" لإضافة منتجات لأمر الاستيراد</small>
+        لا توجد عناصر في هذا أمر الاستيراد.
     </div>
 }

@@ -1,10 +1,21 @@
 @model SharedModels.EF.DTO.ImportOrderItemDTO
  
 
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-<input type="hidden" asp-for="ImportOrderID" id="importOrderIdInput" />
-<input type="hidden" asp-for="ImportOrderItemID" value="0" />
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addItemModalLabel">
+                    <i class="fas fa-plus"></i> إضافة عنصر جديد
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="AddItem" method="post" id="addItemForm">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <input type="hidden" asp-for="ImportOrderID" id="importOrderIdInput" />
+                    <input type="hidden" asp-for="ImportOrderItemID" value="0" />
 
 <div class="row">
     <div class="col-md-6">
@@ -62,96 +73,14 @@
         </div>
     </div>
 </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إضافة المنتج</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-<script>
-$(document).ready(function () {
-    // تعيين ImportOrderID
-    var importOrderId = @Model.ImportOrderID;
-    $('#importOrderIdInput').val(importOrderId);
-    
-    // البحث عن المنتج
-    $("#btnSearchProduct").click(function () {
-        var searchTerm = $("#editProductSearch").val().trim();
-        if (!searchTerm) return;
-
-        $.ajax({
-            url: '/Products/SearchProductByNmae',
-            type: 'GET',
-            dataType: 'json',
-            data: { term: searchTerm },
-            success: function (data) {
-                var $results = $("#searchResults");
-                $results.empty();
-
-                if (!data || !data.id) {
-                    $results.append('<div class="list-group-item">لا توجد نتائج</div>');
-                    return;
-                }
-
-                // تعيين معرف المنتج في الحقل المخفي
-                $('#editProductID').val(data.id);
-                
-                // تحميل معلومات المنتج
-                loadProductInfo(data.id);
-                
-                // إخفاء نتائج البحث
-                $results.empty();
-            },
-            error: function () {
-                alert("حدث خطأ أثناء البحث.");
-            }
-        });
-    });
-    
-    // تحميل معلومات المنتج
-    function loadProductInfo(productId) {
-        // تعيين معرف المنتج في الحقل المخفي
-        $('#editProductID').val(productId);
-        
-        $.get('/ImportOrders/GetProductInfo', { productId: productId })
-            .done(function (data) {
-                if (data.success) {
-                    $('#basePrice').text(data.retailPrice + ' ' + data.currencyType);
-                    $('#availableQuantity').text(data.availableQuantity);
-                    $('#currencyType').text(data.currencyType);
-                    $('#unitOfMeasure').text(data.uomName);
-                    
-                    // تعيين سعر البيع الافتراضي
-                    $('#sellingPriceInput').val(data.retailPrice);
-                    
-                    // حساب المبلغ الإجمالي
-                    calculateItemTotal();
-                } else {
-                    clearProductInfo();
-                    alert('خطأ في تحميل معلومات المنتج: ' + data.message);
-                }
-            })
-            .fail(function () {
-                clearProductInfo();
-                alert('حدث خطأ في الاتصال بالخادم');
-            });
-    }
-    
-    function clearProductInfo() {
-        $('#basePrice').text('-');
-        $('#availableQuantity').text('-');
-        $('#currencyType').text('-');
-        $('#unitOfMeasure').text('-');
-        $('#sellingPriceInput').val('');
-        $('#itemTotalAmount').val('');
-        $('#editProductID').val(''); // مسح معرف المنتج
-    }
-    
-    // حساب المبلغ الإجمالي عند تغيير الكمية أو السعر
-    $('#quantityInput, #sellingPriceInput').on('input', function () {
-        calculateItemTotal();
-    });
-    
-    function calculateItemTotal() {
-        var quantity = parseFloat($('#quantityInput').val()) || 0;
-        var sellingPrice = parseFloat($('#sellingPriceInput').val()) || 0;
-        var total = quantity * sellingPrice;
-        $('#itemTotalAmount').val(total.toFixed(2));
-    }
-});
-</script>
+<!-- JavaScript moved to importOrderEdit.js -->

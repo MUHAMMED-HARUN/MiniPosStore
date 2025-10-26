@@ -18,6 +18,7 @@ namespace SharedModels.EF.Models
         public float RetailPrice { get; set; }
         public float WholesalePrice { get; set; }
         public float AvailableQuantity { get; set; }
+        public float? ReservedQuantity { get; set; }
         public string CurrencyType  { get; set; }
         public string? ImagePath { get; set; }
 
@@ -36,5 +37,6 @@ namespace SharedModels.EF.Models
 
         public virtual ICollection<clsOrderItem> OrderItems { get; set; }
         public virtual  ICollection<clsImportOrder>? ImportedProducts { get; set; }
+        public virtual ICollection<clsRecipe>? Variants { get; set; }
     }
 }

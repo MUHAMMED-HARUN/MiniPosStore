@@ -30,8 +30,8 @@ $(document).ready(function () {
     });
 
     // تحميل معلومات المنتج
-    function loadProductInfo(productId) {
-        $.get('/Orders/GetProductInfo', { productId: productId })
+    function loadProductInfo(productName) {
+        $.get('/Products/SearchProductByNmae', { term: productName })
             .done(function (data) {
                 if (data.success) {
 
@@ -39,7 +39,7 @@ $(document).ready(function () {
                     $('#availableQuantity').text(data.availableQuantity);
                     $('#unitOfMeasure').text(data.uomName);
 
-                    $('#editProductID').val(productId);
+                    $('#editProductID').val(data.id);
 
 
                     // تعيين السعر الأساسي كسعر البيع تلقائياً
@@ -187,7 +187,7 @@ $(document).ready(function () {
                 var $results = $("#searchResults");
                 $results.empty();
 
-                if (!data || !data.id) {
+                if (!data) {
                     $results.append('<div class="list-group-item">لا توجد نتائج</div>');
                     return;
                 }
@@ -196,7 +196,7 @@ $(document).ready(function () {
                 $('#editProductID').val(data.id);
                 
                 // تحميل معلومات المنتج
-                loadProductInfo(data.id);
+                loadProductInfo(data.name);
                 
                 // إخفاء نتائج البحث
                 $results.empty();
