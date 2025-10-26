@@ -14,14 +14,8 @@ namespace DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("ALTER TABLE RecipeInfos\r\nDROP COLUMN ProductionLossQuantity;");
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetRecipeInfoFiltered]    Script Date: 10/04/47 10:24:38 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-ALTER FUNCTION [dbo].[GetRecipeInfoFiltered]
+            migrationBuilder.Sql(@"
+ create or ALTER FUNCTION [dbo].[GetRecipeInfoFiltered]
 (
     @id int = null,
     @RecipeName NVARCHAR(200) = NULL,

@@ -51,7 +51,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8b49019d-17a9-4b7b-a326-e9f30b36c6eb",
+                            Id = "a6e3a8dd-3567-430b-9b02-1f42a0f07ef0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -146,8 +146,8 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "de3f82d8-6157-4fee-9933-8a33e75ea55c",
-                            RoleId = "8b49019d-17a9-4b7b-a326-e9f30b36c6eb"
+                            UserId = "72ad458f-9ae6-4ac1-81db-0ca1016e740c",
+                            RoleId = "a6e3a8dd-3567-430b-9b02-1f42a0f07ef0"
                         });
                 });
 
@@ -899,19 +899,19 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "de3f82d8-6157-4fee-9933-8a33e75ea55c",
+                            Id = "72ad458f-9ae6-4ac1-81db-0ca1016e740c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e42c66c0-a158-42a0-8ea6-55a6aae60f99",
+                            ConcurrencyStamp = "cf1bb9d9-ed65-4d5f-8e6e-c7fbb1ef993e",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAENn8HRqoKNCkrY+nXxer+Ep2YWWSCNxQvOc/hA8m2pc+nFlaKNBNBtci1GEjF8Zg5A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEB2PtduU1klnccqH3xzwcK+2my3RHGvSd75QJF1xd0bGK0tYJkziPj7xdNyGD8KKEQ==",
                             Permissions = 0,
                             PersonID = 1,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d801d0b3-d74c-4f69-936d-cea13aeda9fc",
+                            SecurityStamp = "f111d406-1a08-434d-91b6-880bac2a236f",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });

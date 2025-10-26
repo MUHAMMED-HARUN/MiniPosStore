@@ -25,6 +25,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20250923113936_dfghdf.cs" />
+    <Compile Remove="Migrations\20250923113936_dfghdf.Designer.cs" />
+    <Compile Remove="Migrations\20250928190932_GGGGG.cs" />
+    <Compile Remove="Migrations\20250928190932_GGGGG.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Mapper\DALMapper.cs" />
   </ItemGroup>
 

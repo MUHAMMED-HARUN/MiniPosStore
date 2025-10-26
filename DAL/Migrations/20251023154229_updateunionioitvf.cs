@@ -13,14 +13,7 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[ufn_GetUnionImportOrderItemsFiltered]    Script Date: 01/05/47 06:39:47 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
+            migrationBuilder.Sql(@"
 ALTER FUNCTION [dbo].[ufn_GetUnionImportOrderItemsFiltered]
 (
     @ImportOrderItemID INT = NULL,

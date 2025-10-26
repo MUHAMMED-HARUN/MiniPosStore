@@ -11,13 +11,7 @@ namespace DAL.Migrations
     {
         public static void AddTVFProductFilter(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetProductsFiltered]    Script Date: 01/04/47 02:02:32 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+            migrationBuilder.Sql(@"
 create  FUNCTION [dbo].[GetProductsFiltered]
                     (
                         @id int =null,
@@ -165,13 +159,7 @@ RETURN
         }
         public static void AddTVFOrderFilter(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetOrdersFiltred]    Script Date: 01/04/47 02:02:11 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+            migrationBuilder.Sql(@"
 create FUNCTION [dbo].[GetOrdersFiltred]
 (
     @OrderID INT = NULL,
@@ -221,8 +209,7 @@ RETURN
         }
         public static void Addufn_GetUnionOrderItemsFiltered(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
+            migrationBuilder.Sql(@"
 
 
 CREATE FUNCTION dbo.ufn_GetUnionOrderItemsFiltered
@@ -308,13 +295,7 @@ GO
         }
         public static void AddTVFImportOrderFilter(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetImportOrdersFiltered]    Script Date: 01/04/47 02:01:43 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+            migrationBuilder.Sql(@"
 create FUNCTION [dbo].[GetImportOrdersFiltered]
 (
 	@IOID int =null,
@@ -385,13 +366,7 @@ RETURN
         }
         public static void AddTVFCustomersFilter(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetCustomersFiltred]    Script Date: 01/04/47 02:00:39 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+            migrationBuilder.Sql(@"
 create FUNCTION [dbo].[GetCustomersFiltred]
 (
     @FirstName NVARCHAR(100) = NULL,
@@ -422,8 +397,7 @@ RETURN
         }
         public static void AddGetTopProductsID(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"-- هذه الطريقة تضمن أن الدالة موجودة بدون أخطاء
-CREATE OR ALTER FUNCTION dbo.GetTopProductsID
+            migrationBuilder.Sql(@"CREATE OR ALTER FUNCTION dbo.GetTopProductsID
 (
     @StartDate DATE,
     @EndDate   DATE
@@ -447,13 +421,7 @@ RETURN
         }
         public static void AddGetTopProductsFilter(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetTopProducts]    Script Date: 01/04/47 01:59:32 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+            migrationBuilder.Sql(@"
 
 create FUNCTION [dbo].[GetTopProducts]
 (
@@ -795,13 +763,7 @@ RETURN
         // ========== TVF for Recipes Filter ==========
         public static void AddTVFRecipesFilter(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetRecipesFiltered]    Script Date: 01/04/47 02:02:32 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+            migrationBuilder.Sql(@"
 CREATE FUNCTION [dbo].[GetRecipesFiltered]
 (
     @id int = null,
@@ -844,20 +806,11 @@ RETURN
         // ========== TVF for Recipe Info Filter ==========
         public static void AddTVFRecipeInfoFilter(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"USE [MiniPosStore]
-GO
-/****** Object:  UserDefinedFunction [dbo].[GetRecipeInfoFiltered]    Script Date: 01/04/47 02:02:32 م ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE FUNCTION [dbo].[GetRecipeInfoFiltered]
+            migrationBuilder.Sql(@"Create or ALTER FUNCTION [dbo].[GetRecipeInfoFiltered]
 (
     @id int = null,
     @RecipeName NVARCHAR(200) = NULL,
     @MaterialName NVARCHAR(200) = NULL,
-    @ProductionLossQuantityFrom DECIMAL(18,2) = NULL,
-    @ProductionLossQuantityTo DECIMAL(18,2) = NULL,
     @RequiredMaterialQuantityFrom DECIMAL(18,2) = NULL,
     @RequiredMaterialQuantityTo DECIMAL(18,2) = NULL,
     @ActionDateFrom DATETIME = NULL,
@@ -873,7 +826,6 @@ RETURN
         r.Name AS RecipeName,
         ri.RawMaterialID AS MaterialID,
         rm.Name AS MaterialName,
-        ri.ProductionLossQuantity,
         ri.RequiredMaterialQuantity,
         ri.ActionDate
     FROM dbo.RecipeInfos ri
@@ -884,8 +836,6 @@ RETURN
         (@id IS NULL OR ri.id = @id) AND
         (@RecipeName IS NULL OR r.Name LIKE '%' + @RecipeName + '%') AND
         (@MaterialName IS NULL OR rm.Name LIKE '%' + @MaterialName + '%') AND
-        (@ProductionLossQuantityFrom IS NULL OR ri.ProductionLossQuantity >= @ProductionLossQuantityFrom) AND
-        (@ProductionLossQuantityTo IS NULL OR ri.ProductionLossQuantity <= @ProductionLossQuantityTo) AND
         (@RequiredMaterialQuantityFrom IS NULL OR ri.RequiredMaterialQuantity >= @RequiredMaterialQuantityFrom) AND
         (@RequiredMaterialQuantityTo IS NULL OR ri.RequiredMaterialQuantity <= @RequiredMaterialQuantityTo) AND
         (@ActionDateFrom IS NULL OR ri.ActionDate >= @ActionDateFrom) AND

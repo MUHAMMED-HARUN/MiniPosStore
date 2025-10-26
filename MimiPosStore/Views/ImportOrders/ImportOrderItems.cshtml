@@ -4,6 +4,7 @@
     ViewData["Title"] = "عناصر طلبات الاستيراد";
 }
 
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -19,142 +20,88 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <!-- Filters Section -->
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <div class="card card-primary collapsed-card">
-                                <div class="card-header">
-                                    <h3 class="card-title">
-                                        <i class="fas fa-filter"></i> فلاتر البحث
-                                    </h3>
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="card-body" style="display: none;">
-                                    <form asp-action="ImportOrderItems" method="get">
-                                        <div class="row">
+                    <!-- Simple Filters -->
+                    <form asp-action="ImportOrderItems" method="get" class="card card-body mb-3">
+                        <div class="row g-2">
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="ImportOrderItemID" class="control-label">رقم عنصر الاستيراد</label>
-                                                    <input asp-for="ImportOrderItemID" class="form-control" placeholder="رقم عنصر الاستيراد" />
-                                                </div>
+                                <label class="form-label">رقم عنصر الاستيراد</label>
+                                <input asp-for="ImportOrderItemID" type="number" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="ImportOrderID" class="control-label">رقم أمر الاستيراد</label>
-                                                    <input asp-for="ImportOrderID" class="form-control" placeholder="رقم أمر الاستيراد" />
-                                                </div>
+                                <label class="form-label">رقم أمر الاستيراد</label>
+                                <input asp-for="ImportOrderID" type="number" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="ItemID" class="control-label">رقم العنصر</label>
-                                                    <input asp-for="ItemID" class="form-control" placeholder="رقم العنصر" />
-                                                </div>
+                                <label class="form-label">رقم العنصر</label>
+                                <input asp-for="ItemID" type="number" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="ItemType" class="control-label">نوع العنصر</label>
-                                                    <select asp-for="ItemType" class="form-control">
+                                <label class="form-label">نوع العنصر</label>
+                                <select asp-for="ItemType" class="form-select">
                                                         <option value="">جميع الأنواع</option>
+                                    @if (ViewBag.ItemTypeList != null)
+                                    {
                                                         @foreach (var item in ViewBag.ItemTypeList as SelectList)
                                                         {
-                                                            <option value="@item.Value">@item.Text</option>
+                                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                        }
                                                         }
                                                     </select>
                                                 </div>
+                            <div class="col-md-3">
+                                <label class="form-label">اسم العنصر</label>
+                                <input asp-for="ItemName" class="form-control" />
                                             </div>
+                            <div class="col-md-3">
+                                <label class="form-label">الوصف</label>
+                                <input asp-for="Description" class="form-control" />
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label asp-for="ItemName" class="control-label">اسم العنصر</label>
-                                                    <input asp-for="ItemName" class="form-control" placeholder="اسم العنصر" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label asp-for="Description" class="control-label">الوصف</label>
-                                                    <input asp-for="Description" class="form-control" placeholder="الوصف" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label asp-for="SupplierName" class="control-label">اسم المورد</label>
-                                                    <input asp-for="SupplierName" class="form-control" placeholder="اسم المورد" />
-                                                </div>
-                                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">اسم المورد</label>
+                                <input asp-for="SupplierName" class="form-control" />
                                         </div>
-                                        <div class="row">
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="QuantityFrom" class="control-label">الكمية من</label>
-                                                    <input asp-for="QuantityFrom" type="number" step="0.01" class="form-control" placeholder="الكمية من" />
-                                                </div>
+                                <label class="form-label">الكمية من</label>
+                                <input asp-for="QuantityFrom" type="number" step="0.01" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="QuantityTo" class="control-label">الكمية إلى</label>
-                                                    <input asp-for="QuantityTo" type="number" step="0.01" class="form-control" placeholder="الكمية إلى" />
-                                                </div>
+                                <label class="form-label">الكمية إلى</label>
+                                <input asp-for="QuantityTo" type="number" step="0.01" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="SellingPriceFrom" class="control-label">سعر الشراء من</label>
-                                                    <input asp-for="SellingPriceFrom" type="number" step="0.01" class="form-control" placeholder="سعر الشراء من" />
-                                                </div>
+                                <label class="form-label">سعر الشراء من</label>
+                                <input asp-for="SellingPriceFrom" type="number" step="0.01" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="SellingPriceTo" class="control-label">سعر الشراء إلى</label>
-                                                    <input asp-for="SellingPriceTo" type="number" step="0.01" class="form-control" placeholder="سعر الشراء إلى" />
-                                                </div>
-                                            </div>
+                                <label class="form-label">سعر الشراء إلى</label>
+                                <input asp-for="SellingPriceTo" type="number" step="0.01" class="form-control" />
                                         </div>
-                                        <div class="row">
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="WholesalePriceFrom" class="control-label">سعر الجملة من</label>
-                                                    <input asp-for="WholesalePriceFrom" type="number" step="0.01" class="form-control" placeholder="سعر الجملة من" />
-                                                </div>
+                                <label class="form-label">سعر الجملة من</label>
+                                <input asp-for="WholesalePriceFrom" type="number" step="0.01" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="WholesalePriceTo" class="control-label">سعر الجملة إلى</label>
-                                                    <input asp-for="WholesalePriceTo" type="number" step="0.01" class="form-control" placeholder="سعر الجملة إلى" />
-                                                </div>
+                                <label class="form-label">سعر الجملة إلى</label>
+                                <input asp-for="WholesalePriceTo" type="number" step="0.01" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="AvailableQuantityFrom" class="control-label">الكمية المتاحة من</label>
-                                                    <input asp-for="AvailableQuantityFrom" type="number" step="0.01" class="form-control" placeholder="الكمية المتاحة من" />
-                                                </div>
+                                <label class="form-label">الكمية المتاحة من</label>
+                                <input asp-for="AvailableQuantityFrom" type="number" step="0.01" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="AvailableQuantityTo" class="control-label">الكمية المتاحة إلى</label>
-                                                    <input asp-for="AvailableQuantityTo" type="number" step="0.01" class="form-control" placeholder="الكمية المتاحة إلى" />
-                                                </div>
-                                            </div>
+                                <label class="form-label">الكمية المتاحة إلى</label>
+                                <input asp-for="AvailableQuantityTo" type="number" step="0.01" class="form-control" />
                                         </div>
-                                        <div class="row">
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="ImportDateFrom" class="control-label">تاريخ الاستيراد من</label>
+                                <label class="form-label">تاريخ الاستيراد من</label>
                                                     <input asp-for="ImportDateFrom" type="date" class="form-control" />
-                                                </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label asp-for="ImportDateTo" class="control-label">تاريخ الاستيراد إلى</label>
+                                <label class="form-label">تاريخ الاستيراد إلى</label>
                                                     <input asp-for="ImportDateTo" type="date" class="form-control" />
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">&nbsp;</label>
+                            <div class="col-md-3">
+                                <label class="form-label">&nbsp;</label>
                                                     <div>
                                                         <button type="submit" class="btn btn-primary">
                                                             <i class="fas fa-search"></i> بحث
@@ -162,15 +109,10 @@
                                                         <a asp-action="ImportOrderItems" class="btn btn-secondary">
                                                             <i class="fas fa-undo"></i> إعادة تعيين
                                                         </a>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Results Section -->
                     <div class="row">

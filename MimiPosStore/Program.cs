@@ -81,7 +81,7 @@ namespace MimiPosStore
             string connectionString;
 
 #if DEBUG
-            connectionString = builder.Configuration.GetConnectionString("cs")
+            connectionString = builder.Configuration.GetConnectionString("cs1")
     ?? builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "";
 #else

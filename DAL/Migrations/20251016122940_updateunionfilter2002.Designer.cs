@@ -13,7 +13,7 @@ namespace DAL.Migrations
 {
     [DbContext(typeof(AppDBContext))]
     [Migration("20251016122940_updateunionfilter")]
-    partial class updateunionfilter
+    partial class updateunionfilter2002
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
