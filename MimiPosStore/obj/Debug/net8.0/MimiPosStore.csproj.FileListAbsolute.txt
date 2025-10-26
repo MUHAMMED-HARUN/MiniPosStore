@@ -1218,3 +1218,6 @@ D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\MimiPosStore\
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\MimiPosStore\obj\Debug\net8.0\MimiPosS.184F6D8F.Up2Date
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\MimiPosStore\obj\Debug\net8.0\MimiPosStore.genruntimeconfig.cache
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\MimiPosStore\obj\Debug\net8.0\ref\MimiPosStore.dll
+D:\Project\Gitcommit\MiniPosStore\MimiPosStore\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
+D:\Project\Gitcommit\MiniPosStore\MimiPosStore\bin\Debug\net8.0\SharedModels.dll
+D:\Project\Gitcommit\MiniPosStore\MimiPosStore\bin\Debug\net8.0\SharedModels.pdb

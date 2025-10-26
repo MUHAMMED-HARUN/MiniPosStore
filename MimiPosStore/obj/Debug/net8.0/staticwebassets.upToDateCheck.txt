@@ -75,4 +75,3 @@ wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
 wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
 wwwroot\lib\SignalR\signalr.min.js
 wwwroot\lib\zxing\zxing.min.js
-wwwroot\product\imgs\4eaec975-f626-4687-a11c-a87bdeca986b.png

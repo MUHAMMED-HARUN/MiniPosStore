@@ -82,3 +82,6 @@ D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\DAL\obj\Debug
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\DAL\obj\Debug\net8.0\DAL.pdb
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\DAL\obj\Debug\net8.0\ref\DAL.dll
+D:\Project\Gitcommit\MiniPosStore\DAL\bin\Debug\net8.0\SharedModels.dll
+D:\Project\Gitcommit\MiniPosStore\DAL\bin\Debug\net8.0\SharedModels.pdb
+D:\Project\Gitcommit\MiniPosStore\DAL\obj\Debug\net8.0\DAL.csproj.Up2Date

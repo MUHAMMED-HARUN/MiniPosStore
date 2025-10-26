@@ -75,3 +75,5 @@ D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\BAL\obj\Debug
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\BAL\obj\Debug\net8.0\refint\BAL.dll
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\BAL\obj\Debug\net8.0\BAL.pdb
 D:\Project\Gitcommit\Renew\‏‏‏‏MiniPosStore - نسخة (2)\BAL\obj\Debug\net8.0\ref\BAL.dll
+D:\Project\Gitcommit\MiniPosStore\BAL\bin\Debug\net8.0\SharedModels.dll
+D:\Project\Gitcommit\MiniPosStore\BAL\bin\Debug\net8.0\SharedModels.pdb
