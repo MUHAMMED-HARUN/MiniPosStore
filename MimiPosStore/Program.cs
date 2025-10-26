@@ -93,8 +93,8 @@ namespace MimiPosStore
             {
                 connectionString = $"Server={envDbHost},1433;Database={envDbName};User Id=sa;Password={envDbPassword};TrustServerCertificate=True;";
             }
-            else 
-            InvalidOperationException("Environment variables for DB connection are not set.")
+            else
+                throw new InvalidOperationException("Environment variables for DB connection are not set.");
 #endif
             // Primary DbContext for regular operations and Identity
             builder.Services.AddDbContext<AppDBContext>(options =>
